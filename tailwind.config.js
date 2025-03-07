@@ -1,0 +1,43 @@
+/** @type {import('tailwindcss').Config} */
+module.exports = {
+  content: ["./app/**/*.{js,jsx,ts,tsx}", "./components/**/*.{js,jsx,ts,tsx}"], // Ensure paths to all components
+  presets: [require("nativewind/preset")], // Use NativeWind preset
+  theme: {
+    extend: {
+      fontFamily: {
+        rubik: ["Rubik-Regular", "sans-serif"],
+        "rubik-bold": ["Rubik-Bold", "sans-serif"],
+        "rubik-extrabold": ["Rubik-ExtraBold", "sans-serif"],
+        "rubik-medium": ["Rubik-Medium", "sans-serif"],
+        "rubik-semibold": ["Rubik-SemiBold", "sans-serif"],
+        "rubik-light": ["Rubik-Light", "sans-serif"],
+      },
+      colors: {
+        bone: {
+          DEFAULT: "#E8E4D9", // Main bone color
+          light: "#F4F2ED", // Lighter shade
+          dark: "#D6D1C4", // Darker shade
+        },
+        black: {
+          DEFAULT: "#1A1A1A", // Main black
+          muted: "#666876", // Muted black for secondary text
+          light: "#8C8E98", // Light gray-black
+        },
+        gray: {
+          DEFAULT: "#B2B1A8", // Neutral accent
+          light: "#D6D5CF", // Lighter gray
+          dark: "#9A9992", // Darker gray
+        },
+        accent: {
+          dustyBlue: "#6C757D", // For buttons/highlights
+          taupe: "#D6CFC4", // Warm taupe for soft accents
+          gold: "#C4A484", // Premium gold accent
+        },
+        danger: "#F75555", // Danger or error color
+        success: "#4CAF50", // Optional success color
+        neonBlue: "#0033FF", // Neon Dark Blue
+      },
+    },
+  },
+  plugins: [],
+};
