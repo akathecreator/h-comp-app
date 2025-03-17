@@ -32,6 +32,7 @@ import wifi from "@/assets/icons/wifi.png";
 import location from "@/assets/icons/location.png";
 import edit from "@/assets/icons/edit.png";
 import flame from "@/assets/icons/flame.png";
+import flame2 from "@/assets/icons/flame3.png";
 export default {
   google,
   home,
@@ -67,4 +68,5 @@ export default {
   location,
   edit,
   flame,
+  flame2
 };

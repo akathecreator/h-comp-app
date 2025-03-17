@@ -94,11 +94,11 @@ const AnimatedProgress = ({ date }) => {
       {/* <Text className="text-lg font-bold text-black">Today's Progress</Text> */}
       <View className="flex flex-row items-center justify-between px-1">
         <Text className="text-lg font-bold text-black">Today's Progress</Text>
-        <Link href="/(root)/trends" asChild>
+        {/* <Link href="/(root)/trends" asChild>
           <TouchableOpacity className="bg-neon px-4 py-2 rounded-lg">
             <Text className="text-black font-medium">View Trends</Text>
           </TouchableOpacity>
-        </Link>
+        </Link> */}
       </View>
       <View className="mt-4 bg-white p-6 rounded-lg shadow-lg">
         {/* Calories Progress */}
@@ -127,7 +127,7 @@ const AnimatedProgress = ({ date }) => {
                 top: -8,
                 width: 2,
                 height: 20,
-                backgroundColor: "green",
+                backgroundColor: "blue",
               }}
             />
             {/* Progress Bar */}
@@ -142,7 +142,7 @@ const AnimatedProgress = ({ date }) => {
                 top: -8,
                 width: 2,
                 height: 20,
-                backgroundColor: "green",
+                backgroundColor: "blue",
               }}
             />
 
@@ -151,7 +151,7 @@ const AnimatedProgress = ({ date }) => {
               className={`absolute left-0 h-4 ${
                 currentCalories - currentBurn > maxCalories
                   ? "bg-red-500"
-                  : "bg-green-500"
+                  : "bg-blue"
               } rounded-full opacity-70`}
               style={{
                 width: `${(currentBurn / maxCalories) * 100}%`,
@@ -176,7 +176,7 @@ const AnimatedProgress = ({ date }) => {
               You've exceeded your max caloric limit!
             </Text>
           ) : (
-            <Text className="text-center text-green-600 mt-2 font-bold">
+            <Text className="text-center text-black mt-2 font-bold">
               Deficit so far: {calorieDeficit} kcal
             </Text>
           )}
@@ -196,7 +196,7 @@ const AnimatedProgress = ({ date }) => {
             <Text className="text-black text-sm mt-2">
               {currentProtein}g / {macronutrients.suggested.protein_g}g
             </Text>
-            <Text className="text-black text-sm mt-1 text-red-500">
+            <Text className="text-black text-sm mt-1 text-black">
               Missing: {macronutrients.suggested.protein_g - currentProtein}g
             </Text>
           </View>
@@ -213,7 +213,7 @@ const AnimatedProgress = ({ date }) => {
             <Text className="text-black text-sm mt-2">
               {currentCarbs}g / {macronutrients.suggested.carbs_g}g
             </Text>
-            <Text className="text-black text-sm mt-1 text-red-500">
+            <Text className="text-black text-sm mt-1 text-black">
               Missing: {macronutrients.suggested.carbs_g - currentCarbs}g
             </Text>
           </View>
@@ -230,7 +230,7 @@ const AnimatedProgress = ({ date }) => {
             <Text className="text-black text-sm mt-2">
               {currentFats}g / {macronutrients.suggested.fats_g}g
             </Text>
-            <Text className="text-black text-sm mt-1 text-red-500">
+            <Text className="text-black text-sm mt-1 text-black">
               Missing: {macronutrients.suggested.fats_g - currentFats}g
             </Text>
           </View>

@@ -27,7 +27,7 @@ import {
 } from "@/lib/firebase";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { useGlobalContext } from "@/lib/global-provider";
-import NutritionDialog from "@/components/NutritionDialog";
+import NutritionDialog from "@/components/food/NutritionDialog";
 import { v4 as uuidv4 } from "uuid";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
@@ -123,7 +123,9 @@ export default function C6() {
   // Function to send a message to the backend
   const sendMessageToBackend = async (text_: string) => {
     console.log("sending message to backend", text_);
-    if ((!text_.trim() && !selectedFile) || !user) return;
+    if (!text_.trim() || !user) {
+      return;
+    }
 
     const formData = new FormData();
     formData.append("text", text_);
@@ -147,19 +149,17 @@ export default function C6() {
     }
 
     try {
-      const response = await fetch(
-        `http://192.168.1.174:3000/${agentId}/message`,
-        {
-          method: "POST",
-          body: formData,
-          headers: { "Content-Type": "multipart/form-data" },
-        }
-      );
+      const base = "https://dazzling-simplicity-production.up.railway.app";
+      // const base = `http://192.168.1.164:3000`;
+      const response = await fetch(`${base}/${agentId}/message`, {
+        method: "POST",
+        body: formData,
+        headers: { "Content-Type": "multipart/form-data" },
+      });
       console.log("response", response);
       const botResponse = await response.json();
       console.log("botResponse", botResponse);
       return botResponse;
-      
     } catch (error) {
       console.error("Error sending message:", error);
     }
@@ -313,7 +313,7 @@ export default function C6() {
       if (!result.canceled) {
         const selectedImageUri = result.assets[0].uri;
         setImage(selectedImageUri);
-        setSelectedFile({ uri: result.assets[0].uri })
+        setSelectedFile({ uri: result.assets[0].uri });
         // await uploadImage(result.assets[0].uri);
       }
     } catch (error) {
@@ -339,7 +339,7 @@ export default function C6() {
       if (!result.canceled) {
         const selectedImageUri = result.assets[0].uri;
         setImage(selectedImageUri);
-        setSelectedFile({ uri: selectedImageUri })
+        setSelectedFile({ uri: selectedImageUri });
         // await uploadImage(selectedImageUri);
       }
     } catch (error) {

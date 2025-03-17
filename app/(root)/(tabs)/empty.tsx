@@ -5,17 +5,20 @@ import {
   TouchableOpacity,
   ScrollView,
   TextInput,
+  KeyboardAvoidingView,
 } from "react-native";
 import { useGlobalContext } from "@/lib/global-provider";
 import { updateProfile, logout } from "@/lib/firebase";
-import { SafeAreaView } from "react-native-safe-area-context";
-import AnimatedProgress from "@/components/Animated";
-import Meallogs from "@/components/Meallogs";
+import { SafeAreaFrameContext, SafeAreaView } from "react-native-safe-area-context";
+import AnimatedProgress from "@/components/food/Animated";
+import Meallogs from "@/components/food/Meallogs";
 import { Picker } from "@react-native-picker/picker";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import Quotes from "@/components/Quotes";
 import { Ionicons } from "@expo/vector-icons";
 import Header from "@/components/home/Header";
+import Shortcuts from "@/components/home/Shortcuts";
+import RecentActivityList from "@/components/activity/RecentActivityList";
 const lifeGroups = ["Health", "Finance", "Gym", "Habits"];
 
 const Dashboard = () => {
@@ -31,7 +34,7 @@ const Dashboard = () => {
   };
   if (!userProfile) return null;
   return (
-    <SafeAreaView className="flex-1">
+    <KeyboardAvoidingView className="flex-1 h-full pt-16">
       <View className="flex-1">
         <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
           {/* Life Group Dropdown */}
@@ -66,13 +69,14 @@ const Dashboard = () => {
               <Ionicons name="chevron-forward" size={24} color="black" />
             </TouchableOpacity>
           </View>
-
+          {/* <Shortcuts /> */}
           <AnimatedProgress date={date} />
           <Quotes date={date}/>
+          {/* <RecentActivityList date={date}/> */}
           <Meallogs date={date} />
         </ScrollView>
       </View>
-    </SafeAreaView>
+    </KeyboardAvoidingView>
   );
 };
 

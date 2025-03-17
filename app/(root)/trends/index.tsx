@@ -1,5 +1,4 @@
-import CaloricTrends from "@/components/CaloricTrends";
-import Macronutrients from "@/components/Macronutrients";
+import CaloricTrends from "@/components/food/CaloricTrends";
 import WeightGraph from "@/components/WeightGraph";
 import { router } from "expo-router";
 import React, { useState } from "react";
@@ -21,34 +20,18 @@ const StatsPage = () => {
   );
 
   return (
-    // <SafeAreaView className="flex-1 bg-bone">
-    //   <ScrollView>
-    //     <View className="p-6 bg-bone-dark rounded-b-3xl shadow-md">
-    //       <Text className="text-black font-rubik-bold text-3xl">Stats</Text>
-    //     </View>
-
-    //     {/* Graph Display */}
-    //     <View className="mt-6 px-6">
-    //       <CaloricTrends />
-    //       <WeightGraph />
-    //       {/* <Macronutrients /> */}
-    //       {/* {selectedGraph === "calories" ? <CaloricTrends /> : <WeightGraph />} */}
-    //     </View>
-    //   </ScrollView>
-    // </SafeAreaView>
-    <SafeAreaView className="flex-1 bg-bone">
+    <SafeAreaView className="flex-1">
       <ScrollView>
         {/* Header with Back Button */}
-        <View className="p-6 bg-bone-dark rounded-b-3xl shadow-md flex-row items-center">
+        <View className="p-6 rounded-b-3xl shadow-md flex-row items-center">
           {/* Back Button */}
           <TouchableOpacity
-            onPress={() => router.replace("/")}
+            onPress={() => router.replace("/(root)/(tabs)/dashboard")}
             className="mr-4"
           >
-            <Text className="text-neon text-lg">← Track</Text>
+            <Text className="text-neon text-lg">←</Text>
           </TouchableOpacity>
         </View>
-        
 
         {/* Graph Display */}
         <View className="mt-6 px-6">

@@ -65,6 +65,14 @@
         {
           "iosUrlScheme": "com.googleusercontent.apps.c6companion"
         }
+      ],
+      [
+        "expo-image-picker",
+        {
+          "cameraPermission": "Allow this app to access your camera",
+          "microphonePermission": "Allow this app to access your microphone",
+          "photoLibraryPermission": "Allow this app to access your photo library"
+        }
       ]
     ],
     "experiments": {

@@ -6,14 +6,14 @@ const Header = ({ streak }: { streak: number }) => {
   return (
     <View className="flex-row justify-between items-center">
       {/* Left - Title */}
-      <Text className="text-3xl font-bold text-black">Aki</Text>
+      <Text className="text-3xl font-bold text-black">H Companion</Text>
 
       {/* Right - Streak Count + Icon */}
       <View className="flex-row items-center">
-        <Text className="text-xl font-bold text-black mr-2">{streak}</Text>
+        <Text className="text-lg font-bold text-black mr-1 mt-1">{streak}</Text>
         <Image
-          source={icons.flame} // Replace with actual flame icon
-          style={{ width: 24, height: 24, resizeMode: "contain" }}
+          source={icons.flame2} // Replace with actual flame icon
+          style={{ width: 40, height: 40, resizeMode: "contain" }}
         />
       </View>
     </View>

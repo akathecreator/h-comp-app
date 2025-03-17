@@ -24,8 +24,8 @@ const StoicQuotes = ({ date }: { date: Date }) => {
   }, [date]);
 
   return (
-    <View className="flex items-center justify-center p-6 bg-black">
-      <Text className="text-white text-lg text-center font-rubik-medium">
+    <View className="flex items-center justify-center p-4 bg-black">
+      <Text className="text-white text-md text-center font-rubik-medium">
         "{quote}"
       </Text>
     </View>

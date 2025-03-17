@@ -1,42 +1,45 @@
 import React from "react";
-import { SafeAreaView, FlatList, View } from "react-native";
+import {
+  SafeAreaView,
+  FlatList,
+  View,
+  KeyboardAvoidingView,
+  TouchableOpacity,
+  Text,
+} from "react-native";
 import Header from "@/components/home/Header";
 import ExpBar from "@/components/home/ExpBar";
-import StreakTracker from "@/components/home/StreakTracker";
-import Achievements from "@/components/home/Achievements";
 import DailyQuests from "@/components/home/DailyQuests";
 import WeeklyQuests from "@/components/home/WeeklyQuests";
+import HabitTracker from "@/components/home/Habits";
 import { useGlobalContext } from "@/lib/global-provider";
+import { ActivityIndicator } from "react-native-paper";
 
 const HomeScreen = () => {
-  const { user, userProfile } = useGlobalContext();
-  console.log(user, userProfile);
+  const { user, userProfile, loading, date } = useGlobalContext();
+  if (loading || !userProfile) return <ActivityIndicator size="large" color="black" />;
   const { level_meta, streaks } = userProfile;
   const { level, experience, next_level } = level_meta;
   const { on_going } = streaks;
+
   const sections = [
     { id: "header", component: <Header streak={on_going} /> },
     {
       id: "expBar",
       component: <ExpBar level={level} exp={experience} maxExp={next_level} />,
     },
-    // {
-    //   id: "streakTracker",
-    //   component: (
-    //     <StreakTracker
-    //       logs={[
-    //         streaks[0],
-    //         streaks[1],
-    //         streaks[2],
-    //         streaks[3],
-    //         streaks[4],
-    //         streaks[5],
-    //         streaks[6],
-    //       ]}
-    //     />
-    //   ),
-    // },
+
+    {
+      id: "habits",
+      component: <HabitTracker />,
+    },
+
     { id: "dailyQuests", component: <DailyQuests /> },
+    // {
+    //   id: "quotes",
+    //   component: <StoicQuotes date={date} />,
+    // },
+    // { id: "dailyCalories", component: <DailyCalories /> },
     { id: "weeklyQuests", component: <WeeklyQuests /> },
   ];
 
@@ -46,7 +49,22 @@ const HomeScreen = () => {
         data={sections}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
-          <View className="px-6 mt-4">{item.component}</View>
+          <View
+            className={`mt-4 ${
+              [
+                "header",
+                "expBar",
+                "habits",
+                "dailyQuests",
+                "weeklyQuests",
+                "quotes",
+              ].includes(item.id)
+                ? "px-6"
+                : ""
+            }`}
+          >
+            {item.component}
+          </View>
         )}
         showsVerticalScrollIndicator={false}
       />

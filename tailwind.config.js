@@ -33,9 +33,11 @@ module.exports = {
           taupe: "#D6CFC4", // Warm taupe for soft accents
           gold: "#C4A484", // Premium gold accent
         },
+        blue: "#378ac4", // Neon Dark Blue
         danger: "#F75555", // Danger or error color
         success: "#4CAF50", // Optional success color
         neonBlue: "#0033FF", // Neon Dark Blue
+        newblue: "#4F46E5",
       },
     },
   },

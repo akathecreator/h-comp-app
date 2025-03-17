@@ -65,7 +65,7 @@ const NutritionDialog: React.FC<NutritionDialogProps> = ({
           style={{
             opacity: fadeAnim,
           }}
-          className="w-4/5 bg-bone-light rounded-lg p-6 shadow-lg"
+          className="w-4/5 bg-white rounded-lg p-6 shadow-lg"
         >
           {/* Title */}
           <Text className="text-black text-lg font-bold text-center mb-4">
@@ -80,21 +80,21 @@ const NutritionDialog: React.FC<NutritionDialogProps> = ({
           </View>
 
           {/* Calories and Macros */}
-          <View className="mb-4 bg-bone-dark rounded-lg p-4">
-            <Text className="text-black text-base font-semibold">
+          <View className="mb-4 bg-black rounded-lg p-4">
+            <Text className="text-white text-base font-semibold">
               Total Calories:{" "}
-              <Text className="text-accent-dustyBlue">
+              <Text className="text-white">
                 {recentMeals[0].total_calories} kcal
               </Text>
             </Text>
             <View className="flex-row justify-between mt-2">
-              <Text className="text-black-muted">
+              <Text className="text-white">
                 Protein: {recentMeals[0].total_protein}g
               </Text>
-              <Text className="text-black-muted">
+              <Text className="text-white">
                 Carbs: {recentMeals[0].total_carbs}g
               </Text>
-              <Text className="text-black-muted">
+              <Text className="text-white">
                 Fat: {recentMeals[0].total_fat}g
               </Text>
             </View>
@@ -115,7 +115,7 @@ const NutritionDialog: React.FC<NutritionDialogProps> = ({
           {/* Dismiss Button */}
           <TouchableOpacity
             onPress={onClose}
-            className="bg-accent-dustyBlue p-3 rounded-lg items-center mt-4"
+            className="bg-black p-3 rounded-lg items-center mt-4"
           >
             <Text className="text-white font-bold">Close</Text>
           </TouchableOpacity>

@@ -11,7 +11,7 @@ import useRecentMeals from "@/hooks/useRecentMeals"; // Adjust the path as neede
 import { useGlobalContext } from "@/lib/global-provider";
 import { Timestamp } from "firebase/firestore";
 import { format } from "date-fns";
-import NutritionDialog from "./components/NutritionDialog";
+import NutritionDialog from "./components/food/NutritionDialog";
 
 interface Meal {
   id: string; // Document ID
@@ -104,19 +104,19 @@ const RecentLogs = ({ date }) => {
                 <View className="flex-row justify-between mt-3">
                   <View className="items-center">
                     <Text className="text-xs text-black-muted">Protein</Text>
-                    <Text className="text-sm font-rubik-semibold text-accent-dustyBlue">
+                    <Text className="text-sm font-rubik-semibold text-black">
                       {log.total_protein}g
                     </Text>
                   </View>
                   <View className="items-center">
                     <Text className="text-xs text-black-muted">Carbs</Text>
-                    <Text className="text-sm font-rubik-semibold text-bone-dark">
+                    <Text className="text-sm font-rubik-semibold text-black">
                       {log.total_carbs}g
                     </Text>
                   </View>
                   <View className="items-center">
                     <Text className="text-xs text-black-muted">Fats</Text>
-                    <Text className="text-sm font-rubik-semibold text-accent-gold">
+                    <Text className="text-sm font-rubik-semibold text-black">
                       {log.total_fat}g
                     </Text>
                   </View>

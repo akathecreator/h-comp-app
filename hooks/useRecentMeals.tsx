@@ -14,7 +14,7 @@ interface Meal {
   total_fat: number; // Total fat in grams
   user_id: string; // ID of the user who logged the meal
 }
-const useRecentMeals = (userId: string, date: Date= new Date(), all: string = "false") => {
+const useRecentMeals = (userId: string, date: Date, all: string = "false") => {
   const [recentMeals, setRecentMeals] = useState<Meal[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 

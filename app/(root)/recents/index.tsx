@@ -12,7 +12,7 @@ import { Swipeable } from "react-native-gesture-handler";
 import useRecentMeals from "@/hooks/useRecentMeals";
 import { useGlobalContext } from "@/lib/global-provider";
 import { format } from "date-fns";
-import NutritionDialog from "@/components/NutritionDialog";
+import NutritionDialog from "@/components/food/NutritionDialog";
 import { removeMeal } from "@/lib/firebase";
 import { router } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -155,19 +155,19 @@ const RecentLogs = () => {
                   <View className="flex-row justify-between mt-3">
                     <View className="items-center">
                       <Text className="text-xs text-black-muted">Protein</Text>
-                      <Text className="text-sm font-rubik-semibold text-accent-dustyBlue">
+                      <Text className="text-sm font-rubik-semibold ">
                         {meal.total_protein}g
                       </Text>
                     </View>
                     <View className="items-center">
                       <Text className="text-xs text-black-muted">Carbs</Text>
-                      <Text className="text-sm font-rubik-semibold text-bone-dark">
+                      <Text className="text-sm font-rubik-semibold ">
                         {meal.total_carbs}g
                       </Text>
                     </View>
                     <View className="items-center">
                       <Text className="text-xs text-black-muted">Fats</Text>
-                      <Text className="text-sm font-rubik-semibold text-accent-gold">
+                      <Text className="text-sm font-rubik-semibold ">
                         {meal.total_fat}g
                       </Text>
                     </View>

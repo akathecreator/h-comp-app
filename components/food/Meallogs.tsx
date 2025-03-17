@@ -65,7 +65,7 @@ const RecentLogs = ({ date }: { date: Date }) => {
 
   if (loading) {
     return (
-      <View className="flex-1 justify-center items-center bg-bone-light my-5">
+      <View className="flex-1 justify-center items-center my-5">
         <ActivityIndicator size="large" color="black" />
       </View>
     );
@@ -74,9 +74,9 @@ const RecentLogs = ({ date }: { date: Date }) => {
   if (!recentMeals.length) {
     return (
       <View className="flex-1 px-4 m-4">
-        <Text className="text-lg font-rubik-semibold text-black mb-4">
+        {/* <Text className="text-lg font-rubik-semibold text-black mb-4">
           Recent Meals
-        </Text>
+        </Text> */}
         <Text className="text-lg text-black-muted font-rubik">
           Let me know what you are having today!
         </Text>
@@ -86,13 +86,13 @@ const RecentLogs = ({ date }: { date: Date }) => {
 
   return (
     <ScrollView className="flex-1 px-4 mx-4">
-      <View className="flex-row justify-between items-center my-1 py-4">
-        <Text className="text-xl font-rubik-semibold text-black ">
+      <View className="flex-row justify-between items-center my-1">
+        {/* <Text className="text-xl font-rubik-semibold text-black ">
           Recent Meals
-        </Text>
-        <TouchableOpacity onPress={() => router.push("/(root)/recents")}>
+        </Text> */}
+        {/* <TouchableOpacity onPress={() => router.push("/(root)/recents")}>
           <Text className="text-black text-md font-semibold">View All</Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </View>
       {recentMeals.map((meal) => (
         <Swipeable
@@ -133,19 +133,28 @@ const RecentLogs = ({ date }: { date: Date }) => {
                 <View className="flex-row justify-between mt-3">
                   <View className="items-center">
                     <Text className="text-xs text-black-muted">Protein</Text>
-                    <Text className="text-sm font-rubik-semibold text-accent-dustyBlue">
+                    <Text
+                      className="text-sm font-rubik-semibold"
+                      style={{ color: "#6f7cf8" }}
+                    >
                       {meal.total_protein}g
                     </Text>
                   </View>
                   <View className="items-center">
                     <Text className="text-xs text-black-muted">Carbs</Text>
-                    <Text className="text-sm font-rubik-semibold text-bone-dark">
+                    <Text
+                      className="text-sm font-rubik-semibold"
+                      style={{ color: "#6f7cf8" }}
+                    >
                       {meal.total_carbs}g
                     </Text>
                   </View>
                   <View className="items-center">
                     <Text className="text-xs text-black-muted">Fats</Text>
-                    <Text className="text-sm font-rubik-semibold text-accent-gold">
+                    <Text
+                      className="text-sm font-rubik-semibold"
+                      style={{ color: "#6f7cf8" }}
+                    >
                       {meal.total_fat}g
                     </Text>
                   </View>

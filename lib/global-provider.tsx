@@ -10,7 +10,7 @@ import {
   onAuthStateChanged,
   User as FirebaseUser,
 } from "firebase/auth";
-import { doc, getDoc } from "firebase/firestore";
+import { doc, getDoc, onSnapshot } from "firebase/firestore";
 import { auth, db } from "@/lib/firebase"; // Ensure you have Firestore initialized
 
 interface UserProfile {
@@ -65,7 +65,7 @@ interface UserProfile {
 interface GlobalContextType {
   isLogged: boolean;
   user: FirebaseUser | null;
-  userProfile: UserProfile | null;
+  userProfile: UserProfile;
   loading: boolean;
   lifeGroup: string;
   date: Date;
@@ -93,8 +93,6 @@ export const GlobalProvider = ({ children }: GlobalProviderProps) => {
       setUser(currentUser);
       if (currentUser) {
         await fetchUserProfile(currentUser.uid);
-      } else {
-        setUserProfile(null);
       }
       setLoading(false);
     });
@@ -103,21 +101,36 @@ export const GlobalProvider = ({ children }: GlobalProviderProps) => {
   }, []);
 
   // Fetch user profile from Firestore
-  const fetchUserProfile = async (userId: string) => {
-    try {
-      const userDocRef = doc(db, "users", userId); // Ensure `users` is your Firestore collection
-      const userDoc = await getDoc(userDocRef);
-      if (userDoc.exists()) {
-        const profileData = userDoc.data();
-        setUserProfile(profileData as UserProfile);
+  // const fetchUserProfile = async (userId: string) => {
+  //   try {
+  //     const userDocRef = doc(db, "users", userId); // Ensure `users` is your Firestore collection
+  //     const userDoc = await getDoc(userDocRef);
+  //     if (userDoc.exists()) {
+  //       const profileData = userDoc.data();
+  //       setUserProfile(profileData as UserProfile);
+  //     } else {
+  //       console.error("User profile not found in Firestore.");
+  //       setUserProfile(null);
+  //     }
+  //   } catch (error) {
+  //     console.error("Failed to fetch user profile:", error);
+  //   }
+  // };
+  const fetchUserProfile = (userId: string) => {
+    const userDocRef = doc(db, "users", userId);
+  
+    const unsubscribe = onSnapshot(userDocRef, (doc) => {
+      if (doc.exists()) {
+        setUserProfile(doc.data() as UserProfile);
       } else {
-        console.error("User profile not found in Firestore.");
+        console.error("User profile not found.");
         setUserProfile(null);
       }
-    } catch (error) {
-      console.error("Failed to fetch user profile:", error);
-    }
+    });
+  
+    return unsubscribe; // Allow cleanup
   };
+  
 
   const refetchUserProfile = async () => {
     if (user) {
@@ -133,6 +146,7 @@ export const GlobalProvider = ({ children }: GlobalProviderProps) => {
         isLogged,
         user,
         userProfile,
+        setUserProfile,
         loading,
         lifeGroup,
         date,

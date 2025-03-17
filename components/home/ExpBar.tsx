@@ -20,10 +20,10 @@ const ExpBar = ({
       </Text>
 
       {/* Experience Bar */}
-      <View className="w-full h-4 bg-gray-300 rounded-full mt-2">
+      <View className="w-full h-3 bg-gray-300 rounded-full my-2 shadow-md">
         <View
           className="h-full rounded-full"
-          style={{ width: `${progress}%`, backgroundColor: "black" }} // Neon Dark Blue
+          style={{ width: `${progress}%`, backgroundColor: "#4F46E5" }} // Neon Dark Blue
         />
       </View>
 

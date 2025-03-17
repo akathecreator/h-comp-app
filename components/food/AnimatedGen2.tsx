@@ -1,0 +1,145 @@
+import React, { useState } from "react";
+import { View, Text } from "react-native";
+import { Circle, Svg, G } from "react-native-svg";
+import * as Progress from "react-native-progress";
+import useDailyMacros from "@/hooks/useDailyMacros";
+import { useGlobalContext } from "@/lib/global-provider";
+
+const CaloriesTracker = ({ date }) => {
+  const { userProfile } = useGlobalContext();
+  const { daily_calories, macronutrients } = userProfile;
+  const { dailyMacros } = useDailyMacros(date);
+  const caloriesBurned = dailyMacros.totalBurn;
+  const caloriesEaten = dailyMacros.totalCalories;
+  const totalBurned = daily_calories.maintenance;
+  // const burnProgress = caloriesBurned / totalBurned;
+  const currentCalories = dailyMacros.totalCalories;
+  const currentProtein = dailyMacros.totalProtein;
+  const currentCarbs = dailyMacros.totalCarbs;
+  const currentFats = dailyMacros.totalFats;
+  const currentBurn = dailyMacros.totalBurn;
+  const suggestedCalories = daily_calories.goal;
+  const maxCalories = daily_calories.maintenance;
+  const calorieDeficit = Math.max(0, maxCalories - currentCalories); // Deficit calculation
+  const netCalories = currentCalories - currentBurn;
+
+  // const burnProgress = currentBurn / maxCalories;
+  // const burnProgress = Math.min(1, currentCalories / suggestedCalories);
+  // const burnProgress = Math.min(1, Math.max(0, currentBurn / maxCalories));
+  // Macronutrient data
+  const nutrients = [
+    {
+      label: "Protein",
+      value: currentProtein,
+      max: macronutrients.suggested.protein_g,
+      // color: "#6f7cf8",
+      color: "#6f7cf8",
+    },
+    {
+      label: "Fat",
+      value: currentFats,
+      max: macronutrients.suggested.fats_g,
+      // color: "#6f7cf8",
+      color: "#6f7cf8",
+    },
+    {
+      label: "Carbs",
+      value: currentCarbs,
+      max: macronutrients.suggested.carbs_g,
+      // color: "#6f7cf8",
+      color: "#6f7cf8",
+    },
+  ];
+  // 🔥 Ensure progress doesn't exceed 120% (1.2)
+  const burnProgress = Math.min(1.2, currentCalories / suggestedCalories);
+  const progressColor =
+    currentCalories > suggestedCalories ? "#FF4C4C" : "#6f7cf8";
+
+  // 🟢 Fix stroke offset for proper speedometer effect
+  const RADIUS = 80;
+  const STROKE_WIDTH = 12;
+  const CIRCUMFERENCE = 2 * Math.PI * RADIUS;
+
+  // Ensure progress is within bounds (0 to 1)
+  const progress = Math.min(1, netCalories / suggestedCalories);
+  const strokeDashoffset = (1 - progress) * CIRCUMFERENCE;
+
+  // const adjustedOffset = (1 - Math.min(1, burnProgress)) * DASH_LENGTH;
+  return (
+    <View className="bg-white p-8 rounded-lg shadow-md items-center mx-7 my-4 mb-6">
+      {/* Circular Progress Bar */}
+      <View className="flex-row items-center ">
+        <View className="items-center justify-center mr-6">
+          <Svg height="200" width="200" viewBox="0 0 200 200">
+            {/* Background circle */}
+            <Circle
+              cx="100"
+              cy="100"
+              r={RADIUS}
+              stroke="#E5E7EB"
+              strokeWidth={STROKE_WIDTH}
+              fill="none"
+            />
+            {/* Progress circle */}
+            <Circle
+              cx="100"
+              cy="100"
+              r={RADIUS}
+              stroke="#4F46E5" // Progress color
+              strokeWidth={STROKE_WIDTH}
+              fill="none"
+              strokeDasharray={CIRCUMFERENCE}
+              strokeDashoffset={strokeDashoffset}
+              strokeLinecap="round"
+              transform="rotate(-270, 100, 100)"
+            />
+          </Svg>
+          {/* Centered Text */}
+          <View style={{ position: "absolute", alignItems: "center" }}>
+            <Text style={{ fontSize: 40, fontWeight: "bold" }}>
+              {netCalories}
+            </Text>
+            <Text style={{ fontSize: 14, color: "gray" }}>Net Calories</Text>
+          </View>
+        </View>
+        <View className="mt flex w-[60px] mr-6">
+          {nutrients.map((nutrient, index) => (
+            <View key={index} className="mb-2">
+              <Text className="text-sm font-semibold">{nutrient.label}</Text>
+              <Progress.Bar
+                progress={nutrient.value / nutrient.max}
+                width={null}
+                color={nutrient.color}
+                height={6}
+                style={{ width: "100%" }}
+              />
+              <Text className="text-xs text-gray-500">
+                {nutrient.value}/{nutrient.max} g
+              </Text>
+            </View>
+          ))}
+        </View>
+      </View>
+
+      {/* Macronutrient Progress Bars */}
+
+      {/* Calories Eaten & Burned */}
+      <View className="flex-row justify-between w-full px-6">
+        <View className="items-center">
+          <Text className="text-lg font-bold">{currentCalories} Kcal</Text>
+          <Text className="text">Eaten</Text>
+        </View>
+        <View className="items-center">
+          <Text className="text-lg font-bold">{currentBurn} Kcal</Text>
+          <Text className="text">Burned</Text>
+        </View>
+        <View className="items-center">
+          <Text className="text-lg font-bold">{suggestedCalories} Kcal</Text>
+          <Text className="text">Suggested</Text>
+        </View>
+      </View>
+    </View>
+  );
+};
+
+export default CaloriesTracker;

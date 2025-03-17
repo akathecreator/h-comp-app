@@ -10,6 +10,7 @@ const CaloricTrends: React.FC = () => {
   const [caloriesData, setCaloriesData] = useState<number[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [selectedData, setSelectedData] = useState<{ date: string; calories: number } | null>(null);
 
   const { userProfile, user } = useGlobalContext();
   const screenWidth = Dimensions.get("window").width;
@@ -21,11 +22,8 @@ const CaloricTrends: React.FC = () => {
       try {
         setLoading(true);
         setError(null);
-
-        // Fetch caloric data
         const data = await getCaloricData(user?.uid);
 
-        // Prepare the last 7 days
         const dates: string[] = [];
         const calories: number[] = [];
 
@@ -33,11 +31,7 @@ const CaloricTrends: React.FC = () => {
           const date = subDays(new Date(), i);
           const formattedDate = format(date, "MM/dd");
           dates.push(formattedDate);
-
-          // Find matching data for the day
           const dayData = data.find((d) => d.date === formattedDate);
-
-          // Push calories or 0 if no data
           calories.push(dayData?.calories || 0);
         }
 
@@ -45,7 +39,7 @@ const CaloricTrends: React.FC = () => {
         setCaloriesData(calories);
       } catch (err) {
         console.error("Error fetching caloric data:", err);
-        setError("Failed to fetch caloric data. Please try again later.");
+        setError("Failed to fetch caloric data.");
       } finally {
         setLoading(false);
       }
@@ -55,28 +49,25 @@ const CaloricTrends: React.FC = () => {
   }, [user?.uid]);
 
   if (!userProfile) return null;
-
   const { daily_calories } = userProfile;
   const { goal, maintenance } = daily_calories;
-  const [selectedData, setSelectedData] = useState<{ date: string; calories: number } | null>(null);
+
   if (loading) {
     return (
-      <View className="flex-1 justify-center items-center min-h[400px]">
-        <ActivityIndicator size="large" color="#C4A484" />
-        <Text>Loading caloric trends...</Text>
+      <View className="flex-1 justify-center items-center bg-black min-h-[400px]">
+        <ActivityIndicator size="large" color="#A0A0A0" />
+        <Text className="text-gray-400">Loading caloric trends...</Text>
       </View>
     );
   }
 
   if (error) {
     return (
-      <View className="flex-1 justify-center items-center">
-        <Text className="text-black">{error}</Text>
+      <View className="flex-1 justify-center items-center bg-black">
+        <Text className="text-red-400">{error}</Text>
       </View>
     );
   }
-
- 
 
   const handleDataPointClick = (dataIndex: number) => {
     setSelectedData({
@@ -84,30 +75,28 @@ const CaloricTrends: React.FC = () => {
       calories: caloriesData[dataIndex],
     });
   };
-  
 
   return (
-    <View className="flex-1">
-      <Text className="text-black font-rubik-bold text-xl mb-4">
-        Daily Caloric Intake
-      </Text>
+    <View className="flex-1 bg-black p-4">
+      <Text className="text-white font-rubik-bold text-xl mb-4">Daily Caloric Intake</Text>
+
       <LineChart
         data={{
           labels,
           datasets: [
             {
               data: caloriesData,
-              color: () => "#FF8C00",
+              color: () => "#FFFFFF", // White for caloric intake
               strokeWidth: 2,
             },
             {
               data: Array(caloriesData.length).fill(goal),
-              color: () => "#32CD32",
+              color: () => "#A0A0A0", // Light grey for goal
               strokeWidth: 2,
             },
             {
               data: Array(caloriesData.length).fill(maintenance),
-              color: () => "#FF4500",
+              color: () => "#555555", // Dark grey for max limit
               strokeWidth: 2,
             },
           ],
@@ -116,20 +105,19 @@ const CaloricTrends: React.FC = () => {
         height={260}
         fromZero
         chartConfig={{
-          backgroundColor: "#F4F2ED",
-          backgroundGradientFrom: "#E8E4D9",
-          backgroundGradientTo: "#D6D1C4",
+          backgroundGradientFrom: "#000000",
+          backgroundGradientTo: "#000000",
           decimalPlaces: 0,
-          color: () => `#333333`,
-          labelColor: () => `#333333`,
+          color: () => `#FFFFFF`,
+          labelColor: () => `#A0A0A0`,
           propsForDots: {
-            r: "5",
+            r: "6",
             strokeWidth: "2",
-            stroke: "#ffa726",
+            stroke: "#FFFFFF",
           },
           propsForBackgroundLines: {
-            stroke: "#E0E0E0",
-            strokeDasharray: "",
+            stroke: "#333333",
+            strokeDasharray: "4 4",
           },
         }}
         bezier
@@ -143,15 +131,17 @@ const CaloricTrends: React.FC = () => {
         withHorizontalLabels={true}
         onDataPointClick={({ index }) => handleDataPointClick(index)}
       />
+
       {selectedData && (
-        <View className="mt-4 p-2 bg-gray-200 rounded">
-          <Text>Date: {selectedData.date}</Text>
-          <Text>Calories: {selectedData.calories} kcal</Text>
+        <View className="mt-4 p-4 rounded-lg bg-gray-800 bg-opacity-80 shadow-lg">
+          <Text className="text-gray-400 text-lg">📅 {selectedData.date}</Text>
+          <Text className="text-white text-lg">🔥 {selectedData.calories} kcal</Text>
         </View>
       )}
+
       <View className="flex-row justify-between mt-4">
-        <Text className="text-black">Suggested: {goal} kcal</Text>
-        <Text className="text-black">Max: {maintenance} kcal</Text>
+        <Text className="text-gray-500">Goal: {goal} kcal</Text>
+        <Text className="text-gray-500">Max: {maintenance} kcal</Text>
       </View>
     </View>
   );

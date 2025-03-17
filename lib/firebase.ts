@@ -53,8 +53,9 @@ const auth: Auth = initializeAuth(app, {
   persistence: getReactNativePersistence(AsyncStorage),
 });
 
+
 // Export Firebase references for reuse
-export { auth, db, storage };
+export { auth, db, storage, FieldValue };
 import * as Google from "expo-auth-session/providers/google";
 // Login Function
 export async function loginWithGoogle() {
@@ -162,6 +163,7 @@ export const fetchRecentMeals = async (
   all: string = "false"
 ): Promise<Meal[]> => {
   try {
+    console.log(date)
     const mealsRef = collection(db, "logs");
     // Define the start and end of the given day
     // Define start and end of the day using Firestore Timestamp
@@ -462,11 +464,12 @@ export const saveMessageToFirestore = async (message: {
 };
 
 export const fetchWeightLogs = async ({ userId }: { userId: string }) => {
-  const weightLogsRef = collection(db, "userWeightLogs");
+  const weightLogsRef = collection(db, "logs");
 
   let q = query(
     weightLogsRef,
-    where("userId", "==", userId),
+    where("user_id", "==", userId),
+    where("type", "==", "weight"),
     orderBy("timestamp", "desc")
   );
 
@@ -485,10 +488,11 @@ export const fetchWeightLogs = async ({ userId }: { userId: string }) => {
 
 export async function fetchWeightData(userId: string) {
   try {
-    const weightsRef = collection(db, "userWeightLogs");
+    const weightsRef = collection(db, "logs");
     const q = query(
       weightsRef,
-      where("userId", "==", userId),
+      where("user_id", "==", userId),
+      where("type", "==", "weight"),
       orderBy("timestamp", "asc")
     );
     const snapshot = await getDocs(q);

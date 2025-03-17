@@ -21,15 +21,13 @@ const TabIcon = ({
   <View className="flex-1 mt-3 flex flex-col items-center">
     <Image
       source={icon}
-      tintColor={focused ? "black" : "#666876"}
+      tintColor={focused ? "white" : "#666876"}
       resizeMode="contain"
       className="size-6"
     />
     <Text
       className={`${
-        focused
-          ? "text-primary-300 font-rubik-medium"
-          : "text-black-200 font-rubik"
+        focused ? "text-white font-rubik-medium" : "text-gray-400 font-rubik"
       } text-xs w-full text-center mt-1`}
     >
       {title}
@@ -46,27 +44,21 @@ const TabsLayout = () => {
         screenOptions={{
           tabBarShowLabel: false,
           tabBarStyle: {
-            backgroundColor: "white",
+            backgroundColor: "#000", // Black theme
             position: "relative",
-            borderTopColor: "#0061FF1A",
+            borderTopColor: "#333", // Subtle grey border
             borderTopWidth: 1,
             minHeight: 70,
-            padding: 10,
+            paddingHorizontal: 10, // Extra padding for spacing
+            paddingVertical: 10,
+            justifyContent: "space-between",
+            alignItems: "center",
+            display: "flex",
           },
-          headerTitle: () => (
-            <View className="flex-row items-center">
-              {/* Blue Flame Logo */}
-              <Image
-                source={icons.wifi} // Ensure this points to your flame icon
-                style={{ width: 30, height: 30, marginRight: 8 }}
-              />
-              {/* "SL" Text */}
-              <Text className="text-xl font-bold text-black-500">Aki</Text>
-            </View>
-          ),
-          headerTitleAlign: "center", // Center the logo & text
+          headerTitleAlign: "center",
         }}
       >
+        {/* Home Tab */}
         <Tabs.Screen
           name="index"
           options={{
@@ -78,53 +70,79 @@ const TabsLayout = () => {
             ),
           }}
         />
-        {/* <Tabs.Screen
-          name="explore"
+        {/* Daily Tab */}
+        <Tabs.Screen
+          name="daily"
           options={{
-            title: "Explore",
+            title: "Daily",
             headerShown: false,
-            href: null,
+            href: "/daily",
             tabBarIcon: ({ focused }) => (
-              <TabIcon focused={focused} icon={icons.chat} title="Explore" />
+              <TabIcon focused={focused} icon={icons.cutlery} title="Daily" />
             ),
           }}
-        /> */}
+        />
         <Tabs.Screen
-          name="dashboard"
+          name="empty"
           options={{
             title: "Dashboard",
             headerShown: false,
-            href: "/dashboard",
+            href: "/empty",
             tabBarIcon: ({ focused }) => (
-              <TabIcon
-                focused={focused}
-                icon={icons.filter}
-                title="Dashboard"
-              />
+              <TabIcon focused={focused} icon={icons.cutlery} title="Daily" />
+            ),
+          }}
+        />
+
+        {/* Weekly Tab */}
+        <Tabs.Screen
+          name="weekly"
+          options={{
+            title: "Weekly",
+            headerShown: false,
+            href: "/weekly",
+            tabBarIcon: ({ focused }) => (
+              <TabIcon focused={focused} icon={icons.calendar} title="Weekly" />
+            ),
+          }}
+        />
+
+        {/* Settings Tab */}
+        <Tabs.Screen
+          name="settings"
+          options={{
+            title: "Settings",
+            headerShown: false,
+            href: "/settings",
+            tabBarIcon: ({ focused }) => (
+              <TabIcon focused={focused} icon={icons.person} title="Settings" />
             ),
           }}
         />
       </Tabs>
 
-      {/* Floating Middle Button */}
+      {/* Floating Middle Button (Logging/Chat) */}
       <TouchableOpacity
         onPress={() => router.push("/chat")}
-        className="absolute bottom-6 left-1/2 -translate-x-1/2 bg-black p-4 rounded-full shadow-lg"
+        className="absolute bottom-6 left-1/2 -translate-x-1/2 bg-white p-4 rounded-full shadow-lg"
         style={{
           width: 70,
           height: 70,
           justifyContent: "center",
           alignItems: "center",
           elevation: 10, // Android shadow
-          shadowColor: "#000", // iOS shadow
+          shadowColor: "#fff", // iOS shadow
           shadowOffset: { width: 0, height: 4 },
           shadowOpacity: 0.3,
           shadowRadius: 5,
+          borderRadius: 100,
+          borderWidth: 1,
+          borderColor: "black",
         }}
       >
         <Image
           source={icons.chat}
-          style={{ width: 40, height: 40, tintColor: "white" }}
+          style={{ width: 40, height: 40, tintColor: "black" }} // White button, black icon
         />
       </TouchableOpacity>
     </>
