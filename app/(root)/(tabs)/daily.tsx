@@ -1,27 +1,10 @@
-import React, { useContext, useState } from "react";
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  ScrollView,
-  TextInput,
-  KeyboardAvoidingView,
-} from "react-native";
+import React, { useState } from "react";
+import { View, Text, ScrollView, KeyboardAvoidingView } from "react-native";
 import { useGlobalContext } from "@/lib/global-provider";
-import { updateProfile, logout } from "@/lib/firebase";
-import {
-  SafeAreaFrameContext,
-  SafeAreaView,
-} from "react-native-safe-area-context";
-import AnimatedProgress from "@/components/food/Animated";
-import Meallogs from "@/components/food/Meallogs";
-import { Picker } from "@react-native-picker/picker";
-import DateTimePicker from "@react-native-community/datetimepicker";
+
 import Quotes from "@/components/Quotes";
-import { Ionicons } from "@expo/vector-icons";
 import Header from "@/components/home/Header";
-import Shortcuts from "@/components/home/Shortcuts";
-import RecentActivityList from "@/components/activity/RecentActivityList";
+// import RecentActivityList from "@/components/activity/RecentActivityList";
 import RecentLogs from "@/components/food/RecentLogs";
 import CaloriesTracker from "@/components/food/AnimatedGen2";
 import WeeklySlider from "@/components/food/Weekly";
@@ -55,7 +38,9 @@ const Dashboard = () => {
           />
           {/* Horizontal Date Picker */}
           <View className="px-6 mt-3">
-            <Text className="text-xl font-bold text-black">Today's Progress</Text>
+            <Text className="text-xl font-bold text-black">
+              Today's Progress
+            </Text>
           </View>
           {/* <AnimatedProgress date={selectedDate} /> */}
           <CaloriesTracker date={selectedDate} />

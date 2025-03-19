@@ -17,16 +17,21 @@ const WeeklyPage = () => {
   const { userProfile } = useGlobalContext();
   const [currentWeek, setCurrentWeek] = useState(new Date());
   const { weeklyLogs, loading } = useWeeklyLogs(userProfile.id, currentWeek);
-  const [selectedTab, setSelectedTab] = useState<"calories" | "activity" | "weight">("calories");
+  const [selectedTab, setSelectedTab] = useState<
+    "calories" | "activity" | "weight"
+  >("calories");
 
   const weekStart = startOfWeek(currentWeek, { weekStartsOn: 1 });
   const weekEnd = addDays(weekStart, 6);
 
   const handleWeekChange = (direction: "prev" | "next") => {
-    setCurrentWeek((prev) => (direction === "prev" ? subWeeks(prev, 1) : addWeeks(prev, 1)));
+    setCurrentWeek((prev) =>
+      direction === "prev" ? subWeeks(prev, 1) : addWeeks(prev, 1)
+    );
   };
 
-  if (loading || weeklyLogs.length < 1) return <Text>Loading...</Text>;
+  // if (loading || weeklyLogs.length < 1) return <Text>Loading...</Text>;
+  if (loading || weeklyLogs.length < 1) return null;
 
   return (
     <SafeAreaView className="flex-1 bg-white px-4">
@@ -38,13 +43,19 @@ const WeeklyPage = () => {
 
         <View className="flex-1 bg-white px-4">
           <View className="flex-row justify-between items-center mb-4">
-            <TouchableOpacity onPress={() => handleWeekChange("prev")} className="p-2">
+            <TouchableOpacity
+              onPress={() => handleWeekChange("prev")}
+              className="p-2"
+            >
               <ChevronLeft size={28} color="black" />
             </TouchableOpacity>
             <Text className="text-black font-bold text-xl">
               {format(weekStart, "MMM dd")} - {format(weekEnd, "MMM dd")}
             </Text>
-            <TouchableOpacity onPress={() => handleWeekChange("next")} className="p-2">
+            <TouchableOpacity
+              onPress={() => handleWeekChange("next")}
+              className="p-2"
+            >
               <ChevronRight size={28} color="black" />
             </TouchableOpacity>
           </View>
@@ -53,21 +64,31 @@ const WeeklyPage = () => {
           <View className="flex-row justify-between p-4 bg-gray-100 rounded-lg">
             {weeklyLogs.map((entry, index) => (
               <View key={index} className="items-center">
-                <Text className="text-gray-600 text-sm">{format(new Date(entry.date), "EEE")}</Text>
+                <Text className="text-gray-600 text-sm">
+                  {format(new Date(entry.date), "EEE")}
+                </Text>
                 <View
                   className={`w-8 h-8 rounded-full mt-2 ${
-                    entry.burned > 0 ? "bg-newblue" : "border border-gray-400 bg-white"
+                    entry.burned > 0
+                      ? "bg-newblue"
+                      : "border border-gray-400 bg-white"
                   }`}
                 />
               </View>
             ))}
           </View>
 
-          <Text className="text-black font-bold text-lg m-2">Calories Trends</Text>
+          <Text className="text-black font-bold text-lg m-2">
+            Calories Trends
+          </Text>
           <BarChart
             data={{
-              labels: weeklyLogs.map((entry) => format(new Date(entry.date), "EEE")),
-              datasets: [{ data: weeklyLogs.map((entry) => entry.calories || 0) }],
+              labels: weeklyLogs.map((entry) =>
+                format(new Date(entry.date), "EEE")
+              ),
+              datasets: [
+                { data: weeklyLogs.map((entry) => entry.calories || 0) },
+              ],
             }}
             width={screenWidth - 40}
             height={250}
@@ -79,7 +100,10 @@ const WeeklyPage = () => {
               color: () => "#4F46E5",
               labelColor: () => "#555",
               barPercentage: 0.5,
-              propsForBackgroundLines: { stroke: "#DDD", strokeDasharray: "4 4" },
+              propsForBackgroundLines: {
+                stroke: "#DDD",
+                strokeDasharray: "4 4",
+              },
             }}
             withInnerLines
             showBarTops={false}
@@ -89,8 +113,12 @@ const WeeklyPage = () => {
           <Text className="text-black font-bold text-lg m-2">Weight Trend</Text>
           <LineChart
             data={{
-              labels: weeklyLogs.map((entry) => format(new Date(entry.date), "EEE")),
-              datasets: [{ data: weeklyLogs.map((entry) => entry.weight || 0) }],
+              labels: weeklyLogs.map((entry) =>
+                format(new Date(entry.date), "EEE")
+              ),
+              datasets: [
+                { data: weeklyLogs.map((entry) => entry.weight || 0) },
+              ],
             }}
             width={screenWidth - 40}
             height={200}
@@ -103,7 +131,10 @@ const WeeklyPage = () => {
               color: () => "#4F46E5",
               labelColor: () => "#555",
               propsForDots: { r: "5", strokeWidth: "2", stroke: "#4F46E5" },
-              propsForBackgroundLines: { stroke: "#DDD", strokeDasharray: "4 4" },
+              propsForBackgroundLines: {
+                stroke: "#DDD",
+                strokeDasharray: "4 4",
+              },
             }}
             bezier
             style={{ marginVertical: 8, borderRadius: 16 }}

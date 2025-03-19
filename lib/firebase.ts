@@ -53,7 +53,6 @@ const auth: Auth = initializeAuth(app, {
   persistence: getReactNativePersistence(AsyncStorage),
 });
 
-
 // Export Firebase references for reuse
 export { auth, db, storage, FieldValue };
 import * as Google from "expo-auth-session/providers/google";
@@ -61,7 +60,7 @@ import * as Google from "expo-auth-session/providers/google";
 export async function loginWithGoogle() {
   try {
     const [request, response, promptAsync] = Google.useAuthRequest({
-      clientId: process.env.EXPO_PUBLIC_FIREBASE_APP_ID, // Get this from your Firebase Console
+      clientId: process.env.EXPO_PUBLIC_GOOGLE_CLIENT_ID, // Get this from your Firebase Console
       scopes: ["profile", "email"],
     });
     console.log(request, response);
@@ -163,7 +162,7 @@ export const fetchRecentMeals = async (
   all: string = "false"
 ): Promise<Meal[]> => {
   try {
-    console.log(date)
+    console.log(date);
     const mealsRef = collection(db, "logs");
     // Define the start and end of the given day
     // Define start and end of the day using Firestore Timestamp
@@ -194,7 +193,7 @@ export const fetchRecentMeals = async (
     // Map the documents to the Meal interface
     const meals = querySnapshot.docs.map((doc) => {
       const data = doc.data();
-      
+
       // Ensure all fields in the Meal interface are present
       return {
         id: doc.id,

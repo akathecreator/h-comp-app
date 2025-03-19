@@ -12,7 +12,7 @@ import { collection, query, where, getDocs, limit } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import icons from "@/constants/icons";
 import { useGlobalContext } from "@/lib/global-provider";
-import useGoals from "@/hooks/useDailyQuests";
+import useWeeklyGoals from "@/hooks/useWeeklyQuests";
 import { router } from "expo-router";
 
 const flameIcon = icons.flame2;
@@ -20,10 +20,11 @@ const rightArrowIcon = icons.rightArrow;
 
 const WeeklyQuests = () => {
   const { user } = useGlobalContext();
-  const { quests, loading, updateQuest } = useGoals("weekly");
+  const { quests, loading, updateQuest } = useWeeklyGoals("weekly");
 
   if (loading) {
-    return <ActivityIndicator size="large" color="black" />;
+    // return <ActivityIndicator size="large" color="black" />;
+    return null;
   }
 
   return (

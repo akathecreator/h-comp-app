@@ -4,10 +4,10 @@ import {
   Text,
   FlatList,
   Image,
-  ActivityIndicator,
   TouchableOpacity,
+  SafeAreaView,
 } from "react-native";
-import { ProgressBar } from "react-native-paper";
+import { ActivityIndicator, ProgressBar } from "react-native-paper";
 // import { collection, query, where, getDocs, limit } from "firebase/firestore";
 // import { db } from "@/lib/firebase";
 import icons from "@/constants/icons";
@@ -21,7 +21,11 @@ const DailyQuests = () => {
   const { quests, loading, updateQuest } = useGoals("daily");
   const { user } = useGlobalContext();
   if (loading || !user) {
-    return <ActivityIndicator size="large" color="black" />;
+    return (
+      <SafeAreaView className="flex-1 bg-white">
+        {/* <ActivityIndicator size="large" color="newblue" /> */}
+      </SafeAreaView>
+    );
   }
 
   return (

@@ -32,6 +32,7 @@ import { v4 as uuidv4 } from "uuid";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
+import { AntDesign } from "@expo/vector-icons";
 
 type Message = {
   text: string;
@@ -45,7 +46,7 @@ type Attachment = {
 };
 
 export default function C6() {
-  const agentId = "bf2e9e61-4a51-0d44-97d4-17defc63c3d7";
+  const agentId = process.env.EXPO_PUBLIC_AGENT_ID;
   const [messages, setMessages] = useState<IMessage[]>([]);
   const [image, setImage] = useState<string | null>(null); // Store selected image
   const [text, setText] = useState<string>(""); // Store text input for image message
@@ -124,6 +125,7 @@ export default function C6() {
   const sendMessageToBackend = async (text_: string) => {
     console.log("sending message to backend", text_);
     if (!text_.trim() || !user) {
+      console.log("no text or user");
       return;
     }
 
@@ -149,8 +151,8 @@ export default function C6() {
     }
 
     try {
-      const base = "https://dazzling-simplicity-production.up.railway.app";
-      // const base = `http://192.168.1.164:3000`;
+      // const base = "https://dazzling-simplicity-production.up.railway.app";
+      const base = `http://192.168.1.164:3000`;
       const response = await fetch(`${base}/${agentId}/message`, {
         method: "POST",
         body: formData,
@@ -192,7 +194,7 @@ export default function C6() {
         };
 
         console.log("3. Saving to Firestore:", userMessageData); // Debug log
-        await saveMessageToFirestore(userMessageData);
+        saveMessageToFirestore(userMessageData);
 
         // 3. Get bot response
         console.log("4. Getting bot response"); // Debug log
@@ -231,12 +233,13 @@ export default function C6() {
 
         // 6. Save bot message to Firestore
         console.log("7. Saving bot message to Firestore"); // Debug log
-        await saveMessageToFirestore({
+        saveMessageToFirestore({
           text: botMessage.text,
           user: c6_user,
           userId: c6_user._id,
           roomId: user.uid,
         });
+        setSelectedFile(null);
       } catch (error) {
         console.error("Error in onSend:", error);
         // Show error message to user
@@ -383,18 +386,18 @@ export default function C6() {
         name: userProfile?.nickName || "User",
         avatar: "https://placeimg.com/140/140/tech",
       },
-      text,
+      text: text || "food",
       image,
       userId: user.uid,
       roomId: user.uid,
     };
-    await saveMessageToFirestore(imageMessage);
-
-    //https://storage.googleapis.com/c6-companion-a800c.firebasestorage.app/images/.jpg?GoogleAccessId=firebase-adminsdk-4w7ob%40c6-companion-a800c.iam.gserviceaccount.com&Expires=1742144400&Signature=I7aXaU82%2Fein7mmBlWI0TTmBXpsdNpBI%2FM7e8d%2B7uiQML%2BMlhvCmB29%2F4Cvpkt4dOT8XpPCA5hA9hKzYskvxMIPRUIMflgy5rYeJsQJCSfcBDfVZsRdnt1myU4%2BQmI274avWQt9gpvLsoY2f5vzHYXwpNuYrSzbaUqGz5vUtbbcIHqRDYb9dsj3CUUDrvy57dJ%2Bh9phCmq7H1O%2F0aGQfSaGB%2BdkeGAssZmNxtbGgE25I50tjfk28mGjc74kuWyDYegGVGZ5dBR442AWWlj8ZXwvFcidYcJqcI3HKClSGjc%2FcF%2BNbGL7nNHobWnhZMTad776yI2rFLrd%2F17xTunpjFw%3D%3D
-
     setMessages((previousMessages) =>
       GiftedChat.append(previousMessages, [imageMessage])
     );
+    saveMessageToFirestore(imageMessage);
+
+    //https://storage.googleapis.com/c6-companion-a800c.firebasestorage.app/images/.jpg?GoogleAccessId=firebase-adminsdk-4w7ob%40c6-companion-a800c.iam.gserviceaccount.com&Expires=1742144400&Signature=I7aXaU82%2Fein7mmBlWI0TTmBXpsdNpBI%2FM7e8d%2B7uiQML%2BMlhvCmB29%2F4Cvpkt4dOT8XpPCA5hA9hKzYskvxMIPRUIMflgy5rYeJsQJCSfcBDfVZsRdnt1myU4%2BQmI274avWQt9gpvLsoY2f5vzHYXwpNuYrSzbaUqGz5vUtbbcIHqRDYb9dsj3CUUDrvy57dJ%2Bh9phCmq7H1O%2F0aGQfSaGB%2BdkeGAssZmNxtbGgE25I50tjfk28mGjc74kuWyDYegGVGZ5dBR442AWWlj8ZXwvFcidYcJqcI3HKClSGjc%2FcF%2BNbGL7nNHobWnhZMTad776yI2rFLrd%2F17xTunpjFw%3D%3D
+
     setLoading(true);
     // Send to backend
     const tempText = text;
@@ -444,12 +447,12 @@ export default function C6() {
     <Bubble
       {...props}
       wrapperStyle={{
-        right: { backgroundColor: "#1A1A1A" }, // Black for user messages
-        left: { backgroundColor: "#E8E4D9" }, // Bone for AI messages
+        right: { backgroundColor: "#4F46E5" }, // Black for user messages
+        left: { backgroundColor: "#1A1A1A" }, // Bone for AI messages
       }}
       textStyle={{
         right: { color: "#FFFFFF" },
-        left: { color: "#000000" },
+        left: { color: "#FFFFFF" },
       }}
     />
   );
@@ -459,7 +462,7 @@ export default function C6() {
     <Actions
       {...props}
       onPressActionButton={pickImage}
-      icon={() => <Text style={{ fontSize: 18 }}>+</Text>} // Use an emoji or a text icon
+      icon={() => <AntDesign name="plus" size={24} color="black" />} // Use an emoji or a text icon
     />
   );
 
@@ -510,9 +513,9 @@ export default function C6() {
           }}
         >
           <Ionicons name="arrow-back" size={24} color="black" />
-          <Text style={{ color: "black", fontSize: 18, marginLeft: 5 }}>
+          {/* <Text style={{ color: "black", fontSize: 18, marginLeft: 5 }}>
             Back
-          </Text>
+          </Text> */}
         </TouchableOpacity>
       </View>
       <View style={{ flex: 1, backgroundColor: "#F4F2ED" }}>

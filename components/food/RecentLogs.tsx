@@ -18,9 +18,9 @@ const RecentLogs = ({ date }) => {
           onPress={() => setActiveTab("meals")}
         >
           <Text
-            className={`text-black font-bold font-rubik-medium text-lg ${
+            className={`font-bold font-rubik-medium text-lg ${
               activeTab === "meals"
-                ? "border-b-2 border-black pb-1"
+                ? "border-b-2 text-newblue border-newblue pb-1"
                 : "text-gray-400"
             }`}
           >
@@ -35,7 +35,7 @@ const RecentLogs = ({ date }) => {
           <Text
             className={`text-black font-bold font-rubik-medium text-lg ${
               activeTab === "activity"
-                ? "border-b-2 border-black pb-1"
+                ? "border-b-2 text-newblue border-newblue pb-1"
                 : "text-gray-400"
             }`}
           >

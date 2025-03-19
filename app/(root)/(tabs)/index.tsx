@@ -17,7 +17,13 @@ import { ActivityIndicator } from "react-native-paper";
 
 const HomeScreen = () => {
   const { user, userProfile, loading, date } = useGlobalContext();
-  if (loading || !userProfile) return <ActivityIndicator size="large" color="black" />;
+  if (loading || !userProfile)
+    return (
+      // <SafeAreaView className="flex-1 bg-white">
+      //   <ActivityIndicator size="large" color="newblue" />
+      // </SafeAreaView>
+      null
+    );
   const { level_meta, streaks } = userProfile;
   const { level, experience, next_level } = level_meta;
   const { on_going } = streaks;

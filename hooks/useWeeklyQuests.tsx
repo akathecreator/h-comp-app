@@ -36,7 +36,7 @@ const tasks = {
   manual_log: 50,
 };
 
-const useGoals = (type: string) => {
+const useWeeklyGoals = (type: string) => {
   const { user } = useGlobalContext();
   const [quests, setQuests] = useState<Quest[]>([]);
   const [loading, setLoading] = useState(true);
@@ -85,7 +85,6 @@ const useGoals = (type: string) => {
         await updateUserLevels(owner, the_type);
       } else {
         // 🔄 Update quests state so UI reflects the change immediately
-        console.log(quests);
         setQuests((prevQuests) =>
           prevQuests.map((quest) =>
             quest.id === id
@@ -107,20 +106,33 @@ const useGoals = (type: string) => {
   };
 
   useEffect(() => {
-    const fetchDailyGoals = async () => {
+    const fetchWeeklyGoals = async () => {
       if (!user) return;
       try {
         const today = new Date();
-        const tomorrow = new Date(today);
-        tomorrow.setDate(tomorrow.getDate() + 1);
-        today.setHours(0, 0, 0, 0);
+
+        // Get the current day of the week (0 = Sunday, 1 = Monday, ..., 6 = Saturday)
+        const dayOfWeek = today.getDay();
+
+        // Calculate how many days we need to subtract to get to Monday
+        const daysToMonday = dayOfWeek === 0 ? 6 : dayOfWeek - 1; // If today is Sunday (0), go back 6 days
+
+        // Set the date to this week's Monday
+        const startOfWeek = new Date(today);
+        startOfWeek.setDate(today.getDate() - daysToMonday);
+        startOfWeek.setHours(0, 0, 0, 0);
+
+        // Get the next Monday (Start of next week)
+        const endOfWeek = new Date(startOfWeek);
+        endOfWeek.setDate(startOfWeek.getDate() + 7); // Next Monday
+        endOfWeek.setHours(0, 0, 0, 0);
 
         let q = query(
           collection(db, "goals"),
           where("owner_id", "==", user.uid),
           where("goal_type", "==", type),
-          where("start_date", ">=", today),
-          where("start_date", "<", tomorrow),
+          where("start_date", ">=", startOfWeek),
+          where("start_date", "<", endOfWeek),
           limit(2)
         );
 
@@ -148,7 +160,7 @@ const useGoals = (type: string) => {
       }
     };
 
-    fetchDailyGoals();
+    fetchWeeklyGoals();
   }, [db, user?.uid]); // Dependencies include db and user.uid
 
   return { quests, loading, updateQuest };
@@ -224,4 +236,4 @@ export const updateUserLevels = async (
   await updateUserStreak(userId);
 };
 
-export default useGoals;
+export default useWeeklyGoals;

@@ -6,7 +6,7 @@ const Header = ({ streak }: { streak: number }) => {
   return (
     <View className="flex-row justify-between items-center">
       {/* Left - Title */}
-      <Text className="text-3xl font-bold text-black">H Companion</Text>
+      <Text className="text-3xl font-bold text-black">H-Companion</Text>
 
       {/* Right - Streak Count + Icon */}
       <View className="flex-row items-center">

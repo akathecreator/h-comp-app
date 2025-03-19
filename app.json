@@ -11,7 +11,7 @@
         "projectId": "a3271ed2-47da-4e33-9d3f-649ed63f618f"
       }
     },
-    "name": "c6-companion",
+    "name": "H-Companion",
     "slug": "c6-companion",
     "owner": "archbishop",
     "version": "1.0.0",
@@ -26,8 +26,8 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/icon.png",
-        "backgroundColor": "#ffffff"
+        "foregroundImage": "./assets/images/playstore.png",
+        "backgroundColor": "#000000"
       },
       "package": "com.archbishop.c6companion"
     },
@@ -36,14 +36,19 @@
       "output": "static",
       "favicon": "./assets/images/favicon.png"
     },
+    "splash": {
+      "image": "./assets/images/icon.png",
+      "resizeMode": "cover",
+      "backgroundColor": "#000000"
+    },
     "plugins": [
       "expo-router",
       [
         "expo-splash-screen",
         {
-          "image": "./assets/images/splash-icon.png",
+          "image": "./assets/images/icon.png",
           "resizeMode": "cover",
-          "backgroundColor": "#ffffff",
+          "backgroundColor": "#000000",
           "enableFullScreenImage_legacy": true
         }
       ],

@@ -9,7 +9,18 @@
       "distribution": "internal"
     },
     "preview": {
-      "distribution": "internal"
+      "distribution": "internal",
+      "developmentClient": true,
+      "env": {
+        "EXPO_PUBLIC_FIREBASE_API_KEY": "AIzaSyATxXYWKsLqkUUeb3AsrFVzWRSHUIMyiL8",
+        "EXPO_PUBLIC_FIREBASE_AUTH_DOMAIN": "c6-companion-a800c.firebaseapp.com",
+        "EXPO_PUBLIC_FIREBASE_PROJECT_ID": "c6-companion-a800c",
+        "EXPO_PUBLIC_FIREBASE_STORAGE_BUCKET": "c6-companion-a800c.firebasestorage.app",
+        "EXPO_PUBLIC_FIREBASE_MESSAGING_SENDER_ID": "491833149622",
+        "EXPO_PUBLIC_FIREBASE_APP_ID": "1:491833149622:web:a61d97cf0e8f7ea48fbe17",
+        "EXPO_PUBLIC_GOOGLE_CLIENT_ID": "491833149622-9md8ofm2n21g049jenj80mffusphtmc6.apps.googleusercontent.com",
+        "EXPO_PUBLIC_AGENT_ID": "48fde3d6-4619-029f-bab6-f64953b06e1d"
+      }
     },
     "production": {
       "autoIncrement": true
