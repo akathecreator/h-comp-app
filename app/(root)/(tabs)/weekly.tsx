@@ -9,7 +9,6 @@ import { useGlobalContext } from "@/lib/global-provider";
 import BodyProgress from "@/components/weekly/BodyProgress";
 import { ScrollView } from "react-native-gesture-handler";
 import useWeeklyLogs from "@/hooks/useWeeklyData";
-import WeeklyData from "@/types/weeklyData";
 
 const screenWidth = Dimensions.get("window").width;
 
@@ -17,9 +16,6 @@ const WeeklyPage = () => {
   const { userProfile } = useGlobalContext();
   const [currentWeek, setCurrentWeek] = useState(new Date());
   const { weeklyLogs, loading } = useWeeklyLogs(userProfile.id, currentWeek);
-  const [selectedTab, setSelectedTab] = useState<
-    "calories" | "activity" | "weight"
-  >("calories");
 
   const weekStart = startOfWeek(currentWeek, { weekStartsOn: 1 });
   const weekEnd = addDays(weekStart, 6);
@@ -42,7 +38,7 @@ const WeeklyPage = () => {
         <BodyProgress />
 
         <View className="flex-1 bg-white px-4">
-          <View className="flex-row justify-between items-center mb-4">
+          <View className="flex-row justify-between items-center mb-1">
             <TouchableOpacity
               onPress={() => handleWeekChange("prev")}
               className="p-2"

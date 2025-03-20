@@ -100,22 +100,7 @@ export const GlobalProvider = ({ children }: GlobalProviderProps) => {
     return () => unsubscribe();
   }, []);
 
-  // Fetch user profile from Firestore
-  // const fetchUserProfile = async (userId: string) => {
-  //   try {
-  //     const userDocRef = doc(db, "users", userId); // Ensure `users` is your Firestore collection
-  //     const userDoc = await getDoc(userDocRef);
-  //     if (userDoc.exists()) {
-  //       const profileData = userDoc.data();
-  //       setUserProfile(profileData as UserProfile);
-  //     } else {
-  //       console.error("User profile not found in Firestore.");
-  //       setUserProfile(null);
-  //     }
-  //   } catch (error) {
-  //     console.error("Failed to fetch user profile:", error);
-  //   }
-  // };
+
   const fetchUserProfile = (userId: string) => {
     const userDocRef = doc(db, "users", userId);
   

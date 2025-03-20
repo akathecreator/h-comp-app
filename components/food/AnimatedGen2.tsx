@@ -70,7 +70,7 @@ const CaloriesTracker = ({ date }) => {
       {/* Circular Progress Bar */}
       <View className="flex-row items-center ">
         <View className="items-center justify-center mr-6">
-          <Svg height="200" width="200" viewBox="0 0 200 200">
+          <Svg height="180" width="180" viewBox="0 0 200 200">
             {/* Background circle */}
             <Circle
               cx="100"

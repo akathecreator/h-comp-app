@@ -13,7 +13,7 @@ const ExpBar = ({
   const progress = (exp / maxExp) * 100;
 
   return (
-    <View>
+    <View className="my-2">
       {/* Level Label */}
       <Text className="text-lg font-bold text-black text-left">
         Level {level}

@@ -86,7 +86,7 @@ const DynamicHabitTracker = () => {
   };
 
   return (
-    <View className="flex-row space-x-2 w-full gap-1">
+    <View className="flex-row space-x-2 w-full gap-1 my-2">
       {habits.map((habit) => (
         <View className="px-1 rounded-xl flex-1" key={habit.habit_id}>
           <TouchableOpacity

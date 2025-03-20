@@ -26,9 +26,9 @@ const Dashboard = () => {
   return (
     <KeyboardAvoidingView className="flex-1 h-full pt-16">
       <View className="flex-1">
-        <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+        <ScrollView style={{ flexGrow: 1 }}>
           {/* Life Group Dropdown */}
-          <View className="px-6 my-4">
+          <View className="px-6 my">
             <Header streak={userProfile.streaks.on_going} />
           </View>
 

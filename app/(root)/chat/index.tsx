@@ -33,6 +33,12 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import { AntDesign } from "@expo/vector-icons";
+import {
+  CameraMode,
+  CameraType,
+  CameraView,
+  useCameraPermissions,
+} from "expo-camera";
 
 type Message = {
   text: string;
@@ -57,6 +63,7 @@ export default function C6() {
   );
   const { user, isLogged, loading, userProfile } = useGlobalContext();
   const [dialogVisible, setDialogVisible] = useState(false);
+  const [permission, requestPermission] = useCameraPermissions();
   const c6_user = {
     _id: "2", // Convert to string
     name: "C6",
@@ -152,7 +159,7 @@ export default function C6() {
 
     try {
       // const base = "https://dazzling-simplicity-production.up.railway.app";
-      const base = `http://192.168.1.164:3000`;
+      const base = `http://192.168.1.164:3002`;
       const response = await fetch(`${base}/${agentId}/message`, {
         method: "POST",
         body: formData,
@@ -192,7 +199,7 @@ export default function C6() {
           userId: user.uid,
           roomId: user.uid,
         };
-
+        setLoading(true);
         console.log("3. Saving to Firestore:", userMessageData); // Debug log
         saveMessageToFirestore(userMessageData);
 
@@ -221,7 +228,7 @@ export default function C6() {
           user: c6_user,
           roomId: user.uid,
         };
-
+        setLoading(false);
         // 5. Update UI with bot message
         setMessages((previousMessages) => {
           console.log(
@@ -300,15 +307,15 @@ export default function C6() {
 
   const selectImageFromGallery = async () => {
     try {
-      const permissionResult =
-        await ImagePicker.requestMediaLibraryPermissionsAsync();
-      if (permissionResult.status !== "granted") {
-        Alert.alert("Permission to access gallery is required!");
-        return;
-      }
+      // const [status, requestPermission] =
+      //   await ImagePicker.useMediaLibraryPermissions();
+      // if (status?.accessPrivileges == "none") {
+      //   requestPermission();
+      //   return;
+      // }
 
       const result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        mediaTypes: ["images"],
         allowsEditing: true,
         quality: 0.7,
       });
@@ -316,8 +323,8 @@ export default function C6() {
       if (!result.canceled) {
         const selectedImageUri = result.assets[0].uri;
         setImage(selectedImageUri);
-        setSelectedFile({ uri: result.assets[0].uri });
-        // await uploadImage(result.assets[0].uri);
+        setSelectedFile({ uri: selectedImageUri });
+        // await uploadImage(selectedImageUri);
       }
     } catch (error) {
       console.error("Error picking image from gallery:", error);
@@ -326,15 +333,15 @@ export default function C6() {
 
   const takePhotoWithCamera = async () => {
     try {
-      const permissionResult =
-        await ImagePicker.requestCameraPermissionsAsync();
-      if (permissionResult.status !== "granted") {
-        Alert.alert("Permission to access the camera is required!");
+      // const [status, requestPermission] =
+
+      if (!permission?.granted) {
+        requestPermission();
         return;
       }
 
       const result = await ImagePicker.launchCameraAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        mediaTypes: ["images"],
         allowsEditing: true,
         quality: 0.7,
       });
@@ -404,7 +411,7 @@ export default function C6() {
     const tempImageId = imageId;
     setImage(null);
     setText("");
-    Keyboard.dismiss();
+    // Keyboard.dismiss();
     const replyText = await sendMessageToBackend(text);
 
     let count = 0;

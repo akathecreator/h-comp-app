@@ -85,7 +85,8 @@ const RecentLogs = ({ date }: { date: Date }) => {
   }
 
   return (
-    <ScrollView className="flex-1 px-4 mx-4">
+    // <ScrollView className="flex-1 px-4 mx-4">
+    <>
       <View className="flex-row justify-between items-center my-1">
         {/* <Text className="text-xl font-rubik-semibold text-black ">
           Recent Meals
@@ -106,6 +107,7 @@ const RecentLogs = ({ date }: { date: Date }) => {
               setMealId(meal.id); // Set mealId to the log's id
             }}
             activeOpacity={0.7}
+            className="mx-4"
           >
             <View
               className="flex-row items-center bg-white rounded-lg shadow-md p-4 mb-4"
@@ -172,7 +174,8 @@ const RecentLogs = ({ date }: { date: Date }) => {
           meal_id={mealId}
         />
       )}
-    </ScrollView>
+    </>
+    // </ScrollView>
   );
 };
 

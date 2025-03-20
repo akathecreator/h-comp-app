@@ -24,7 +24,6 @@ import { useGlobalContext } from "@/lib/global-provider";
 import useProgressPhotos from "@/hooks/useProgressPhotos";
 import { FlatList } from "react-native-gesture-handler";
 import dayjs from "dayjs";
-import { v4 as uuidv4 } from "uuid";
 const BodyProgress = () => {
   const { photos, setPhotos } = useProgressPhotos();
   const { user } = useGlobalContext();
@@ -42,7 +41,6 @@ const BodyProgress = () => {
   // Open Image in Fullscreen Modal
   const openImage = (index: number) => setSelectedIndex(index);
   const closeModal = () => {
-    console.log("Closing Modal"); // Debugging
     setSelectedIndex(null);
   };
 
@@ -85,13 +83,13 @@ const BodyProgress = () => {
     const result =
       source === "camera"
         ? await ImagePicker.launchCameraAsync({
+            mediaTypes: ["images"],
             allowsEditing: true,
-            aspect: [1, 1],
-            quality: 1,
+            quality: 0.7,
           })
         : await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ["images"],
             allowsEditing: true,
-            aspect: [1, 1],
             quality: 1,
           });
 
@@ -124,15 +122,11 @@ const BodyProgress = () => {
     <View className="p-4 bg-white rounded-lg`">
       <Text className="text-black font-bold text-lg mb-4">Body Progress</Text>
 
-      <ScrollView
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        className="flex-row"
-      >
+      <ScrollView showsHorizontalScrollIndicator={false} className="flex-row">
         {/* Add Photo Button */}
         <TouchableOpacity
           onPress={handleAddPhoto}
-          className="mt-7 w-24 h-24 border-dashed border-2 border-gray-400 rounded-full flex items-center justify-center mr-3"
+          className="mt-2 w-24 h-24 border-dashed border-2 border-gray-400 rounded-full flex items-center justify-center mr-3"
         >
           <Plus size={32} color="gray" />
         </TouchableOpacity>

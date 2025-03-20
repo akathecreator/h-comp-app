@@ -56,7 +56,7 @@ const HomeScreen = () => {
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
           <View
-            className={`mt-4 ${
+            className={`mt ${
               [
                 "header",
                 "expBar",

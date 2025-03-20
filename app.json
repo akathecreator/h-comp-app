@@ -14,15 +14,17 @@
     "name": "H-Companion",
     "slug": "c6-companion",
     "owner": "archbishop",
-    "version": "1.0.0",
+    "version": "1.0.2",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
+    "icon": "./assets/images/icon-real.png",
     "scheme": "c6-companion",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
+      "icon": "./assets/images/icon-real.png",
       "supportsTablet": true,
-      "bundleIdentifier": "com.archbishop.c6companion"
+      "bundleIdentifier": "com.archbishop.c6companion",
+      "googleServicesFile": "./GoogleService-Info.plist"
     },
     "android": {
       "adaptiveIcon": {
@@ -37,18 +39,18 @@
       "favicon": "./assets/images/favicon.png"
     },
     "splash": {
-      "image": "./assets/images/icon.png",
+      "image": "./assets/images/icon-real.png",
       "resizeMode": "cover",
-      "backgroundColor": "#000000"
+      "backgroundColor": "#101016"
     },
     "plugins": [
       "expo-router",
       [
         "expo-splash-screen",
         {
-          "image": "./assets/images/icon.png",
+          "image": "./assets/images/icon-real.png",
           "resizeMode": "cover",
-          "backgroundColor": "#000000",
+          "backgroundColor": "#101016",
           "enableFullScreenImage_legacy": true
         }
       ],
@@ -76,14 +78,14 @@
         {
           "cameraPermission": "Allow this app to access your camera",
           "microphonePermission": "Allow this app to access your microphone",
-          "photoLibraryPermission": "Allow this app to access your photo library"
+          "photosPermission": "Allow this app to access your photo library"
         }
       ]
     ],
     "experiments": {
       "typedRoutes": true
     },
-    "runtimeVersion": "1.0.0",
+    "runtimeVersion": "1.0.1",
     "updates": {
       "url": "https://u.expo.dev/a3271ed2-47da-4e33-9d3f-649ed63f618f"
     }

@@ -43,19 +43,12 @@ const RecentLogs = ({ date }) => {
           </Text>
         </TouchableOpacity>
       </View>
-      <View>
-        {/* FlatList to Prevent Nested Scroll Issues */}
-        <FlatList
-          data={[{ key: activeTab }]} // Simulated data for one active section
-          keyExtractor={(item) => item.key}
-          renderItem={({ item }) =>
-            item.key === "meals" ? (
-              <Meallogs date={date} />
-            ) : (
-              <RecentActivityList date={date} />
-            )
-          }
-        />
+      <View className="flex-1">
+        {activeTab === "meals" ? (
+          <Meallogs date={date} />
+        ) : (
+          <RecentActivityList date={date} />
+        )}
       </View>
     </View>
   );
