@@ -115,7 +115,7 @@ const Auth = () => {
 
           <TouchableOpacity
             disabled={!request}
-            onPress={signInWithEmail}
+            onPress={handleLoginGoogle}
             className="bg-white shadow-md shadow-zinc-300 rounded-full w-full py-4 mt-5"
           >
             <View className="flex flex-row items-center justify-center">
