@@ -7,8 +7,8 @@ export const sendForMoreGoals = async (uid: string, type: string) => {
   formData.append("roomId", `default-room-${agentId}`);
 
   try {
-    const base = "https://dazzling-simplicity-production.up.railway.app";
-    // const base = `http://192.168.1.164:3002`;
+    // const base = "https://dazzling-simplicity-production.up.railway.app";
+    const base = `http://192.168.1.164:3002`;
     const response = await fetch(`${base}/${agentId}/message`, {
       method: "POST",
       body: formData,
@@ -32,8 +32,8 @@ export const sendOnboardingData = async (uid: string, data: any) => {
   formData.append("roomId", `default-room-${agentId}`);
 
   try {
-    const base = "https://dazzling-simplicity-production.up.railway.app";
-    // const base = `http://192.168.1.164:3002`;
+    // const base = "https://dazzling-simplicity-production.up.railway.app";
+    const base = `http://192.168.1.164:3002`;
     const response = await fetch(`${base}/${agentId}/message`, {
       method: "POST",
       body: formData,

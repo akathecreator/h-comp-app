@@ -158,8 +158,8 @@ export default function C6() {
     }
 
     try {
-      const base = "https://dazzling-simplicity-production.up.railway.app";
-      // const base = `http://192.168.1.164:3002`;
+      // const base = "https://dazzling-simplicity-production.up.railway.app";
+      const base = `http://192.168.1.164:3002`;
       const response = await fetch(`${base}/${agentId}/message`, {
         method: "POST",
         body: formData,
@@ -219,33 +219,57 @@ export default function C6() {
         // if (!botResponse?.[0]?.text) {
         //   throw new Error("Invalid bot response");
         // }
+        const splitMessageIntoBubbles = (text: string) => {
+          // Split at the first full stop but keep it in the first part
+          const splitIndex = text.indexOf(". ");
+          if (splitIndex !== -1) {
+            return [
+              text.substring(0, splitIndex + 1), // First sentence (including ".")
+              text.substring(splitIndex + 2), // Remaining text
+            ];
+          }
+          return [text]; // If no full stop, return as a single message
+        };
+
+        const botResponses = splitMessageIntoBubbles(botResponse[0].text);
 
         // 4. Create bot message
-        const botMessage: IMessage = {
-          _id: `bot-${Date.now()}-${Math.random()}`,
-          text: botResponse[0].text,
-          createdAt: new Date(),
-          user: c6_user,
-          roomId: user.uid,
-        };
-        setLoading(false);
-        // 5. Update UI with bot message
-        setMessages((previousMessages) => {
-          console.log(
-            "6. Adding bot message, current count:",
-            previousMessages.length
-          ); // Debug log
-          return GiftedChat.append(previousMessages, [botMessage]);
-        });
+        // const botMessage: IMessage = {
+        //   _id: `bot-${Date.now()}-${Math.random()}`,
+        //   text: botResponse[0].text,
+        //   createdAt: new Date(),
+        //   user: c6_user,
+        //   roomId: user.uid,
+        // };
+        for (const botMessage of botResponses) {
+          console.log("botMessage", botMessage);
+          const _botMessage: IMessage = {
+            _id: `bot-${Date.now()}-${Math.random()}`,
+            text: botMessage,
+            createdAt: new Date(),
+            user: c6_user,
+            roomId: user.uid,
+          };
+          // 5. Update UI with bot message
+          setMessages((previousMessages) => {
+            console.log(
+              "6. Adding bot message, current count:",
+              previousMessages.length
+            ); // Debug log
+            return GiftedChat.append(previousMessages, [_botMessage]);
+          });
 
-        // 6. Save bot message to Firestore
-        console.log("7. Saving bot message to Firestore"); // Debug log
-        saveMessageToFirestore({
-          text: botMessage.text,
-          user: c6_user,
-          userId: c6_user._id,
-          roomId: user.uid,
-        });
+          // 6. Save bot message to Firestore
+          console.log("7. Saving bot message to Firestore"); // Debug log
+          saveMessageToFirestore({
+            text: botMessage,
+            user: c6_user,
+            userId: c6_user._id,
+            roomId: user.uid,
+          });
+        }
+        setLoading(false);
+
         setSelectedFile(null);
       } catch (error) {
         console.error("Error in onSend:", error);
@@ -509,7 +533,7 @@ export default function C6() {
       <View style={{ padding: 10 }}>
         {/* Back Button in Top Left */}
         <TouchableOpacity
-          onPress={() => router.back()} // Navigate back
+          onPress={() => router.replace("/")} // Navigate back
           style={{
             position: "absolute",
             top: 20, // Adjust for status bar

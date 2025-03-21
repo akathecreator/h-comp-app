@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -7,15 +7,22 @@ import {
   SafeAreaView,
   ScrollView,
   Alert,
+  Modal,
 } from "react-native";
 import { Picker } from "@react-native-picker/picker"; // Correct Picker import
 import { useRouter } from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { sendOnboardingData } from "@/lib/chat";
 import { useGlobalContext } from "@/lib/global-provider";
+import { ProgressBar } from "react-native-paper";
+import { sendForMoreGoals } from "@/lib/chat";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+
 export default function OnboardingScreen() {
   const router = useRouter();
-  const { user } = useGlobalContext();
+  const { user, userProfile } = useGlobalContext();
+  const [progress, setProgress] = useState(0);
+  const [loading, setLoading] = useState(false);
   const [form, setForm] = useState({
     nickname: "",
     gender: "",
@@ -29,6 +36,10 @@ export default function OnboardingScreen() {
   const isFormComplete = () => {
     return Object.values(form).every((value) => value !== "" && value !== null);
   };
+  // useEffect(() => {
+  //   setLoading(true); // Show loading screen
+  //   setProgress(0.2);
+  // }, []);
 
   const completeOnboarding = async () => {
     if (!isFormComplete()) {
@@ -41,6 +52,10 @@ export default function OnboardingScreen() {
       Alert.alert("Error", "User ID not found.");
       return;
     }
+    sendForMoreGoals(user.uid, "daily");
+    sendForMoreGoals(user.uid, "weekly");
+    setLoading(true); // Show loading screen
+    setProgress(0.0); // Start progress from 0
 
     const onboardingData = {
       nickname: form.nickname,
@@ -51,11 +66,26 @@ export default function OnboardingScreen() {
       activityLevel: form.activityLevel,
       healthGoals: form.healthGoals,
     };
+    // Progress animation loop (increments every 100ms for a smooth effect)
+    let currentProgress = 0;
+    const interval = setInterval(() => {
+      currentProgress += 0.01; // Increase smoothly
+      setProgress(currentProgress);
+      if (currentProgress >= 0.9) {
+        clearInterval(interval); // Stop before 100%, final step is manual
+      }
+    }, 100); // Updates every 100ms (total ~9 seconds)
 
     await sendOnboardingData(uid, onboardingData);
+    clearInterval(interval); // Ensure interval stops when the function completes
+    setProgress(1.0); // Ensure it reaches 100%
 
     await AsyncStorage.setItem("isOnboarded", "true"); // Mark onboarding as complete
-    router.replace("/"); // Redirect user to home
+    // router.replace("/"); // Redirect user to home
+    setTimeout(() => {
+      setLoading(false); // Hide loading screen
+      router.replace("/"); // Redirect user to home
+    }, 500); // Small delay for smooth transition
   };
 
   const handleSelect = (field: string, value: string) => {
@@ -64,7 +94,12 @@ export default function OnboardingScreen() {
 
   return (
     <SafeAreaView className="flex-1 bg-white">
-      <ScrollView>
+      <KeyboardAwareScrollView
+        enableOnAndroid={true} // 👈 Makes sure it works on Android
+        extraHeight={150} // 👈 Pushes content up when keyboard is open
+        extraScrollHeight={100} // 👈 Prevents overlap
+        keyboardShouldPersistTaps="handled" // 👈 Dismisses keyboard on tap outside
+      >
         <View className="flex-1 px-6 py-1 bg-white">
           <Text className="text-2xl font-bold mb-4 text-newblue">
             Tell us about yourself
@@ -140,19 +175,21 @@ export default function OnboardingScreen() {
           <View className="">
             {/* Act Selection */}
             <View className="flex-row justify-between mb-4 gap-2">
-              {["Chill", "Lightly Active", "Very Active"].map((activityLevel) => (
-                <TouchableOpacity
-                  key={activityLevel}
-                  className={`p-3 w-1/3 border rounded-lg items-center ${
-                    form.activityLevel === activityLevel
-                      ? "border-newblue bg-newblue/10"
-                      : "border-gray-300"
-                  }`}
-                  onPress={() => handleSelect("activityLevel", activityLevel)}
-                >
-                  <Text className="text-gray-700">{activityLevel}</Text>
-                </TouchableOpacity>
-              ))}
+              {["Chill", "Lightly Active", "Very Active"].map(
+                (activityLevel) => (
+                  <TouchableOpacity
+                    key={activityLevel}
+                    className={`p-3 w-1/3 border rounded-lg items-center ${
+                      form.activityLevel === activityLevel
+                        ? "border-newblue bg-newblue/10"
+                        : "border-gray-300"
+                    }`}
+                    onPress={() => handleSelect("activityLevel", activityLevel)}
+                  >
+                    <Text className="text-gray-700">{activityLevel}</Text>
+                  </TouchableOpacity>
+                )
+              )}
             </View>
           </View>
 
@@ -173,7 +210,43 @@ export default function OnboardingScreen() {
             <Text className="text-white font-bold">Continue</Text>
           </TouchableOpacity>
         </View>
-      </ScrollView>
+      </KeyboardAwareScrollView>
+      {/* Loading Screen */}
+      <Modal transparent visible={loading} animationType="fade">
+        <View
+          style={{
+            flex: 1,
+            justifyContent: "center",
+            alignItems: "center",
+            backgroundColor: "rgba(0,0,0,0.5)",
+          }}
+        >
+          <View
+            style={{
+              width: 300,
+              padding: 20,
+              backgroundColor: "white",
+              borderRadius: 10,
+            }}
+          >
+            <Text
+              style={{
+                fontSize: 16,
+                fontWeight: "bold",
+                marginBottom: 10,
+                textAlign: "center",
+              }}
+            >
+              Personalizing your experience...
+            </Text>
+            <ProgressBar
+              progress={progress}
+              color="#4F46E5"
+              style={{ height: 10, borderRadius: 5 }}
+            />
+          </View>
+        </View>
+      </Modal>
     </SafeAreaView>
   );
 }

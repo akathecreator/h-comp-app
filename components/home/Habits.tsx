@@ -12,6 +12,7 @@ import { X, Settings } from "lucide-react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import useHabits from "@/hooks/useHabits";
 import { useGlobalContext } from "@/lib/global-provider";
+import { useRouter } from "expo-router";
 // Sample dynamic habits (This should come from Firebase/AI in real use cases)
 interface HabitData {
   habit_id: string;
@@ -40,6 +41,7 @@ const generateMockHistory = () => {
 };
 const DynamicHabitTracker = () => {
   const { user } = useGlobalContext();
+  const router = useRouter();
   if (!user) return null;
   const { habits, loading, updateHabitProgress } = useHabits(user.uid);
 
@@ -87,6 +89,19 @@ const DynamicHabitTracker = () => {
 
   return (
     <View className="flex-row space-x-2 w-full gap-1 my-2">
+      {habits.length < 1 && (
+        <TouchableOpacity
+          onPress={() => {
+            router.replace("/chat");
+          }}
+        >
+          <View className="p-4 rounded-xl w-full bg-newblue">
+            <Text className="text-left text-md font-bold text-white">
+              Tell me about your bad habits and good habits to crete streaks
+            </Text>
+          </View>
+        </TouchableOpacity>
+      )}
       {habits.map((habit) => (
         <View className="px-1 rounded-xl flex-1" key={habit.habit_id}>
           <TouchableOpacity
@@ -114,7 +129,9 @@ const DynamicHabitTracker = () => {
               } font-bold text-lg`}
             >
               {habit.streak_count}{" "}
-              {habit.type === "good" ? "days" : `/ ${habit.day_till_complete} days`}
+              {habit.type === "good"
+                ? "days"
+                : `/ ${habit.day_till_complete} days`}
             </Text>
             {/* Button with Icon to Open Modal */}
             {/* <TouchableOpacity

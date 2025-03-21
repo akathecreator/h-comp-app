@@ -133,7 +133,7 @@ const useWeeklyGoals = (type: string) => {
           where("goal_type", "==", type),
           where("start_date", ">=", startOfWeek),
           where("start_date", "<", endOfWeek),
-          limit(2)
+          limit(3)
         );
 
         let querySnapshot = await getDocs(q);
