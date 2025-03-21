@@ -9,15 +9,21 @@
       },
       "eas": {
         "projectId": "a3271ed2-47da-4e33-9d3f-649ed63f618f"
+      },
+      "iosClientId": "218tq9r1n71ooub7sq466scl07o8vijc.apps.googleusercontent.com",
+      "updates": {
+        "enabled": true,
+        "checkAutomatically": "ON_LOAD",
+        "fallbackToCacheTimeout": 0
       }
     },
     "name": "H-Companion",
     "slug": "c6-companion",
     "owner": "archbishop",
-    "version": "1.0.2",
+    "version": "1.0.3",
     "orientation": "portrait",
     "icon": "./assets/images/icon-real.png",
-    "scheme": "c6-companion",
+    "scheme": "com.archbishop.c6companion",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
@@ -70,7 +76,7 @@
       [
         "@react-native-google-signin/google-signin",
         {
-          "iosUrlScheme": "com.googleusercontent.apps.c6companion"
+          "iosUrlScheme": "com.googleusercontent.apps.218tq9r1n71ooub7sq466scl07o8vijc:/oauthredirect"
         }
       ],
       [
@@ -85,7 +91,7 @@
     "experiments": {
       "typedRoutes": true
     },
-    "runtimeVersion": "1.0.1",
+    "runtimeVersion": "1.0.3",
     "updates": {
       "url": "https://u.expo.dev/a3271ed2-47da-4e33-9d3f-649ed63f618f"
     }

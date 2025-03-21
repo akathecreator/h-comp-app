@@ -139,7 +139,7 @@ const useWeeklyGoals = (type: string) => {
         let querySnapshot = await getDocs(q);
         // console.log(querySnapshot.docs.length);
         if (querySnapshot.docs.length === 0) {
-          await sendForMoreGoals(user.uid);
+          await sendForMoreGoals(user.uid, 'weekly');
           querySnapshot = await getDocs(q);
         }
         const dailyGoals = querySnapshot.docs.map((doc) => ({

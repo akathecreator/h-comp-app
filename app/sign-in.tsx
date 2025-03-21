@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useCallback, useEffect } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import {
   Alert,
@@ -11,59 +11,60 @@ import {
 import * as Google from "expo-auth-session/providers/google";
 import * as AuthSession from "expo-auth-session";
 import { makeRedirectUri } from "expo-auth-session";
-import { GoogleAuthProvider, signInWithCredential } from "firebase/auth";
+import {
+  GoogleAuthProvider,
+  OAuthCredential,
+  signInWithCredential,
+} from "firebase/auth";
+import { useIdTokenAuthRequest as useGoogleIdTokenAuthRequest } from "expo-auth-session/providers/google";
 import { auth } from "@/lib/firebase"; // Ensure Firebase is correctly set up
 import { Redirect } from "expo-router";
 import { useGlobalContext } from "@/lib/global-provider";
 import icons from "@/constants/icons";
 import images from "@/constants/images";
 import { signInWithEmailAndPassword } from "firebase/auth";
-
 const Auth = () => {
-  const { refetch, loading, isLogged } = useGlobalContext();
-
+  const { refetchUserProfile, loading, isLogged } = useGlobalContext();
   // Redirect if already logged in
   if (!loading && isLogged) return <Redirect href="/" />;
 
   // ✅ Correct client IDs for each platform
-  const [request, response, promptAsync] = Google.useAuthRequest({
-    iosClientId: process.env.EXPO_PUBLIC_GOOGLE_IOS_CLIENT_ID,
-    scopes: ["profile", "email"],
-    redirectUri: makeRedirectUri({ useProxy: true }),
-  });
+  // const [request, response, promptAsync] = Google.useAuthRequest({
+  //   iosClientId: process.env.EXPO_PUBLIC_GOOGLE_IOS_CLIENT_ID,
+  //   scopes: ["profile", "email"],
+  //   redirectUri: makeRedirectUri({
+  //     native:
+  //       "com.googleusercontent.apps.491833149622-218tq9r1n71ooub7sq466scl07o8vijc:/oauthredirect", // Replace with your app’s iOS scheme
+  //     scheme: "com.archbishop.c6companion",
+  //     path: "oauthredirect",
+  //   }),
+  // });
 
-  const login = async () => {
-    try {
-      console.log("Initiating Google login...");
-      const result = await promptAsync();
-      console.log("Prompt async result:", result);
+  const [request, googleResponse, promptAsyncGoogle] =
+    useGoogleIdTokenAuthRequest({
+      selectAccount: true,
+      iosClientId: process.env.EXPO_PUBLIC_GOOGLE_IOS_CLIENT_ID,
+    });
 
-      if (result.type === "success" && result.authentication) {
-        const { idToken } = result.authentication;
-        console.log("Google ID Token:", idToken);
-
-        // ✅ Now sign in with Firebase
-        const credential = GoogleAuthProvider.credential(idToken);
-        const userCredential = await signInWithCredential(auth, credential);
-        console.log("Firebase user:", userCredential.user);
-
-        // Refresh context after login
-        refetch();
-      } else {
-        console.error("Login cancelled or failed:", result);
-        Alert.alert("Error", "Google login was cancelled or failed.");
-      }
-    } catch (error) {
-      console.error("Error during login:", error);
-      Alert.alert("Error", "An error occurred during Google login.");
-    }
+  // Handles the login via the Google Provider
+  const handleLoginGoogle = async () => {
+    await promptAsyncGoogle();
   };
 
+  // Function that logs into firebase using the credentials from an OAuth provider
+  const loginToFirebase = useCallback(async (credentials: OAuthCredential) => {
+    const signInResponse = await signInWithCredential(auth, credentials);
+  }, []);
+
   useEffect(() => {
-    if (response?.type === "success" && response.authentication) {
-      login();
+    if (googleResponse?.type === "success") {
+      const credentials = GoogleAuthProvider.credential(
+        googleResponse.params.id_token
+      );
+      loginToFirebase(credentials);
     }
-  }, [response]);
+  }, [googleResponse]);
+
   const signInWithEmail = async () => {
     try {
       // Login the user with email and password
@@ -80,7 +81,7 @@ const Auth = () => {
       Alert.alert("Success", "You are now logged in!");
 
       // Refetch global context data
-      refetch();
+      refetchUserProfile();
 
       return user; // Return the user for further use
     } catch (error) {
@@ -114,7 +115,7 @@ const Auth = () => {
 
           <TouchableOpacity
             disabled={!request}
-            onPress={signInWithEmail}
+            onPress={handleLoginGoogle}
             className="bg-white shadow-md shadow-zinc-300 rounded-full w-full py-4 mt-5"
           >
             <View className="flex flex-row items-center justify-center">

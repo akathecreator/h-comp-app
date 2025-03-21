@@ -56,14 +56,18 @@ const auth: Auth = initializeAuth(app, {
 // Export Firebase references for reuse
 export { auth, db, storage, FieldValue };
 import * as Google from "expo-auth-session/providers/google";
+import { makeRedirectUri } from "expo-auth-session";
 // Login Function
 export async function loginWithGoogle() {
   try {
     const [request, response, promptAsync] = Google.useAuthRequest({
-      clientId: process.env.EXPO_PUBLIC_GOOGLE_CLIENT_ID, // Get this from your Firebase Console
+      iosClientId: process.env.EXPO_PUBLIC_GOOGLE_IOS_CLIENT_ID,
       scopes: ["profile", "email"],
+      redirectUri: makeRedirectUri({
+        scheme: "com.archbishop.c6companion",
+        path: "oauthredirect",
+      }),
     });
-    console.log(request, response);
 
     // Prompt the Google login popup
     const result = await promptAsync();
@@ -254,6 +258,7 @@ export const fetchMostRecentMeal = async (
             total_fat: data.total_fat,
             user_id: data.user_id,
             items,
+            type: data.type,
           },
         ];
       } else {
@@ -298,6 +303,7 @@ export const fetchMostRecentMeal = async (
             total_fat: data.total_fat,
             user_id: data.user_id,
             items, // Include the `food_name` array
+            type: data.type,
           } as Meal;
         })
       );
