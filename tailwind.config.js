@@ -38,6 +38,7 @@ module.exports = {
         success: "#4CAF50", // Optional success color
         neonBlue: "#0033FF", // Neon Dark Blue
         newblue: "#4F46E5",
+        royalblue: "#261FB3",
       },
     },
   },

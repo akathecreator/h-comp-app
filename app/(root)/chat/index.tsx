@@ -530,17 +530,19 @@ export default function C6() {
   // }, [messages]);
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <View style={{ padding: 10 }}>
+      {/* <View style={{ padding: 10 }}> */}
         {/* Back Button in Top Left */}
         <TouchableOpacity
           onPress={() => router.replace("/")} // Navigate back
           style={{
             position: "absolute",
-            top: 20, // Adjust for status bar
-            left: 15,
+            top: 30, // Adjust for status bar
+            left: 5,
             zIndex: 10,
             flexDirection: "row",
             alignItems: "center",
+            margin: 10,
+            paddingTop: 20
           }}
         >
           <Ionicons name="arrow-back" size={24} color="black" />
@@ -548,7 +550,7 @@ export default function C6() {
             Back
           </Text> */}
         </TouchableOpacity>
-      </View>
+      {/* </View> */}
       <View style={{ flex: 1, backgroundColor: "#F4F2ED" }}>
         <GiftedChat
           messages={messages}

@@ -97,7 +97,7 @@ const DynamicHabitTracker = () => {
         >
           <View className="p-4 rounded-xl w-full bg-newblue">
             <Text className="text-left text-md font-bold text-white">
-              Tell me about your bad habits and good habits to crete streaks
+              Tell me about your bad habits and good habits to track streaks
             </Text>
           </View>
         </TouchableOpacity>
