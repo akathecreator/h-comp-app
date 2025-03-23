@@ -14,7 +14,7 @@ const DynamicHabitTracker = () => {
   if (loading || cups === null) return null;
 
   return (
-    <View className="flex-row space-x-2 w-full gap-1 my-2 px-5">
+    <View className="flex-row space-x-2 w-full gap-1 my-2 px-6">
       {/* Hydration Tracker */}
       <View className="px-1 rounded-xl flex-1">
         <TouchableOpacity

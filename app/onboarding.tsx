@@ -17,7 +17,10 @@ import { useGlobalContext } from "@/lib/global-provider";
 import { ProgressBar } from "react-native-paper";
 import { sendForMoreGoals } from "@/lib/chat";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-
+import {
+  registerForPushNotificationsAsync,
+  savePushTokenToUser,
+} from "@/lib/noti";
 export default function OnboardingScreen() {
   const router = useRouter();
   const { user, userProfile } = useGlobalContext();
@@ -76,6 +79,11 @@ export default function OnboardingScreen() {
     }, 100); // Updates every 100ms (total ~9 seconds)
 
     await sendOnboardingData(uid, onboardingData);
+    const token = await registerForPushNotificationsAsync();
+    if (token) {
+      await savePushTokenToUser(token);
+    }
+  
     clearInterval(interval); // Ensure interval stops when the function completes
     setProgress(1.0); // Ensure it reaches 100%
     // sendForMoreGoals(user.uid, "daily");

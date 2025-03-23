@@ -319,7 +319,7 @@ export const fetchMostRecentMeal = async (
 export const removeMeal = async (meal_id: string): Promise<void> => {
   try {
     // Reference the document in the "meals" collection using meal_id
-    const mealDocRef = doc(db, "meals", meal_id);
+    const mealDocRef = doc(db, "logs", meal_id);
 
     // Delete the document
     await deleteDoc(mealDocRef);

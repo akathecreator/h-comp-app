@@ -12,7 +12,7 @@ import ExpBar from "@/components/home/ExpBar";
 import DailyQuests from "@/components/home/DailyQuests";
 import WeeklyQuests from "@/components/home/WeeklyQuests";
 import HabitTracker from "@/components/home/Habits";
-import WaterTracker from "@/components/home/WaterTracker";
+import DynamicHabitTracker from "@/components/home/WaterTracker";
 import { useGlobalContext } from "@/lib/global-provider";
 import { ActivityIndicator } from "react-native-paper";
 
@@ -43,7 +43,7 @@ const HomeScreen = () => {
 
     {
       id: "water",
-      component: <WaterTracker />,
+      component: <DynamicHabitTracker />,
     },
 
     { id: "dailyQuests", component: <DailyQuests /> },
