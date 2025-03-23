@@ -24,9 +24,10 @@ export const sendForMoreGoals = async (uid: string, type: string) => {
 };
 
 export const sendOnboardingData = async (uid: string, data: any) => {
-  const text_ = "sending user ONBOARDING_DATA" + JSON.stringify(data);
+  const text_ = "Please save my data as user ONBOARDING_DATA" + JSON.stringify(data);
   const agentId = process.env.EXPO_PUBLIC_AGENT_ID;
   const formData = new FormData();
+  // console.log("text_", text_);
   formData.append("text", text_);
   formData.append("userId", uid);
   formData.append("roomId", `default-room-${agentId}`);

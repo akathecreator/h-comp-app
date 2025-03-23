@@ -24,13 +24,13 @@ export default function OnboardingScreen() {
   const [progress, setProgress] = useState(0);
   const [loading, setLoading] = useState(false);
   const [form, setForm] = useState({
-    nickname: "",
-    gender: "",
-    age: "",
-    height: "",
-    weight: "",
-    activityLevel: "",
-    healthGoals: "",
+    nickname: "bright",
+    gender: "male",
+    age: 29,
+    height: "180cm",
+    weight: "80kg",
+    activityLevel: "Chill",
+    healthGoals: "Lose weight",
   });
   // Function to check if all fields are filled
   const isFormComplete = () => {
@@ -52,8 +52,7 @@ export default function OnboardingScreen() {
       Alert.alert("Error", "User ID not found.");
       return;
     }
-    sendForMoreGoals(user.uid, "daily");
-    sendForMoreGoals(user.uid, "weekly");
+
     setLoading(true); // Show loading screen
     setProgress(0.0); // Start progress from 0
 
@@ -79,7 +78,8 @@ export default function OnboardingScreen() {
     await sendOnboardingData(uid, onboardingData);
     clearInterval(interval); // Ensure interval stops when the function completes
     setProgress(1.0); // Ensure it reaches 100%
-
+    // sendForMoreGoals(user.uid, "daily");
+    // sendForMoreGoals(user.uid, "weekly");
     await AsyncStorage.setItem("isOnboarded", "true"); // Mark onboarding as complete
     // router.replace("/"); // Redirect user to home
     setTimeout(() => {

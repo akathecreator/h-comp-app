@@ -10,20 +10,31 @@ import {
   GestureDetector,
 } from "react-native-gesture-handler";
 import { Feather } from "@expo/vector-icons";
+import weekday from "dayjs/plugin/weekday";
+import utc from "dayjs/plugin/utc";
 dayjs.locale("en");
+dayjs.extend(weekday);
+dayjs.extend(utc);
 
-const WeeklySlider = ({ selectedDate, setSelectedDate }) => {
+const WeeklySlider = ({
+  selectedDate,
+  setSelectedDate,
+}: {
+  selectedDate: dayjs.Dayjs;
+  setSelectedDate: (date: dayjs.Dayjs) => void;
+}) => {
   const [currentWeekStart, setCurrentWeekStart] = useState(
-    dayjs().startOf("week").add(1, "day")
+    dayjs().startOf("week").add(0, "day")
   ); // Monday start
   const isCurrentWeek = currentWeekStart.isSame(
-    dayjs().startOf("week").add(1, "day"),
+    dayjs().startOf("week").add(0, "day"),
     "week"
   );
   // Generate a week's data
   const getWeekDays = (startDate: dayjs.Dayjs) => {
     return Array.from({ length: 7 }, (_, i) => {
-      const date = startDate.add(i, "day");
+      // const date = startDate.add(i, "day");
+      const date = startDate.clone().add(i, "day");
       return {
         day: date.format("ddd"),
         date: date.format("D"),
@@ -33,7 +44,7 @@ const WeeklySlider = ({ selectedDate, setSelectedDate }) => {
   };
 
   const weekDays = getWeekDays(currentWeekStart);
-
+  console.log("weekDays", weekDays);
   return (
     <View className="bg-transparent rounded-2xl shadow-md w-full items-center py-1">
       <TouchableOpacity
