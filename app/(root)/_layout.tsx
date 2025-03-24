@@ -8,18 +8,24 @@ import { useGlobalContext } from "@/lib/global-provider";
 import { ActivityIndicator } from "react-native-paper";
 
 export default function AppLayout() {
-  const { loading, isLogged } = useGlobalContext();
+  const { loading, isLogged, userProfile } = useGlobalContext();
   const [isOnboarded, setIsOnboarded] = useState<boolean | null>(null);
-  
+
   useEffect(() => {
     const checkOnboarding = async () => {
       // await AsyncStorage.setItem("isOnboarded", "true"); // Mark onboarding as complete
       const onboarded = await AsyncStorage.getItem("isOnboarded");
-      setIsOnboarded(onboarded === "true"); // Convert string to boolean
+      const { bmi } = userProfile;
+      const value = bmi?.value;
+      if (!value) {
+        setIsOnboarded(false); // Convert string to boolean
+      } else {
+        setIsOnboarded(onboarded === "true"); // Convert string to boolean
+      }
     };
 
     checkOnboarding();
-  }, []);
+  }, [userProfile]);
 
   if (loading || isOnboarded === null) {
     return (
