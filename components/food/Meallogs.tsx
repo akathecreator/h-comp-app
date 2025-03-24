@@ -15,7 +15,8 @@ import { format } from "date-fns";
 import NutritionDialog from "./NutritionDialog";
 import { removeMeal } from "@/lib/firebase";
 import { router } from "expo-router";
-
+import icons from "@/constants/icons";
+const flame2 = icons.flame2;
 interface Meal {
   id: string;
   description: string;
@@ -114,7 +115,7 @@ const RecentLogs = ({ date }: { date: Date }) => {
               style={{ elevation: 3 }}
             >
               <Image
-                source={{ uri: meal.image_url }}
+                source={{ uri: meal.image_url ? meal.image_url : flame2  }}
                 style={{
                   width: 136,
                   height: 136,

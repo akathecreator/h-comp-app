@@ -140,6 +140,11 @@ export default function C6() {
     formData.append("text", text_);
     formData.append("userId", user.uid);
     formData.append("roomId", `default-room-${agentId}`);
+    const payload = {
+      text: text_,
+      userId: user.uid,
+      roomId: `default-room-${agentId}`,
+    };
     console.log("userid sent", user.uid);
     if (selectedFile) {
       const fileName = selectedFile.uri.split("/").pop() || "image.jpg";
@@ -148,22 +153,27 @@ export default function C6() {
       const image_meta = await uploadImage(selectedFile.uri);
       if (!image_meta) return;
       const { imageUrl, uniqueId } = image_meta;
-
-      formData.append("file", {
-        uri: imageUrl,
-        name: uniqueId,
-        type: `image/${fileType}`,
-      } as any);
+      payload.imageUrl = uniqueId;
+      // formData.append("file", {
+      //   uri: imageUrl,
+      //   name: uniqueId,
+      //   type: `image/${fileType}`,
+      // } as any);
+      formData.append("imageUrl", imageUrl);
       console.log("selectedFile", selectedFile);
     }
 
     try {
-      const base = "https://dazzling-simplicity-production.up.railway.app";
-      // const base = `http://192.168.1.164:3002`;
+      // const base = "https://dazzling-simplicity-production.up.railway.app";
+      const base = `http://192.168.1.164:3002`;
+      console.log(formData);
+
       const response = await fetch(`${base}/${agentId}/message`, {
         method: "POST",
-        body: formData,
-        headers: { "Content-Type": "multipart/form-data" },
+        body: JSON.stringify(payload),
+        headers: {
+          "Content-Type": "application/json",
+        },
       });
       console.log("response", response);
       const botResponse = await response.json();
@@ -436,7 +446,7 @@ export default function C6() {
     setImage(null);
     setText("");
     // Keyboard.dismiss();
-    const replyText = await sendMessageToBackend(text);
+    const replyText = await sendMessageToBackend(tempText);
 
     let count = 0;
     for (var reply of replyText) {
@@ -531,25 +541,25 @@ export default function C6() {
   return (
     <SafeAreaView style={{ flex: 1 }}>
       {/* <View style={{ padding: 10 }}> */}
-        {/* Back Button in Top Left */}
-        <TouchableOpacity
-          onPress={() => router.replace("/")} // Navigate back
-          style={{
-            position: "absolute",
-            top: 30, // Adjust for status bar
-            left: 5,
-            zIndex: 10,
-            flexDirection: "row",
-            alignItems: "center",
-            margin: 10,
-            paddingTop: 20
-          }}
-        >
-          <Ionicons name="arrow-back" size={24} color="black" />
-          {/* <Text style={{ color: "black", fontSize: 18, marginLeft: 5 }}>
+      {/* Back Button in Top Left */}
+      <TouchableOpacity
+        onPress={() => router.replace("/")} // Navigate back
+        style={{
+          position: "absolute",
+          top: 30, // Adjust for status bar
+          left: 5,
+          zIndex: 10,
+          flexDirection: "row",
+          alignItems: "center",
+          margin: 10,
+          paddingTop: 20,
+        }}
+      >
+        <Ionicons name="arrow-back" size={24} color="black" />
+        {/* <Text style={{ color: "black", fontSize: 18, marginLeft: 5 }}>
             Back
           </Text> */}
-        </TouchableOpacity>
+      </TouchableOpacity>
       {/* </View> */}
       <View style={{ flex: 1, backgroundColor: "#F4F2ED" }}>
         <GiftedChat

@@ -61,10 +61,17 @@ const CaloriesTracker = ({ date }) => {
   const CIRCUMFERENCE = 2 * Math.PI * RADIUS;
 
   // Ensure progress is within bounds (0 to 1)
-  const progress = Math.min(1, netCalories / suggestedCalories);
-  const strokeDashoffset = (1 - progress) * CIRCUMFERENCE;
-
+  // const progress = Math.min(1, netCalories / suggestedCalories);
+  // const strokeDashoffset = (1 - progress) * CIRCUMFERENCE;
+  // const excessProgress = Math.max(progress - 1, 0);
+  // const redStrokeDashoffset = (1 - excessProgress) * CIRCUMFERENCE;
   // const adjustedOffset = (1 - Math.min(1, burnProgress)) * DASH_LENGTH;
+  const progress = netCalories / suggestedCalories; // full raw value
+  const cappedProgress = Math.min(1, progress);
+  const excessProgress = Math.max(progress - 1, 0);
+
+  const strokeDashoffset = (1 - cappedProgress) * CIRCUMFERENCE;
+  const redStrokeDashoffset = (1 - Math.min(1, excessProgress)) * CIRCUMFERENCE;
   return (
     <View className="bg-white p-8 rounded-lg shadow-md items-center mx-7 my-4 mb-6">
       {/* Circular Progress Bar */}
@@ -93,6 +100,18 @@ const CaloriesTracker = ({ date }) => {
               strokeLinecap="round"
               transform="rotate(-270, 100, 100)"
             />
+            <Circle
+              cx="100"
+              cy="100"
+              r={RADIUS / 1.17}
+              stroke="#FF4C4C" // Progress color
+              strokeWidth={12}
+              fill="none"
+              strokeDasharray={CIRCUMFERENCE}
+              strokeDashoffset={redStrokeDashoffset}
+              strokeLinecap="round"
+              transform="rotate(-270, 100, 100)"
+            />
           </Svg>
           {/* Centered Text */}
           <View style={{ position: "absolute", alignItems: "center" }}>
@@ -100,6 +119,9 @@ const CaloriesTracker = ({ date }) => {
               {netCalories}
             </Text>
             <Text style={{ fontSize: 14, color: "gray" }}>Net Calories</Text>
+            <Text style={{ fontSize: 8, color: "gray" }}>
+              {maxCalories} Max Calories
+            </Text>
           </View>
         </View>
         <View className="mt flex w-[60px] mr-6">
@@ -109,13 +131,20 @@ const CaloriesTracker = ({ date }) => {
               <Progress.Bar
                 progress={nutrient.value / nutrient.max}
                 width={null}
-                color={nutrient.color}
+                color={
+                  nutrient.value > nutrient.max ? "#FF4C4C" : nutrient.color
+                }
                 height={6}
                 style={{ width: "100%" }}
               />
               <Text className="text-xs text-gray-500">
                 {nutrient.value}/{nutrient.max} g
               </Text>
+              {/* {nutrient.value > nutrient.max && (
+                <Text className="text-xs text-red-500">
+                  {nutrient.value - nutrient.max}g
+                </Text>
+              )} */}
             </View>
           ))}
         </View>
@@ -138,6 +167,11 @@ const CaloriesTracker = ({ date }) => {
           <Text className="text">Suggested</Text>
         </View>
       </View>
+      {netCalories > maxCalories && (
+        <Text className="text-xs text-red-500">
+          {netCalories - maxCalories} Kcal
+        </Text>
+      )}
     </View>
   );
 };
