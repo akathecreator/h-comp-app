@@ -187,8 +187,8 @@ const QuickLogBox = ({ date }: { date: Date }) => {
     }
 
     try {
-      // const base = "https://dazzling-simplicity-production.up.railway.app";
-      const base = `http://192.168.1.200:3002`;
+      const base = "https://dazzling-simplicity-production.up.railway.app";
+      // const base = `http://192.168.1.200:3002`;
       // console.la);
 
       const response = await fetch(`${base}/${agentId}/message`, {

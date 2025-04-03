@@ -1,4 +1,4 @@
-import onboarding from "@/assets/images/Onboarding1.png";
+import onboarding from "@/assets/images/onboarding1.png";
 import onboarding2 from "@/assets/images/onboarding4.png";
 import onboarding3 from "@/assets/images/onboarding3.png";
 import onboarding4 from "@/assets/images/onboarding2.png";

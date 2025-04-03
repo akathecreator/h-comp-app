@@ -136,8 +136,8 @@ export default function C6() {
         // formData.append("imageUrl", imageUrl);
         console.log("selectedFile", selectedFile);
       }
-      // const base = "https://dazzling-simplicity-production.up.railway.app";
-      const base = `http://192.168.1.200:3002`;
+      const base = "https://dazzling-simplicity-production.up.railway.app";
+      // const base = `http://192.168.1.200:3002`;
       // console.la);
       console.log("sending to", agentId, payload);
       const response = await fetch(`${base}/${agentId}/message`, {

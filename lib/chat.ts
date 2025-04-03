@@ -12,8 +12,8 @@ export const sendForMealSuggestions = async (uid: string) => {
     roomId: `default-room-${agentId}`,
   };
   try {
-    // const base = "https://dazzling-simplicity-production.up.railway.app";
-    const base = `http://192.168.1.164:3002`;
+    const base = "https://dazzling-simplicity-production.up.railway.app";
+    // const base = `http://192.168.1.164:3002`;
     await fetch(`${base}/${agentId}/message`, {
       method: "POST",
       body: JSON.stringify(payload),
@@ -44,8 +44,8 @@ export const sendInitialUserData = async (uid: string, data: any) => {
   };
 
   try {
-    // const base = "https://dazzling-simplicity-production.up.railway.app";
-    const base = `http://192.168.1.164:3002`;
+    const base = "https://dazzling-simplicity-production.up.railway.app";
+    // const base = `http://192.168.1.164:3002`;
     await fetch(`${base}/${agentId}/message`, {
       method: "POST",
       body: JSON.stringify(payload),
@@ -75,8 +75,8 @@ export const sendUserOnboardingConversations = async (uid: string) => {
   };
 
   try {
-    // const base = "https://dazzling-simplicity-production.up.railway.app";
-    const base = `http://192.168.1.164:3002`;
+    const base = "https://dazzling-simplicity-production.up.railway.app";
+    // const base = `http://192.168.1.164:3002`;
     await fetch(`${base}/${agentId}/message`, {
       method: "POST",
       body: JSON.stringify(payload),
