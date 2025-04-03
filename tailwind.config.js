@@ -11,6 +11,13 @@ module.exports = {
         "rubik-medium": ["Rubik-Medium", "sans-serif"],
         "rubik-semibold": ["Rubik-SemiBold", "sans-serif"],
         "rubik-light": ["Rubik-Light", "sans-serif"],
+        sans: ["NotoSansThai-Regular", "sans-serif"],
+        bold: ["NotoSansThai-Bold", "sans-serif"],
+        medium: ["NotoSansThai-Medium", "sans-serif"],
+        semibold: ["NotoSansThai-SemiBold", "sans-serif"],
+        light: ["NotoSansThai-Light", "sans-serif"],
+        extrabold: ["NotoSansThai-ExtraBold", "sans-serif"],
+        black: ["NotoSansThai-Black", "sans-serif"],
       },
       colors: {
         bone: {
@@ -37,8 +44,14 @@ module.exports = {
         danger: "#F75555", // Danger or error color
         success: "#4CAF50", // Optional success color
         neonBlue: "#0033FF", // Neon Dark Blue
-        newblue: "#4F46E5",
+        // newblue: "#4F46E5",
+        newblue: "#594715",
         royalblue: "#261FB3",
+
+        earthseaweed: "#594715",
+        earthbrown: "#c2a968",
+        
+        earthspinach: "#847d3b",
       },
     },
   },

@@ -12,15 +12,7 @@ import {
 } from "react-native";
 import useMostRecentMeal from "@/hooks/useMostRecentMeal";
 import { useGlobalContext } from "@/lib/global-provider";
-// Mock data (replace this with AI response data)
-const mockSummary = {
-  calories: 450,
-  protein: 25,
-  carbs: 60,
-  fat: 15,
-  items: ["Grilled Chicken", "Brown Rice", "Steamed Broccoli"],
-};
-
+import flame2 from "../../assets/images/food.png";
 interface NutritionDialogProps {
   visible: boolean;
   onClose: () => void;
@@ -34,7 +26,8 @@ const NutritionDialog: React.FC<NutritionDialogProps> = ({
 }) => {
   const { user } = useGlobalContext(); // Get the current user
   const [fadeAnim] = useState(new Animated.Value(0)); // For fade-in animation
-  const { recentMeals, loading } = useMostRecentMeal(user.uid, meal_id);
+  
+  const { recentMeals, loading } = useMostRecentMeal(user?.uid, meal_id);
   useEffect(() => {
     if (visible) {
       Animated.timing(fadeAnim, {
@@ -73,14 +66,14 @@ const NutritionDialog: React.FC<NutritionDialogProps> = ({
           </Text>
           <View className="items-center mb-6">
             <Image
-              source={{ uri: recentMeals[0].image_url }}
+              source={recentMeals[0].image_url ? { uri: recentMeals[0].image_url } : flame2}
               className="rounded-lg w-60 h-60"
-              resizeMode="contain"
+              resizeMode="cover"
             />
           </View>
 
           {/* Calories and Macros */}
-          <View className="mb-4 bg-black rounded-lg p-4">
+          <View className="mb-4 bg-earthseaweed rounded-lg p-4">
             <Text className="text-white text-base font-semibold">
               Total Calories:{" "}
               <Text className="text-white">
@@ -115,7 +108,7 @@ const NutritionDialog: React.FC<NutritionDialogProps> = ({
           {/* Dismiss Button */}
           <TouchableOpacity
             onPress={onClose}
-            className="bg-black p-3 rounded-lg items-center mt-4"
+            className="bg-earthbrown p-3 rounded-lg items-center mt-4"
           >
             <Text className="text-white font-bold">Close</Text>
           </TouchableOpacity>

@@ -23,6 +23,7 @@ import { useGlobalContext } from "@/lib/global-provider";
 import icons from "@/constants/icons";
 import images from "@/constants/images";
 import { signInWithEmailAndPassword } from "firebase/auth";
+import { OnboardingSlider } from "@/components/auth/OnboardingSlider";
 const Auth = () => {
   const { refetchUserProfile, loading, isLogged } = useGlobalContext();
   // Redirect if already logged in
@@ -93,29 +94,29 @@ const Auth = () => {
   return (
     <SafeAreaView className="bg-white h-full">
       <ScrollView contentContainerStyle={{ height: "100%" }}>
-        <Image
+        {/* <Image
           source={images.onboarding}
           className="w-full h-4/6"
           resizeMode="contain"
-        />
+        /> */}
+        <OnboardingSlider />
 
         <View className="px-10">
-          <Text className="text-base text-center uppercase font-rubik text-black-200">
-            Welcome To H-Companion
+          <Text className="text-xl text-semibold text-center uppercase san text-black-300 mt-5">
+            Hi! I’m Leafi, your health companion 🌱
           </Text>
 
-          <Text className="text-3xl font-rubik-bold text-black-300 text-center mt-2">
-            Let's Get You Closer To {"\n"}
-            <Text className="text-primary-300">Your Ideal Health Goals</Text>
+          <Text className="text-lg san-bold text-black-300 text-center mt-4">
+            Ready when you are!
           </Text>
 
-          <Text className="text-lg font-rubik text-black-200 text-center mt-12">
+          {/* <Text className="text-lg san text-black-200 text-center mt-4">
             Login to H-Companion with Google
-          </Text>
-
+          </Text> */}
+          {/* handleLoginGoogle */}
           <TouchableOpacity
             disabled={!request}
-            onPress={handleLoginGoogle}
+            onPress={signInWithEmail}
             className="bg-white shadow-md shadow-zinc-300 rounded-full w-full py-4 mt-5"
           >
             <View className="flex flex-row items-center justify-center">
@@ -124,7 +125,7 @@ const Auth = () => {
                 className="w-5 h-5"
                 resizeMode="contain"
               />
-              <Text className="text-lg font-rubik-medium text-black-300 ml-2">
+              <Text className="text-lg san-medium text-black-300 ml-2">
                 Continue with Google
               </Text>
             </View>

@@ -81,6 +81,7 @@
       <string>Rubik-Medium.ttf</string>
       <string>Rubik-Regular.ttf</string>
       <string>Rubik-SemiBold.ttf</string>
+      <string>NotoSansThai-Regular.ttf</string>
     </array>
     <key>UILaunchStoryboardName</key>
     <string>SplashScreen</string>

@@ -119,51 +119,7 @@ const BodyProgress = () => {
   };
 
   return (
-    <View className="p-4 bg-white rounded-lg`">
-      <Text className="text-black font-bold text-lg mb-4">Body Progress</Text>
-
-      <ScrollView showsHorizontalScrollIndicator={false} className="flex-row">
-        {/* Add Photo Button */}
-        <TouchableOpacity
-          onPress={handleAddPhoto}
-          className="mt-2 w-24 h-24 border-dashed border-2 border-gray-400 rounded-full flex items-center justify-center mr-3"
-        >
-          <Plus size={32} color="gray" />
-        </TouchableOpacity>
-
-        {/* Display Progress Photos */}
-        <FlatList
-          data={photos}
-          keyExtractor={(item, index) => index.toString()}
-          horizontal
-          contentContainerStyle={{ paddingVertical: 16 }}
-          renderItem={({ item, index }) => (
-            <TouchableOpacity
-              onPress={() => openImage(index)}
-              onLongPress={() => confirmDelete(index, item.id)}
-            >
-              <View className="relative w-28 h-28 items-center justify-center mx-1">
-                {/* Date Above Image */}
-                <Text className="absolute -top-4 text-gray-500 text-xs">
-                  {dayjs(item.uploadedAt.toDate()).format("MMM D")}
-                </Text>
-
-                {/* Circular Image */}
-                <Image
-                  source={{ uri: item.url }}
-                  className="w-24 h-24 rounded-full border border-gray-300"
-                  resizeMode="cover"
-                />
-
-                {/* Date Below Image */}
-                <Text className="absolute -bottom-4 text-gray-500 text-xs">
-                  {dayjs(item.uploadedAt.toDate()).format("hh:mm A")}
-                </Text>
-              </View>
-            </TouchableOpacity>
-          )}
-        />
-      </ScrollView>
+    <View className="p-4 bg-white rounded-lg">
       {/* Full-Screen Image Viewer Modal */}
       <Modal
         visible={selectedIndex !== null}
@@ -212,6 +168,54 @@ const BodyProgress = () => {
           </KeyboardAvoidingView>
         </View>
       </Modal>
+      <Text className="text-black font-bold text-lg">Body Progress</Text>
+      {photos.length === 0 && (
+        <Text className="text-grey text-sm mb-2">
+          You can track your body progress daily or weekly here!
+        </Text>
+      )}
+      <ScrollView showsHorizontalScrollIndicator={false} className="flex-row">
+        {/* Add Photo Button */}
+        <TouchableOpacity
+          onPress={handleAddPhoto}
+          className="mt-2 w-24 h-24 border-dashed border-2 border-newblue rounded-full flex items-center justify-center mr-3"
+        >
+          <Plus size={32} color="#847d3b" />
+        </TouchableOpacity>
+
+        {/* Display Progress Photos */}
+        <FlatList
+          data={photos}
+          keyExtractor={(item, index) => index.toString()}
+          horizontal
+          contentContainerStyle={{ paddingVertical: 16 }}
+          renderItem={({ item, index }) => (
+            <TouchableOpacity
+              onPress={() => openImage(index)}
+              onLongPress={() => confirmDelete(index, item.id)}
+            >
+              <View className="relative w-28 h-28 items-center justify-center mx-1">
+                {/* Date Above Image */}
+                <Text className="absolute -top-4 text-gray-500 text-xs">
+                  {dayjs(item.uploadedAt.toDate()).format("MMM D")}
+                </Text>
+
+                {/* Circular Image */}
+                <Image
+                  source={{ uri: item.url }}
+                  className="w-24 h-24 rounded-full border border-gray-300"
+                  resizeMode="cover"
+                />
+
+                {/* Date Below Image */}
+                <Text className="absolute -bottom-4 text-gray-500 text-xs">
+                  {dayjs(item.uploadedAt.toDate()).format("hh:mm A")}
+                </Text>
+              </View>
+            </TouchableOpacity>
+          )}
+        />
+      </ScrollView>
     </View>
   );
 };

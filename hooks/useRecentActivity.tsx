@@ -18,7 +18,7 @@ interface Activity {
 
 const useRecentActivity = (
   userId: string,
-  date: Date = new Date(),
+  date: any = new Date(),
   all: string = "false"
 ) => {
   const [recentActivity, setRecentActivity] = useState<Activity[]>([]);
@@ -28,7 +28,7 @@ const useRecentActivity = (
     if (!userId || !date) return;
     const fetchRecentActivity = async (
       userId: string,
-      date: Date,
+      date: any,
       all: string = "false"
     ) => {
       const activityRef = collection(db, "logs");

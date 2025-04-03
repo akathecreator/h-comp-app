@@ -4,16 +4,16 @@ import { ActivityIndicator } from "react-native-paper";
 import { format } from "date-fns"; // For formatting timestamp
 import useRecentActivity from "@/hooks/useRecentActivity";
 import { useGlobalContext } from "@/lib/global-provider";
-import icons from "@/constants/icons";
+import flame2 from "../../assets/images/exercise.png";
 
-const RecentActivityList = ({ date }: { date: Date }) => {
+const RecentActivityList = ({ date }: { date: any }) => {
   const { user } = useGlobalContext();
   const { recentActivity, loading } = useRecentActivity(user?.uid, date);
 
   if (loading) return <ActivityIndicator size="large" color="black" />;
 
   return (
-    <View className="p-6 gap-2">
+    <View className="px-6 py-2 gap-2">
       {recentActivity.length === 0 ? (
         <Text className="text-center text-gray-500">No recent activities</Text>
       ) : (
@@ -24,12 +24,17 @@ const RecentActivityList = ({ date }: { date: Date }) => {
             return (
               <View
                 key={item.timestamp.toString()}
-                className="p-4 bg-white rounded-lg shadow-md mb-3 flex-row items-center"
+                className="flex-row items-center bg-white rounded-lg shadow-md p-4 mb-4"
               >
                 {/* Left: Activity Icon */}
                 <Image
-                  source={icons.run}
-                  style={{ width: 50, height: 50, margin: 14 }}
+                  source={flame2}
+                  style={{
+                    width: 136,
+                    height: 136,
+                    borderRadius: 8,
+                    marginRight: 12,
+                  }}
                 />
 
                 {/* Middle: Activity Info */}
@@ -42,11 +47,11 @@ const RecentActivityList = ({ date }: { date: Date }) => {
                       {item.duration_minutes} mins
                     </Text>
                   </View>
-                  <Text className="text-xs text-gray-500">
+                  <Text className="text-black-muted">
                     {format(activityDate, "MMM dd, yyyy h:mm a")}
                   </Text>
                   <View className="flex-row mt-1">
-                    <Text className="text-sm text-gray-700 mr-3">
+                    <Text className="text-sm text-black-muted">
                       {item.calories_burned} Calories
                     </Text>
                   </View>

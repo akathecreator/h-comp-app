@@ -1,4 +1,7 @@
-import React, { useEffect, useState } from "react";
+// This is a full onboarding flow broken into 5 steps, each one wrapped under a single component with step navigation and shared state.
+// You will need Tailwind support with NativeWind or equivalent and routing/navigation.
+
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -7,254 +10,307 @@ import {
   SafeAreaView,
   ScrollView,
   Alert,
-  Modal,
 } from "react-native";
-import { Picker } from "@react-native-picker/picker"; // Correct Picker import
 import { useRouter } from "expo-router";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { sendOnboardingData } from "@/lib/chat";
-import { useGlobalContext } from "@/lib/global-provider";
 import { ProgressBar } from "react-native-paper";
-import { sendForMoreGoals } from "@/lib/chat";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+// import { sendOnboardingData } from "@/lib/chat";
+import { saveOnboardingData } from "@/lib/onboarding";
 import {
   registerForPushNotificationsAsync,
   savePushTokenToUser,
 } from "@/lib/noti";
+import { useGlobalContext } from "@/lib/global-provider";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import {
+  StepBasics,
+  StepBodyStats,
+  StepLifestyle,
+  StepEatingHabits,
+  StepPreferences,
+} from "@/components/steps";
+
+import { OnboardingForm } from "@/types/onboarding";
+
+const defaultForm: OnboardingForm = {
+  nickname: "",
+  gender: "male",
+  age: "",
+  height: "",
+  weight: "",
+  targetWeight: "",
+  activityLevel: "Lightly Active",
+  dietType: "normal",
+  eatingStyle: [],
+  preferredWorkouts: [],
+  tone: "funny",
+  country: "thailand",
+  mealTimes: {
+    breakfast: "07:30",
+    lunch: "12:30",
+    dinner: "19:00",
+  },
+  primaryGoal: "lose weight",
+};
+
+const steps = [
+  "Basics",
+  "Body Stats",
+  "Lifestyle",
+  "Eating Habits",
+  "Preferences",
+];
+const calculateMacros = (calories: number, isSuggested = true) => {
+  const pct = isSuggested
+    ? { protein: 0.3, carbs: 0.4, fats: 0.3 }
+    : { protein: 0.25, carbs: 0.5, fats: 0.25 };
+
+  return {
+    protein_g: Math.round((calories * pct.protein) / 4),
+    carbs_g: Math.round((calories * pct.carbs) / 4),
+    fats_g: Math.round((calories * pct.fats) / 9),
+  };
+};
+
 export default function OnboardingScreen() {
   const router = useRouter();
-  const { user, userProfile } = useGlobalContext();
-  const [progress, setProgress] = useState(0);
+  const { user } = useGlobalContext();
+  const [step, setStep] = useState(0);
+  const [form, setForm] = useState(defaultForm);
   const [loading, setLoading] = useState(false);
-  const [form, setForm] = useState({
-    nickname: "bright",
-    gender: "male",
-    age: 29,
-    height: "180cm",
-    weight: "80kg",
-    activityLevel: "Chill",
-    healthGoals: "Lose weight",
-  });
-  // Function to check if all fields are filled
-  const isFormComplete = () => {
-    return Object.values(form).every((value) => value !== "" && value !== null);
+  const [progress, setProgress] = useState(0);
+
+  const handleInput = (key: keyof typeof form, value: any) => {
+    setForm((prev) => ({ ...prev, [key]: value }));
   };
-  // useEffect(() => {
-  //   setLoading(true); // Show loading screen
-  //   setProgress(0.2);
-  // }, []);
+
+  const calculateDerivedMetrics = () => {
+    const weight = parseFloat(form.weight);
+    const targetWeight = parseFloat(form.targetWeight);
+    const height = parseFloat(form.height);
+    const age = parseInt(form.age);
+    const gender = form.gender.toLowerCase();
+    const heightM = height / 100;
+    const bmi = +(weight / (heightM * heightM)).toFixed(1);
+    const bmiCategory =
+      bmi < 18.5
+        ? "underweight"
+        : bmi < 25
+        ? "normal"
+        : bmi < 30
+        ? "overweight"
+        : "obese";
+    const bmr =
+      gender === "male"
+        ? 10 * weight + 6.25 * height - 5 * age + 5
+        : 10 * weight + 6.25 * height - 5 * age - 161;
+    const activityMultiplier =
+      form.activityLevel === "Very Active"
+        ? 1.55
+        : form.activityLevel === "Lightly Active"
+        ? 1.375
+        : 1.2;
+    const tdee = bmr * activityMultiplier;
+    const calorieTarget = tdee - 500;
+
+    return {
+      bmi,
+      bmi_category: bmiCategory,
+      bmr: Math.round(bmr),
+      tdee: Math.round(tdee),
+      calorie_target: Math.round(calorieTarget),
+      last_calculated: new Date(),
+    };
+  };
 
   const completeOnboarding = async () => {
-    if (!isFormComplete()) {
-      Alert.alert("Missing Fields", "Please fill in all the required fields.");
-      return;
-    }
-
     const uid = user?.uid;
-    if (!uid) {
-      Alert.alert("Error", "User ID not found.");
-      return;
-    }
+    if (!uid) return Alert.alert("User not found");
 
-    setLoading(true); // Show loading screen
-    setProgress(0.0); // Start progress from 0
-
+    const metrics = calculateDerivedMetrics();
     const onboardingData = {
       nickname: form.nickname,
+      age: parseInt(form.age),
       gender: form.gender,
-      age: form.age,
-      height: form.height,
-      weight: form.weight,
-      activityLevel: form.activityLevel,
-      healthGoals: form.healthGoals,
+      goals: {
+        primary_goal: form.primaryGoal,
+        target_weight_kg: parseFloat(form.targetWeight),
+        current_weight_kg: parseFloat(form.weight),
+        height_cm: parseFloat(form.height),
+      },
+      diet: {
+        eating_style: form.eatingStyle,
+        diet_type: form.dietType,
+        diet_type_custom: "",
+        disliked_foods: [],
+        allergies: [],
+        meal_times: form.mealTimes,
+      },
+      activity: {
+        activity_level: form.activityLevel.toLowerCase(),
+        preferred_workouts: form.preferredWorkouts,
+        limitations: [],
+      },
+      personalization: {
+        tone: form.tone,
+        language: "th",
+        country: form.country,
+        suggestive_preference: "I want meal plans",
+      },
+      notifications: {
+        reminder_times: ["morning", "evening"],
+        reminder_types: ["meals", "water", "workouts"],
+      },
+      metrics: {
+        ...metrics,
+        last_calculated: new Date(),
+      },
+      daily_calories: {
+        goal: metrics.calorie_target,
+        maintenance: metrics.tdee,
+      },
+      macronutrients: {
+        max: { carbs_g: 180, fats_g: 70, protein_g: 170 },
+        suggested: { carbs_g: 280, fats_g: 87, protein_g: 135 },
+      },
+      streaks: {
+        on_going: 0,
+        consecutive_days: 0,
+      },
     };
-    // Progress animation loop (increments every 100ms for a smooth effect)
-    let currentProgress = 0;
-    const interval = setInterval(() => {
-      currentProgress += 0.01; // Increase smoothly
-      setProgress(currentProgress);
-      if (currentProgress >= 0.9) {
-        clearInterval(interval); // Stop before 100%, final step is manual
-      }
-    }, 100); // Updates every 100ms (total ~9 seconds)
-
-    await sendOnboardingData(uid, onboardingData);
+    const maintenance = metrics.tdee;
+    const goal =
+      form.primaryGoal === "lose weight"
+        ? metrics.calorie_target - 500
+        : form.primaryGoal === "gain weight"
+        ? metrics.calorie_target + 500
+        : metrics.calorie_target;
+    onboardingData.macronutrients.max = calculateMacros(goal, true);
+    onboardingData.macronutrients.suggested = calculateMacros(
+      maintenance,
+      false
+    );
+    setLoading(true);
+    // await sendOnboardingData(uid, onboardingData);
     const token = await registerForPushNotificationsAsync();
-    if (token) {
-      await savePushTokenToUser(token);
-    }
-  
-    clearInterval(interval); // Ensure interval stops when the function completes
-    setProgress(1.0); // Ensure it reaches 100%
-    // sendForMoreGoals(user.uid, "daily");
-    // sendForMoreGoals(user.uid, "weekly");
-    await AsyncStorage.setItem("isOnboarded", "true"); // Mark onboarding as complete
-    // router.replace("/"); // Redirect user to home
-    setTimeout(() => {
-      setLoading(false); // Hide loading screen
-      router.replace("/"); // Redirect user to home
-    }, 500); // Small delay for smooth transition
-  };
+    if (token) await savePushTokenToUser(token);
+    await AsyncStorage.setItem("isOnboarded", "true");
+    await AsyncStorage.setItem("onboardingStatus", "completed");
+    // Simulate upload and progress (skip API for now)
+    let currentProgress = 0;
+    const duration = 5000; // 5 seconds
+    const interval = 100; // update every 100ms
+    const increment = interval / duration;
 
-  const handleSelect = (field: string, value: string) => {
-    setForm((prev) => ({ ...prev, [field]: value }));
+    const progressInterval = setInterval(() => {
+      currentProgress += increment;
+      setProgress(currentProgress);
+      if (currentProgress >= 1) {
+        clearInterval(progressInterval);
+        setLoading(false);
+        router.replace("/");
+      }
+    }, interval);
+    saveOnboardingData(onboardingData, uid).catch((error) => {
+      console.error("Error saving onboarding data:", error);
+      // Optionally handle error
+    });
+    // setLoading(false);
+    // router.replace("/");
   };
+  const stepComponents = [
+    <StepBasics form={form as any} handleInput={handleInput} key="step-1" />,
+    <StepBodyStats form={form as any} handleInput={handleInput} key="step-2" />,
+    <StepLifestyle form={form as any} handleInput={handleInput} key="step-3" />,
+    <StepEatingHabits
+      form={form as any}
+      handleInput={handleInput}
+      key="step-4"
+    />,
+    <StepPreferences
+      form={form as any}
+      handleInput={handleInput}
+      key="step-5"
+    />,
+  ];
+  // const StepComponent = () => {
+  //   switch (step) {
+  //     case 0:
+  //       return <StepBasics form={form as any} handleInput={handleInput} />;
+  //     case 1:
+  //       return <StepBodyStats form={form as any} handleInput={handleInput} />;
+  //     case 2:
+  //       return <StepLifestyle form={form as any} handleInput={handleInput} />;
+  //     case 3:
+  //       return <StepEatingHabits form={form as any} handleInput={handleInput} />;
+  //     case 4:
+  //       return <StepPreferences form={form as any} handleInput={handleInput} />;
+  //   }
+  // };
 
   return (
     <SafeAreaView className="flex-1 bg-white">
-      <KeyboardAwareScrollView
-        enableOnAndroid={true} // 👈 Makes sure it works on Android
-        extraHeight={150} // 👈 Pushes content up when keyboard is open
-        extraScrollHeight={100} // 👈 Prevents overlap
-        keyboardShouldPersistTaps="handled" // 👈 Dismisses keyboard on tap outside
-      >
-        <View className="flex-1 px-6 py-1 bg-white">
-          <Text className="text-2xl font-bold mb-4 text-newblue">
-            Tell us about yourself
+      <KeyboardAwareScrollView>
+        <View className="px-6 py-4">
+          <Text className="text-xl font-semibold text-newblue mb-2">
+            Step {step + 1} of {steps.length} — {steps[step]}
           </Text>
-          <Text className="text-gray-600 mb-6">
-            We'll use this information to personalize your experience
-          </Text>
-          <Text className="text-lg font-bold text-newblue mb-2">Nickname</Text>
-          <TextInput
-            placeholder="Enter your nickname"
-            value={form.nickname}
-            onChangeText={(text) => handleSelect("nickname", text)}
-            className="mb-4 p-3 bg-gray-100 rounded-lg w-full text-gray-800 "
+          <ProgressBar
+            progress={(step + 1) / steps.length}
+            color="#594715"
+            className="mb-4 h-2 rounded-full"
           />
-          <Text className="text-lg font-bold text-newblue mb-2">Gender</Text>
-          {/* Gender Selection */}
-          <View className="flex-row justify-between mb-4 gap-2">
-            {["Male", "Female", "Other"].map((gender) => (
+
+          {stepComponents[step]}
+
+          <View className="flex-row justify-between mt-8">
+            {step > 0 && (
               <TouchableOpacity
-                key={gender}
-                className={`p-3 w-1/3 border rounded-lg items-center ${
-                  form.gender === gender
-                    ? "border-newblue bg-newblue/10"
-                    : "border-gray-300"
-                }`}
-                onPress={() => handleSelect("gender", gender)}
+                onPress={() => setStep(step - 1)}
+                className="bg-gray-200 p-4 rounded-lg w-1/2 mr-2 flex-1"
               >
-                <Text className="text-gray-700">{gender}</Text>
+                <Text className="text-center">Back</Text>
               </TouchableOpacity>
-            ))}
+            )}
+            {step < steps.length - 1 ? (
+              <TouchableOpacity
+                onPress={() => setStep(step + 1)}
+                className="bg-newblue p-4 rounded-lg w-full flex-1"
+              >
+                <Text className="text-white text-center font-semibold">
+                  Next
+                </Text>
+              </TouchableOpacity>
+            ) : (
+              <TouchableOpacity
+                onPress={completeOnboarding}
+                className="bg-newblue p-4 rounded-lg w-full flex-1"
+              >
+                <Text className="text-white text-center font-semibold">
+                  Finish
+                </Text>
+              </TouchableOpacity>
+            )}
           </View>
-
-          {/* Age */}
-          <Text className="text-lg font-bold text-newblue mb-2">Age</Text>
-          <TextInput
-            placeholder="Enter your age"
-            keyboardType="numeric"
-            value={form.age}
-            onChangeText={(text) => handleSelect("age", text)}
-            className="mb-4 p-3 bg-gray-100 rounded-lg w-full text-gray-800"
-          />
-
-          {/* Height */}
-          <Text className="text-lg font-bold text-newblue mb-2">Height</Text>
-          <View className="flex-row mb-4 items-center">
-            <TextInput
-              placeholder="Enter your height"
-              keyboardType="numeric"
-              value={form.height}
-              onChangeText={(text) => handleSelect("height", text)}
-              className="flex-1 p-3 bg-gray-100 rounded-lg text-gray-800 mr-2"
-            />
-            <Text className="text-gray-600">cm</Text>
-          </View>
-
-          {/* Weight */}
-          <Text className="text-lg font-bold text-newblue mb-2">Weight</Text>
-          <View className="flex-row mb-4 items-center">
-            <TextInput
-              placeholder="Enter your weight"
-              keyboardType="numeric"
-              value={form.weight}
-              onChangeText={(text) => handleSelect("weight", text)}
-              className="flex-1 p-3 bg-gray-100 rounded-lg text-gray-800 mr-2"
-            />
-            <Text className="text-gray-600">kg</Text>
-          </View>
-
-          <Text className="text-lg font-bold text-newblue mb-2">
-            Activity Level
-          </Text>
-          {/* Activity Level */}
-          <View className="">
-            {/* Act Selection */}
-            <View className="flex-row justify-between mb-4 gap-2">
-              {["Chill", "Lightly Active", "Very Active"].map(
-                (activityLevel) => (
-                  <TouchableOpacity
-                    key={activityLevel}
-                    className={`p-3 w-1/3 border rounded-lg items-center ${
-                      form.activityLevel === activityLevel
-                        ? "border-newblue bg-newblue/10"
-                        : "border-gray-300"
-                    }`}
-                    onPress={() => handleSelect("activityLevel", activityLevel)}
-                  >
-                    <Text className="text-gray-700">{activityLevel}</Text>
-                  </TouchableOpacity>
-                )
-              )}
-            </View>
-          </View>
-
-          <Text className="text-lg font-bold text-newblue mb-2">
-            Health Goals
-          </Text>
-          <TextInput
-            placeholder="Enter your health goals"
-            value={form.healthGoals}
-            onChangeText={(text) => handleSelect("healthGoals", text)}
-            className="mb-4 p-3 bg-gray-100 rounded-lg w-full text-gray-800"
-          />
-          {/* Submit Button */}
-          <TouchableOpacity
-            onPress={completeOnboarding}
-            className="p-4 bg-newblue rounded-xl items-center mt-5"
-          >
-            <Text className="text-white font-bold">Continue</Text>
-          </TouchableOpacity>
         </View>
       </KeyboardAwareScrollView>
-      {/* Loading Screen */}
-      <Modal transparent visible={loading} animationType="fade">
-        <View
-          style={{
-            flex: 1,
-            justifyContent: "center",
-            alignItems: "center",
-            backgroundColor: "rgba(0,0,0,0.5)",
-          }}
-        >
-          <View
-            style={{
-              width: 300,
-              padding: 20,
-              backgroundColor: "white",
-              borderRadius: 10,
-            }}
-          >
-            <Text
-              style={{
-                fontSize: 16,
-                fontWeight: "bold",
-                marginBottom: 10,
-                textAlign: "center",
-              }}
-            >
-              Personalizing your experience...
-            </Text>
+      {loading && (
+        <View className="absolute inset-0 bg-black/40 justify-center items-center z-50">
+          <View className="bg-white p-6 rounded-xl w-64 items-center shadow-lg">
             <ProgressBar
               progress={progress}
-              color="#4F46E5"
-              style={{ height: 10, borderRadius: 5 }}
+              color="#4F46E5" // This is your 'newblue' hex
+              style={{ width: 200, height: 12, borderRadius: 6 }}
             />
           </View>
         </View>
-      </Modal>
+      )}
     </SafeAreaView>
   );
 }
+
+// ⚠️ To complete the setup, implement and import the components:
+// StepBasics, StepBodyStats, StepLifestyle, StepEatingHabits, StepPreferences
+// Each of them should accept `form` and `handleInput` props and return input fields for that step.
+
+// If you'd like, I can now generate the components for each step, with fields and styling ready to use.

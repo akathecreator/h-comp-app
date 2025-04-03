@@ -3,7 +3,6 @@ import { StyleSheet, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useEffect, useState } from "react";
-
 import { useGlobalContext } from "@/lib/global-provider";
 import { ActivityIndicator } from "react-native-paper";
 
@@ -12,26 +11,43 @@ export default function AppLayout() {
   const [isOnboarded, setIsOnboarded] = useState<boolean | null>(null);
 
   useEffect(() => {
+    if (!isLogged) return;
+
     const checkOnboarding = async () => {
-      // await AsyncStorage.setItem("isOnboarded", "true"); // Mark onboarding as complete
-      const onboarded = await AsyncStorage.getItem("isOnboarded");
-      const { bmi } = userProfile;
-      const value = bmi?.value;
-      if (!value) {
-        setIsOnboarded(false); // Convert string to boolean
-      } else {
-        setIsOnboarded(onboarded === "true"); // Convert string to boolean
+      try {
+        // Check if user has required metrics (meaning they completed onboarding)
+        const hasRequiredMetrics = Boolean(userProfile?.metrics?.bmi);
+        console.log(
+          "hasRequiredMetrics",
+          userProfile,
+          hasRequiredMetrics,
+          "is logged",
+          isLogged
+        );
+        if (hasRequiredMetrics) {
+          // If user has metrics, they've completed onboarding
+          await AsyncStorage.setItem("isOnboarded", "true");
+          setIsOnboarded(true);
+        } else {
+          // If no metrics, check AsyncStorage as fallback
+          const onboarded = await AsyncStorage.getItem("isOnboarded");
+          setIsOnboarded(onboarded === "true");
+        }
+      } catch (error) {
+        console.error("Error checking onboarding status:", error);
+        setIsOnboarded(false);
       }
     };
 
     checkOnboarding();
-  }, [userProfile]);
+  }, [isLogged, userProfile]);
 
-  if (loading || isOnboarded === null) {
+  // Show loading state while checking
+  if (loading) {
     return (
-      <SafeAreaView style={styles.safeArea}>
-        <ActivityIndicator size="large" color="#333" />
-      </SafeAreaView>
+      <View className="flex-1 justify-center items-center">
+        <ActivityIndicator size="large" />
+      </View>
     );
   }
 
@@ -39,18 +55,9 @@ export default function AppLayout() {
     return <Redirect href="/sign-in" />;
   }
 
-  if (!isOnboarded) {
+  if (!isOnboarded && userProfile) {
     return <Redirect href="/onboarding" />;
   }
 
   return <Slot />;
 }
-
-const styles = StyleSheet.create({
-  safeArea: {
-    flex: 1,
-    backgroundColor: "white",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-});

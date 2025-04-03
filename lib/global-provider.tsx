@@ -14,51 +14,72 @@ import { doc, getDoc, onSnapshot } from "firebase/firestore";
 import { auth, db } from "@/lib/firebase"; // Ensure you have Firestore initialized
 
 interface UserProfile {
-  id: string;
-  fullName: string;
-  nickName: string;
-  email: string;
-  activityLevel: string; // e.g., "High", "Moderate"
+  nickname: string;
   age: number;
-  gender: string; // e.g., "Male", "Female"
-  dietaryPreferences: string; // e.g., "Vegetarian", "None"
-  foodAllergies: string; // e.g., "nuts", "none"
-  healthGoal: string; // e.g., "Lose Weight", "Maintain Weight"
-  height: string; // e.g., "178cm"
-  weight: string; // e.g., "83.5kg"
-  notifications: {
-    hydrationReminders: boolean;
-    mealReminders: boolean;
+  gender: "male" | "female";
+  goals: {
+    primary_goal: "lose_weight" | "gain_muscle" | "maintain" | string;
+    target_weight_kg: number;
+    current_weight_kg: number;
+    height_cm: number;
   };
-  createdAt: Date | null;
-  bmi: {
-    status: string; // e.g., "overweight"
-    value: number; // e.g., 26.2
-    createdAt: Date | null;
+  diet: {
+    eating_style: string[]; // e.g. ["delivery", "outside"]
+    diet_type: "normal" | "vegetarian" | "vegan" | string;
+    diet_type_custom: string;
+    disliked_foods: string[];
+    allergies: string[];
+    meal_times: {
+      breakfast: string; // "HH:mm"
+      lunch: string;
+      dinner: string;
+    };
+  };
+  activity: {
+    activity_level: "none" | "light" | "moderate" | "heavy";
+    preferred_workouts: string[];
+    limitations: string[];
+  };
+  personalization: {
+    tone: "supportive" | "informative" | "funny" | "tough_love";
+    language: "en" | "th";
+    country: string;
+    suggestive_preference: string; // e.g. "I want meal plans"
+  };
+  notifications: {
+    reminder_times: string[]; // e.g. ["morning", "evening"]
+    reminder_types: string[]; // e.g. ["meals", "water", "workouts"]
+  };
+  created_at: any; // Firebase FieldValue.serverTimestamp
+  last_updated: any; // Firebase FieldValue.serverTimestamp
+  metrics: {
+    bmi: number;
+    bmi_category: "underweight" | "normal" | "overweight" | "obese" | string;
+    bmr: number;
+    tdee: number;
+    calorie_target: number;
+    last_calculated: any; // Firebase FieldValue.serverTimestamp
   };
   daily_calories: {
-    goal: number; // e.g., 1984
-    maintenance: number; // e.g., 2480
-  };
-  streaks: {
-    on_going: number;
-  };
-  level_meta: {
-    level: number;
-    experience: number;
-    next_level: number;
+    goal: number;
+    maintenance: number;
   };
   macronutrients: {
     max: {
-      carbs_g: number; // e.g., 225
-      fats_g: number; // e.g., 83
-      protein_g: number; // e.g., 150
+      carbs_g: number;
+      fats_g: number;
+      protein_g: number;
     };
     suggested: {
-      carbs_g: number; // e.g., 180
-      fats_g: number; // e.g., 66
-      protein_g: number; // e.g., 125
+      carbs_g: number;
+      fats_g: number;
+      protein_g: number;
     };
+  };
+  uuid: string;
+  streaks: {
+    on_going: number;
+    consecutive_days: number;
   };
 }
 
@@ -72,6 +93,10 @@ interface GlobalContextType {
   refetchUserProfile: () => Promise<void>;
   setDate: (date: Date) => void;
   setLifeGroup: (lifeGroup: string) => void;
+  dialogVisible: boolean;
+  setDialogVisible: (dialogVisible: boolean) => void;
+  loadingFood: boolean;
+  setLoadingFood: (loadingFood: boolean) => void;
 }
 
 const GlobalContext = createContext<GlobalContextType | undefined>(undefined);
@@ -86,7 +111,9 @@ export const GlobalProvider = ({ children }: GlobalProviderProps) => {
   const [loading, setLoading] = useState<boolean>(true);
   const [date, setDate] = useState<Date>(new Date());
   const [lifeGroup, setLifeGroup] = useState<string>("Health");
-  // finance | health | gym | habits
+  const [dialogVisible, setDialogVisible] = useState<boolean>(false);
+  const [loadingFood, setLoadingFood] = useState<boolean>(false);
+
   // Monitor Firebase Auth State
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
@@ -100,22 +127,21 @@ export const GlobalProvider = ({ children }: GlobalProviderProps) => {
     return () => unsubscribe();
   }, []);
 
-
   const fetchUserProfile = (userId: string) => {
     const userDocRef = doc(db, "users", userId);
-  
+    console.log("fetching profile");
     const unsubscribe = onSnapshot(userDocRef, (doc) => {
       if (doc.exists()) {
+        console.log("profile fetched", doc.data());
         setUserProfile(doc.data() as UserProfile);
       } else {
         console.error("User profile not found.");
         setUserProfile(null);
       }
     });
-  
+
     return unsubscribe; // Allow cleanup
   };
-  
 
   const refetchUserProfile = async () => {
     if (user) {
@@ -138,6 +164,10 @@ export const GlobalProvider = ({ children }: GlobalProviderProps) => {
         setDate,
         setLifeGroup,
         refetchUserProfile,
+        dialogVisible,
+        setDialogVisible,
+        loadingFood,
+        setLoadingFood,
       }}
     >
       {children}

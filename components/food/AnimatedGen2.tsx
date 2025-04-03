@@ -33,21 +33,21 @@ const CaloriesTracker = ({ date }) => {
       value: currentProtein,
       max: macronutrients.suggested.protein_g,
       // color: "#6f7cf8",
-      color: "#6f7cf8",
+      color: "#c2a968",
     },
     {
       label: "Fat",
       value: currentFats,
       max: macronutrients.suggested.fats_g,
       // color: "#6f7cf8",
-      color: "#6f7cf8",
+      color: "#c2a968",
     },
     {
       label: "Carbs",
       value: currentCarbs,
       max: macronutrients.suggested.carbs_g,
       // color: "#6f7cf8",
-      color: "#6f7cf8",
+      color: "#c2a968",
     },
   ];
   // 🔥 Ensure progress doesn't exceed 120% (1.2)
@@ -92,7 +92,7 @@ const CaloriesTracker = ({ date }) => {
               cx="100"
               cy="100"
               r={RADIUS}
-              stroke="#4F46E5" // Progress color
+              stroke="#594715" // Progress color
               strokeWidth={STROKE_WIDTH}
               fill="none"
               strokeDasharray={CIRCUMFERENCE}
@@ -119,7 +119,7 @@ const CaloriesTracker = ({ date }) => {
               {netCalories}
             </Text>
             <Text style={{ fontSize: 14, color: "gray" }}>Net Calories</Text>
-            <Text style={{ fontSize: 8, color: "gray" }}>
+            <Text style={{ fontSize: 10, color: "gray" }}>
               {maxCalories} Max Calories
             </Text>
           </View>
@@ -132,7 +132,7 @@ const CaloriesTracker = ({ date }) => {
                 progress={nutrient.value / nutrient.max}
                 width={null}
                 color={
-                  nutrient.value > nutrient.max ? "#FF4C4C" : nutrient.color
+                  nutrient.value > nutrient.max ? "#c58b49" : nutrient.color
                 }
                 height={6}
                 style={{ width: "100%" }}

@@ -15,8 +15,7 @@ import { format } from "date-fns";
 import NutritionDialog from "./NutritionDialog";
 import { removeMeal } from "@/lib/firebase";
 import { router } from "expo-router";
-import icons from "@/constants/icons";
-const flame2 = icons.flame2;
+import flame2 from "../../assets/images/food.png";
 interface Meal {
   id: string;
   description: string;
@@ -75,10 +74,10 @@ const RecentLogs = ({ date }: { date: Date }) => {
   if (!recentMeals.length) {
     return (
       <View className="flex-1 px-4 m-4">
-        {/* <Text className="text-lg font-rubik-semibold text-black mb-4">
+        {/* <Text className="text-lg san-semibold text-black mb-4">
           Recent Meals
         </Text> */}
-        <Text className="text-lg text-black-muted font-rubik">
+        <Text className="text-lg text-black-muted san">
           Let me know what you are having today!
         </Text>
       </View>
@@ -89,7 +88,7 @@ const RecentLogs = ({ date }: { date: Date }) => {
     // <ScrollView className="flex-1 px-4 mx-4">
     <>
       <View className="flex-row justify-between items-center my-1">
-        {/* <Text className="text-xl font-rubik-semibold text-black ">
+        {/* <Text className="text-xl san-semibold text-black ">
           Recent Meals
         </Text> */}
         {/* <TouchableOpacity onPress={() => router.push("/(root)/recents")}>
@@ -115,7 +114,7 @@ const RecentLogs = ({ date }: { date: Date }) => {
               style={{ elevation: 3 }}
             >
               <Image
-                source={{ uri: meal.image_url ? meal.image_url : flame2  }}
+                source={meal.image_url ? { uri: meal.image_url } : flame2}
                 style={{
                   width: 136,
                   height: 136,
@@ -137,8 +136,8 @@ const RecentLogs = ({ date }: { date: Date }) => {
                   <View className="items-center">
                     <Text className="text-xs text-black-muted">Protein</Text>
                     <Text
-                      className="text-sm font-rubik-semibold"
-                      style={{ color: "#6f7cf8" }}
+                      className="text-md san-semibold"
+                      // style={{ color: "#6f7cf8" }}
                     >
                       {meal.total_protein}g
                     </Text>
@@ -146,8 +145,8 @@ const RecentLogs = ({ date }: { date: Date }) => {
                   <View className="items-center">
                     <Text className="text-xs text-black-muted">Carbs</Text>
                     <Text
-                      className="text-sm font-rubik-semibold"
-                      style={{ color: "#6f7cf8" }}
+                      className="text-md san-semibold"
+                      // style={{ color: "#6f7cf8" }}
                     >
                       {meal.total_carbs}g
                     </Text>
@@ -155,8 +154,8 @@ const RecentLogs = ({ date }: { date: Date }) => {
                   <View className="items-center">
                     <Text className="text-xs text-black-muted">Fats</Text>
                     <Text
-                      className="text-sm font-rubik-semibold"
-                      style={{ color: "#6f7cf8" }}
+                      className="text-md san-semibold"
+                      // style={{ color: "#6f7cf8" }}
                     >
                       {meal.total_fat}g
                     </Text>

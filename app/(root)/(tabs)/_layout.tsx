@@ -7,8 +7,10 @@ import {
   TouchableOpacity,
 } from "react-native";
 import icons from "@/constants/icons";
+import images from "@/constants/images";
 import { useRouter } from "expo-router";
-
+import NutritionDialog from "@/components/food/NutritionDialog";
+import { useGlobalContext } from "@/lib/global-provider";
 const TabIcon = ({
   focused,
   icon,
@@ -21,13 +23,13 @@ const TabIcon = ({
   <View className="flex-1 mt-3 flex flex-col items-center">
     <Image
       source={icon}
-      tintColor={focused ? "white" : "#666876"}
+      tintColor={focused ? "#f9eacc" : "#f9eacc"}
       resizeMode="contain"
       className="size-6"
     />
     <Text
       className={`${
-        focused ? "text-white font-rubik-medium" : "text-gray-400 font-rubik"
+        focused ? "text-white san-medium" : "text-gray-400 san"
       } text-xs w-full text-center mt-1`}
     >
       {title}
@@ -37,14 +39,14 @@ const TabIcon = ({
 
 const TabsLayout = () => {
   const router = useRouter();
-
+  const { dialogVisible, setDialogVisible } = useGlobalContext();
   return (
     <>
       <Tabs
         screenOptions={{
           tabBarShowLabel: false,
           tabBarStyle: {
-            backgroundColor: "#000", // Black theme
+            backgroundColor: "#594715", // Black theme
             position: "relative",
             borderTopColor: "#333", // Subtle grey border
             borderTopWidth: 1,
@@ -89,7 +91,18 @@ const TabsLayout = () => {
             headerShown: false,
             href: "/empty",
             tabBarIcon: ({ focused }) => (
-              <TabIcon focused={focused} icon={icons.cutlery} title="Daily" />
+              <>
+                <Image
+                  source={images.chat2}
+                  style={{
+                    width: 50,
+                    height: 60,
+                    borderRadius: 50,
+                    // Remove tintColor to show original image colors
+                  }}
+                  resizeMode="contain"
+                />
+              </>
             ),
           }}
         />
@@ -137,14 +150,30 @@ const TabsLayout = () => {
           shadowRadius: 5,
           borderRadius: 100,
           borderWidth: 1,
-          borderColor: "black",
+          borderColor: "#f9eacc",
+          backgroundColor: "#f9ddad",
         }}
       >
         <Image
-          source={icons.chat}
-          style={{ width: 40, height: 40, tintColor: "black" }} // White button, black icon
+          source={images.chat2}
+          style={{
+            width: 50,
+            height: 60,
+            borderRadius: 50,
+            // Remove tintColor to show original image colors
+          }}
+          resizeMode="contain"
         />
       </TouchableOpacity>
+
+      {/* Nutrition Summary Popup */}
+      {dialogVisible && (
+        <NutritionDialog
+          visible={dialogVisible}
+          onClose={() => setDialogVisible(false)}
+          meal_id=""
+        />
+      )}
     </>
   );
 };

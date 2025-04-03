@@ -44,7 +44,7 @@ const WeeklySlider = ({
   };
 
   const weekDays = getWeekDays(currentWeekStart);
-  console.log("weekDays", weekDays);
+  // console.log("weekDays", wee    kDays);
   return (
     <View className="bg-transparent rounded-2xl shadow-md w-full items-center py-1">
       <TouchableOpacity
@@ -75,23 +75,29 @@ const WeeklySlider = ({
                       cx="25"
                       cy="32.5"
                       r="17"
-                      stroke={isSelected ? "#4F46E5" : "#A0AEC0"}
+                      stroke={isSelected ? "#594715" : isToday ? "#c58b49" : "#594715"}
                       strokeWidth="2"
-                      strokeDasharray="4 4"
-                      fill={isToday ? "#4F46E5" : "none"}
+                      strokeDasharray={isToday || isSelected ? "#c58b49" : "4 4"}
+                      fill={
+                        isSelected
+                          ? "#594715"
+                          : isToday
+                          ? "#c58b49"
+                          : "transparent"
+                      }
                     />
                   </Svg>
                   <View className="absolute inset-0 flex items-center justify-center pb-1">
                     <Text
-                      className={`text-lg ${
-                        isToday ? "font-bold text-white" : "text-gray-600"
+                      className={`text-lg mb-1 ${
+                        (isSelected || isToday) ? "font-bold text-white" : "text-gray-600"
                       }`}
                     >
                       {item.date}
                     </Text>
                   </View>
                   <Text
-                    className={`text-sm ${
+                    className={`text-sm mt-1 ${
                       isToday ? "font-bold " : "text-gray-600"
                     }`}
                   >

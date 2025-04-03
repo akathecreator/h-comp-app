@@ -13,6 +13,13 @@ export default function RootLayout() {
     "Rubik-Medium": require("../assets/fonts/Rubik-Medium.ttf"),
     "Rubik-Regular": require("../assets/fonts/Rubik-Regular.ttf"),
     "Rubik-SemiBold": require("../assets/fonts/Rubik-SemiBold.ttf"),
+    "NotoSansThai-Regular": require("../assets/fonts/NotoSansThai-Regular.ttf"),
+    "NotoSansThai-Bold": require("../assets/fonts/NotoSansThai-Bold.ttf"),
+    "NotoSansThai-Medium": require("../assets/fonts/NotoSansThai-Medium.ttf"),
+    "NotoSansThai-SemiBold": require("../assets/fonts/NotoSansThai-SemiBold.ttf"),
+    "NotoSansThai-Light": require("../assets/fonts/NotoSansThai-Light.ttf"),
+    "NotoSansThai-ExtraBold": require("../assets/fonts/NotoSansThai-ExtraBold.ttf"),
+    "NotoSansThai-Black": require("../assets/fonts/NotoSansThai-Black.ttf"),
   });
 
   useEffect(() => {

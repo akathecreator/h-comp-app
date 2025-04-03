@@ -77,7 +77,7 @@ export default function WeightGraph() {
 
   return (
     <>
-      <Text className="text-black font-rubik-bold text-xl mb-4">
+      <Text className="text-black san-bold text-xl mb-4">
         Weight Trends
       </Text>
       <LineChart

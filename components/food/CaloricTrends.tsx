@@ -78,7 +78,7 @@ const CaloricTrends: React.FC = () => {
 
   return (
     <View className="flex-1 bg-black p-4">
-      <Text className="text-white font-rubik-bold text-xl mb-4">Daily Caloric Intake</Text>
+      <Text className="text-white san-bold text-xl mb-4">Daily Caloric Intake</Text>
 
       <LineChart
         data={{

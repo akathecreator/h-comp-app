@@ -5,7 +5,7 @@ import Meallogs from "@/components/food/Meallogs";
 import { useGlobalContext } from "@/lib/global-provider";
 import { FlatList } from "react-native-gesture-handler";
 
-const RecentLogs = ({ date }) => {
+const RecentLogs = ({ date }: { date: any }) => {
   // const { date } = useGlobalContext();
   const [activeTab, setActiveTab] = useState<"meals" | "activity">("meals");
 
@@ -18,7 +18,7 @@ const RecentLogs = ({ date }) => {
           onPress={() => setActiveTab("meals")}
         >
           <Text
-            className={`font-bold font-rubik-medium text-lg ${
+            className={`font-bold san-medium text-lg ${
               activeTab === "meals"
                 ? "border-b-2 text-newblue border-newblue pb-1"
                 : "text-gray-400"
@@ -33,7 +33,7 @@ const RecentLogs = ({ date }) => {
           onPress={() => setActiveTab("activity")}
         >
           <Text
-            className={`text-black font-bold font-rubik-medium text-lg ${
+            className={`text-black font-bold san-medium text-lg ${
               activeTab === "activity"
                 ? "border-b-2 text-newblue border-newblue pb-1"
                 : "text-gray-400"

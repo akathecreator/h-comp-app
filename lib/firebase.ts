@@ -400,37 +400,58 @@ export const fetchUserMessages = (
     orderBy("createdAt", "desc")
   );
 
-  return onSnapshot(q, (snapshot) => {
-    const messages = snapshot.docs
-      .map((doc) => {
-        const data = doc.data();
+  const unsubscribe = onSnapshot(q, (snapshot) => {
+    console.log("snapshot", snapshot.size);
+    const messages = snapshot.docs.map((doc) => {
+      const data = doc.data();
+      return {
+        _id: doc.id || `${Date.now()}-${Math.random()}`,
+        text: data.text || "",
+        createdAt: data.createdAt?.toDate() || new Date(),
+        image: data.imageUrl || undefined,
+        user: {
+          _id: data.user?._id || "unknown",
+          name: data.user?.name || "Unknown",
+          avatar: data.user?.avatar || "",
+        },
+      };
+    });
 
-        // Ensure all required fields are present and valid
-        const validMessage = {
-          _id: doc.id || `${Date.now()}-${Math.random()}`, // Ensure unique _id
-          text: data.text || "", // Default to empty string if text is missing
-          createdAt: data.createdAt?.toDate() || new Date(), // Fallback to current date
-          image: data.imageUrl || undefined, // Optional: Only include if present
-          user: {
-            _id: data.user?._id || "unknown", // Default to "unknown" if missing
-            name: data.user?.name || "Unknown", // Default to "Unknown" if missing
-            avatar: data.user?.avatar || "", // Default to empty string if missing
-          },
-        };
-
-        return validMessage;
-      })
-      .filter((msg) => !!msg._id); // Filter out any invalid messages
-
-    // Deduplicate messages by `_id`
     const uniqueMessages = [
       ...new Map(messages.map((msg) => [msg._id, msg])).values(),
     ];
-
     setMessages(uniqueMessages);
   });
-};
 
+  return unsubscribe;
+};
+export const fetchUserMessagesOnce = async (userId: string) => {
+  const chatsRef = collection(db, "chats");
+  const q = query(
+    chatsRef,
+    where("roomId", "==", userId),
+    orderBy("createdAt", "desc")
+  );
+
+  const snapshot = await getDocs(q);
+
+  const messages = snapshot.docs.map((doc) => {
+    const data = doc.data();
+    return {
+      _id: doc.id,
+      text: data.text || "",
+      createdAt: data.createdAt?.toDate() || new Date(),
+      image: data.imageUrl || undefined,
+      user: {
+        _id: data.user?._id || "unknown",
+        name: data.user?.name || "Unknown",
+        avatar: data.user?.avatar || "",
+      },
+    };
+  });
+
+  return messages;
+};
 export const saveMessageToFirestore = async (message: {
   text?: string;
   user: {

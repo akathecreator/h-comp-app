@@ -27,7 +27,7 @@ const ProfilePage = () => {
   if (!userProfile) {
     return (
       <View className="flex-1 justify-center items-center bg-bone-light">
-        <Text className="text-black-muted font-rubik text-lg">
+        <Text className="text-black-muted san text-lg">
           Loading Profile...
         </Text>
       </View>
@@ -39,7 +39,7 @@ const ProfilePage = () => {
       <ScrollView className="flex-1 bg-bone-light">
         {/* Header Section */}
         <View className="bg-bone-dark p-6 rounded-b-3xl shadow-md">
-          <Text className="text-black font-rubik-bold text-3xl">Profile</Text>
+          <Text className="text-black san-bold text-3xl">Profile</Text>
         </View>
 
         {/* Profile Info */}
@@ -47,14 +47,14 @@ const ProfilePage = () => {
           <Text className="text-black-muted text-sm">Full Name</Text>
           {isEditing ? (
             <TextInput
-              className="text-black font-rubik-medium text-lg mb-4 bg-white p-2 rounded-md border border-gray"
+              className="text-black san-medium text-lg mb-4 bg-white p-2 rounded-md border border-gray"
               value={editedProfile.fullName}
               onChangeText={(text) =>
                 setEditedProfile({ ...editedProfile, fullName: text })
               }
             />
           ) : (
-            <Text className="text-black font-rubik-medium text-lg mb-4">
+            <Text className="text-black san-medium text-lg mb-4">
               {userProfile.fullName}
             </Text>
           )}
@@ -62,14 +62,14 @@ const ProfilePage = () => {
           <Text className="text-black-muted text-sm">Nickname</Text>
           {isEditing ? (
             <TextInput
-              className="text-black font-rubik-medium text-lg mb-4 bg-white p-2 rounded-md border border-gray"
+              className="text-black san-medium text-lg mb-4 bg-white p-2 rounded-md border border-gray"
               value={editedProfile.nickName}
               onChangeText={(text) =>
                 setEditedProfile({ ...editedProfile, nickName: text })
               }
             />
           ) : (
-            <Text className="text-black font-rubik-medium text-lg mb-4">
+            <Text className="text-black san-medium text-lg mb-4">
               {userProfile.nickName}
             </Text>
           )}
@@ -77,14 +77,14 @@ const ProfilePage = () => {
           <Text className="text-black-muted text-sm">Email</Text>
           {isEditing ? (
             <TextInput
-              className="text-black font-rubik-medium text-lg mb-4 bg-white p-2 rounded-md border border-gray"
+              className="text-black san-medium text-lg mb-4 bg-white p-2 rounded-md border border-gray"
               value={editedProfile.email}
               onChangeText={(text) =>
                 setEditedProfile({ ...editedProfile, email: text })
               }
             />
           ) : (
-            <Text className="text-black font-rubik-medium text-lg mb-4">
+            <Text className="text-black san-medium text-lg mb-4">
               {userProfile.email}
             </Text>
           )}
@@ -92,7 +92,7 @@ const ProfilePage = () => {
 
         {/* Health Stats */}
         <View className="mt-6 px-6">
-          <Text className="text-black font-rubik-bold text-xl mb-4">
+          <Text className="text-black san-bold text-xl mb-4">
             Health Stats
           </Text>
 
@@ -100,14 +100,14 @@ const ProfilePage = () => {
             <Text className="text-black-muted text-sm">Height</Text>
             {isEditing ? (
               <TextInput
-                className="text-black font-rubik-medium text-lg bg-white p-2 rounded-md border border-gray w-24"
+                className="text-black san-medium text-lg bg-white p-2 rounded-md border border-gray w-24"
                 value={editedProfile.height}
                 onChangeText={(text) =>
                   setEditedProfile({ ...editedProfile, height: text })
                 }
               />
             ) : (
-              <Text className="text-black font-rubik-medium text-lg">
+              <Text className="text-black san-medium text-lg">
                 {userProfile.height}
               </Text>
             )}
@@ -117,14 +117,14 @@ const ProfilePage = () => {
             <Text className="text-black-muted text-sm">Weight</Text>
             {isEditing ? (
               <TextInput
-                className="text-black font-rubik-medium text-lg bg-white p-2 rounded-md border border-gray w-24"
+                className="text-black san-medium text-lg bg-white p-2 rounded-md border border-gray w-24"
                 value={editedProfile.weight}
                 onChangeText={(text) =>
                   setEditedProfile({ ...editedProfile, weight: text })
                 }
               />
             ) : (
-              <Text className="text-black font-rubik-medium text-lg">
+              <Text className="text-black san-medium text-lg">
                 {userProfile.weight}
               </Text>
             )}
@@ -134,14 +134,14 @@ const ProfilePage = () => {
             <Text className="text-black-muted text-sm">Activity Level</Text>
             {isEditing ? (
               <TextInput
-                className="text-black font-rubik-medium text-lg bg-white p-2 rounded-md border border-gray w-24"
+                className="text-black san-medium text-lg bg-white p-2 rounded-md border border-gray w-24"
                 value={editedProfile.activityLevel}
                 onChangeText={(text) =>
                   setEditedProfile({ ...editedProfile, activityLevel: text })
                 }
               />
             ) : (
-              <Text className="text-black font-rubik-medium text-lg">
+              <Text className="text-black san-medium text-lg">
                 {userProfile.activityLevel}
               </Text>
             )}
@@ -151,14 +151,14 @@ const ProfilePage = () => {
             <Text className="text-black-muted text-sm">Health Goal</Text>
             {isEditing ? (
               <TextInput
-                className="text-black font-rubik-medium text-lg bg-white p-2 rounded-md border border-gray w-48"
+                className="text-black san-medium text-lg bg-white p-2 rounded-md border border-gray w-48"
                 value={editedProfile.healthGoal}
                 onChangeText={(text) =>
                   setEditedProfile({ ...editedProfile, healthGoal: text })
                 }
               />
             ) : (
-              <Text className="text-black font-rubik-medium text-lg">
+              <Text className="text-black san-medium text-lg">
                 {userProfile.healthGoal}
               </Text>
             )}
@@ -172,7 +172,7 @@ const ProfilePage = () => {
               className="bg-success py-4 rounded-lg shadow-md"
               onPress={handleSave}
             >
-              <Text className="text-white text-center font-rubik-bold text-lg">
+              <Text className="text-white text-center san-bold text-lg">
                 Save Changes
               </Text>
             </TouchableOpacity>
@@ -181,7 +181,7 @@ const ProfilePage = () => {
               className="bg-accent-dustyBlue py-4 rounded-lg shadow-md"
               onPress={() => setIsEditing(true)}
             >
-              <Text className="text-white text-center font-rubik-bold text-lg">
+              <Text className="text-white text-center san-bold text-lg">
                 Edit Profile
               </Text>
             </TouchableOpacity>
@@ -192,7 +192,7 @@ const ProfilePage = () => {
         <View className="mt-4 px-6 mb-10">
           <TouchableOpacity className="bg-danger py-4 rounded-lg shadow-md">
             <Text
-              className="text-white text-center font-rubik-bold text-lg"
+              className="text-white text-center san-bold text-lg"
               onClick={logout}
             >
               Logout

@@ -76,10 +76,10 @@ const RecentLogs = () => {
   if (!recentMeals.length) {
     return (
       <View className="flex-1 px-4 m-4">
-        <Text className="text-lg font-rubik-semibold text-black mb-4">
+        <Text className="text-lg san-semibold text-black mb-4">
           Recent Meals
         </Text>
-        <Text className="text-lg text-black-muted font-rubik">
+        <Text className="text-lg text-black-muted san">
           Let me know what you are having today!
         </Text>
       </View>
@@ -109,7 +109,7 @@ const RecentLogs = () => {
       </View>
       <ScrollView className="flex-1 px-4 mx-4">
         <View className="flex-row justify-between items-center mb-4 py-7">
-          <Text className="text-xl font-rubik-semibold text-black">
+          <Text className="text-xl san-semibold text-black">
             Recent Meals
           </Text>
           <TouchableOpacity onPress={() => router.push("/(root)/recents")}>
@@ -155,19 +155,19 @@ const RecentLogs = () => {
                   <View className="flex-row justify-between mt-3">
                     <View className="items-center">
                       <Text className="text-xs text-black-muted">Protein</Text>
-                      <Text className="text-sm font-rubik-semibold ">
+                      <Text className="text-sm san-semibold ">
                         {meal.total_protein}g
                       </Text>
                     </View>
                     <View className="items-center">
                       <Text className="text-xs text-black-muted">Carbs</Text>
-                      <Text className="text-sm font-rubik-semibold ">
+                      <Text className="text-sm san-semibold ">
                         {meal.total_carbs}g
                       </Text>
                     </View>
                     <View className="items-center">
                       <Text className="text-xs text-black-muted">Fats</Text>
-                      <Text className="text-sm font-rubik-semibold ">
+                      <Text className="text-sm san-semibold ">
                         {meal.total_fat}g
                       </Text>
                     </View>

@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useState, useCallback, useEffect, useRef } from "react";
 import Constants from "expo-constants";
 import {
   View,
@@ -12,6 +12,8 @@ import {
   ActionSheetIOS,
   Platform,
   TouchableOpacity,
+  Animated,
+  ActivityIndicator,
 } from "react-native";
 import {
   Bubble,
@@ -24,6 +26,7 @@ import {
   storage,
   saveMessageToFirestore,
   fetchUserMessages,
+  fetchUserMessagesOnce,
 } from "@/lib/firebase";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { useGlobalContext } from "@/lib/global-provider";
@@ -33,12 +36,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import { AntDesign } from "@expo/vector-icons";
-import {
-  CameraMode,
-  CameraType,
-  CameraView,
-  useCameraPermissions,
-} from "expo-camera";
+import { useCameraPermissions } from "expo-camera";
 
 type Message = {
   text: string;
@@ -53,6 +51,7 @@ type Attachment = {
 
 export default function C6() {
   const agentId = process.env.EXPO_PUBLIC_AGENT_ID;
+  console.log(agentId);
   const [messages, setMessages] = useState<IMessage[]>([]);
   const [image, setImage] = useState<string | null>(null); // Store selected image
   const [text, setText] = useState<string>(""); // Store text input for image message
@@ -69,33 +68,22 @@ export default function C6() {
     name: "C6",
     avatar: "https://placeimg.com/140/140/tech",
   };
+
   useEffect(() => {
     const initializeChat = async () => {
-      if (!user?.uid) {
-        console.warn("User is not logged in");
-        return;
-      }
+      // First: check if chat is empty
+      const existingMessages = await fetchUserMessagesOnce(user?.uid);
+      console.log("Existing messages", existingMessages);
 
-      // Fetch existing messages
-      const fetchedMessages = await fetchUserMessages(user.uid, setMessages);
-
-      // Transform fetched messages
-      const formattedMessages = fetchedMessages.map((msg) => ({
-        ...msg,
-        _id: msg._id || uuidv4(), // Ensure unique _id
-        createdAt: new Date(msg.createdAt),
-        user: msg.user,
-        image: msg.image || undefined,
-      }));
-
-      if (formattedMessages.length === 0) {
-        // Save welcome message to Firestore
+      if (!existingMessages || existingMessages.length === 0) {
+        const { goals, nickname } = userProfile;
+        const weightLossKg = goals.current_weight_kg - goals.target_weight_kg;
         const welcomeMessage: IMessage = {
-          _id: uuidv4(), // Generate a unique ID for the welcome message
-          text: "Welcome! What topic would you like me to assist you with?",
+          _id: uuidv4(),
+          text: `Hi ${nickname}, So you want to lose ${weightLossKg} kg (from ${goals.current_weight_kg} kg to ${goals.target_weight_kg} kg). I have created a weekly suggested meal plan for you but if you don't feel like following them you can just send pictures of what you eat for me to log and analyze`,
           createdAt: new Date(),
           user: {
-            _id: "bot", // Fixed ID for the bot user
+            _id: "bot",
             name: "C6",
             avatar: "https://placeimg.com/140/140/tech",
           },
@@ -103,71 +91,55 @@ export default function C6() {
 
         await saveMessageToFirestore({
           ...welcomeMessage,
-          userId: "2",
-          roomId: user.uid,
+          userId: "bot",
+          roomId: user?.uid,
         });
 
-        // Append welcome message
-        setMessages((prevMessages) =>
-          GiftedChat.append(prevMessages, [welcomeMessage])
-        );
-      } else {
-        // Remove duplicates from previous messages
-        const uniqueMessages = [
-          ...new Map(
-            [...formattedMessages].map((msg) => [msg._id, msg])
-          ).values(),
-        ];
-
-        // Append fetched messages
-        setMessages((prevMessages) =>
-          GiftedChat.append(prevMessages, uniqueMessages)
-        );
+        // Show in UI immediately
+        setMessages([welcomeMessage]);
       }
     };
-
+    if (!user?.uid || !userProfile?.nickname) return;
     initializeChat();
-  }, [user?.uid]);
+
+    // Setup live listener after
+    const unsubscribe = fetchUserMessages(user.uid, setMessages);
+    return () => unsubscribe && unsubscribe();
+  }, [user?.uid, userProfile?.nickname]);
   // Function to send a message to the backend
   const sendMessageToBackend = async (text_: string) => {
-    console.log("sending message to backend", text_);
     if (!text_.trim() || !user) {
       console.log("no text or user");
       return;
     }
-
-    const formData = new FormData();
-    formData.append("text", text_);
-    formData.append("userId", user.uid);
-    formData.append("roomId", `default-room-${agentId}`);
     const payload = {
       text: text_,
       userId: user.uid,
       roomId: `default-room-${agentId}`,
     };
-    console.log("userid sent", user.uid);
-    if (selectedFile) {
-      const fileName = selectedFile.uri.split("/").pop() || "image.jpg";
-      const fileType = fileName.split(".").pop() || "jpg";
-      console.log("uri", selectedFile.uri);
-      const image_meta = await uploadImage(selectedFile.uri);
-      if (!image_meta) return;
-      const { imageUrl, uniqueId } = image_meta;
-      payload.imageUrl = uniqueId;
-      // formData.append("file", {
-      //   uri: imageUrl,
-      //   name: uniqueId,
-      //   type: `image/${fileType}`,
-      // } as any);
-      formData.append("imageUrl", imageUrl);
-      console.log("selectedFile", selectedFile);
-    }
+    console.log("📨 Sending message:", text_, "from user:", user.uid);
 
     try {
-      const base = "https://dazzling-simplicity-production.up.railway.app";
-      // const base = `http://192.168.1.164:3002`;
-      console.log(formData);
-
+      if (selectedFile) {
+        const fileName = selectedFile.uri.split("/").pop() || "image.jpg";
+        const fileType = fileName.split(".").pop() || "jpg";
+        console.log("uri", selectedFile.uri);
+        const image_meta = await uploadImage(selectedFile.uri);
+        if (!image_meta) return;
+        const { imageUrl, uniqueId } = image_meta;
+        payload.imageUrl = uniqueId;
+        // formData.append("file", {
+        //   uri: imageUrl,
+        //   name: uniqueId,
+        //   type: `image/${fileType}`,
+        // } as any);
+        // formData.append("imageUrl", imageUrl);
+        console.log("selectedFile", selectedFile);
+      }
+      // const base = "https://dazzling-simplicity-production.up.railway.app";
+      const base = `http://192.168.1.200:3002`;
+      // console.la);
+      console.log("sending to", agentId, payload);
       const response = await fetch(`${base}/${agentId}/message`, {
         method: "POST",
         body: JSON.stringify(payload),
@@ -175,10 +147,15 @@ export default function C6() {
           "Content-Type": "application/json",
         },
       });
-      console.log("response", response);
-      const botResponse = await response.json();
-      console.log("botResponse", botResponse);
-      return botResponse;
+      if (!response.ok) {
+        const errText = await response.text();
+        throw new Error(`Server error: ${response.status} ${errText}`);
+      }
+
+      const responseData = await response.json();
+      console.log("✅ Bot response:", responseData);
+
+      return responseData;
     } catch (error) {
       console.error("Error sending message:", error);
     }
@@ -203,7 +180,7 @@ export default function C6() {
           text: userMessage.text,
           user: {
             _id: "1",
-            name: userProfile?.nickName || "User",
+            name: userProfile?.nickname || "User",
             avatar: "https://placeimg.com/140/140/tech",
           },
           userId: user.uid,
@@ -219,11 +196,15 @@ export default function C6() {
 
         console.log("5. Bot response received:", botResponse); // Debug log
         if (!botResponse || botResponse.length === 0) {
-          throw new Error("Bot response is empty or undefined");
+          // throw new Error("Bot response is empty or undefined");
+          setLoading(false);
+          return;
         }
         // ✅ Ensure botResponse[0].text exists before proceeding
         if (!botResponse[0]?.text) {
-          throw new Error("Invalid bot response format");
+          // throw new Error("Invalid bot response format");
+          setLoading(false);
+          return;
         }
 
         // if (!botResponse?.[0]?.text) {
@@ -258,7 +239,6 @@ export default function C6() {
             text: botMessage,
             createdAt: new Date(),
             user: c6_user,
-            roomId: user.uid,
           };
           // 5. Update UI with bot message
           setMessages((previousMessages) => {
@@ -424,10 +404,10 @@ export default function C6() {
       createdAt: new Date(),
       user: {
         _id: "1",
-        name: userProfile?.nickName || "User",
+        name: userProfile?.nickname || "User",
         avatar: "https://placeimg.com/140/140/tech",
       },
-      text: text || "food",
+      text: text || "FOOD_LOG",
       image,
       userId: user.uid,
       roomId: user.uid,
@@ -450,6 +430,7 @@ export default function C6() {
 
     let count = 0;
     for (var reply of replyText) {
+      console.log(reply, "reply");
       if (reply.action === "FOOD_LOG") {
         setDialogVisible(true);
       }
@@ -488,8 +469,8 @@ export default function C6() {
     <Bubble
       {...props}
       wrapperStyle={{
-        right: { backgroundColor: "#4F46E5" }, // Black for user messages
-        left: { backgroundColor: "#1A1A1A" }, // Bone for AI messages
+        right: { backgroundColor: "#47330c" }, // Black for user messages
+        left: { backgroundColor: "#847d3b" }, // Bone for AI messages
       }}
       textStyle={{
         right: { color: "#FFFFFF" },
@@ -529,21 +510,14 @@ export default function C6() {
       );
     }
     return false;
-    // return (
-    //   <View className="flex-1 m-2 bg-red-50">
-    //     <TextInput style={styles.textInput} {...props} />
-    //   </View>
-    // );
   };
-  // useEffect(() => {
-  //   console.log(messages);
-  // }, [messages]);
+
   return (
     <SafeAreaView style={{ flex: 1 }}>
       {/* <View style={{ padding: 10 }}> */}
       {/* Back Button in Top Left */}
       <TouchableOpacity
-        onPress={() => router.replace("/")} // Navigate back
+        onPress={() => router.replace("/daily")} // Navigate back
         style={{
           position: "absolute",
           top: 30, // Adjust for status bar
@@ -573,14 +547,6 @@ export default function C6() {
           renderComposer={renderComposer}
           isTyping={loading_}
         />
-        {/* Nutrition Summary Popup */}
-        {dialogVisible && (
-          <NutritionDialog
-            visible={dialogVisible}
-            onClose={() => setDialogVisible(false)}
-            meal_id=""
-          />
-        )}
       </View>
     </SafeAreaView>
   );

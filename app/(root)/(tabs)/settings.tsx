@@ -2,166 +2,312 @@ import React, { useState } from "react";
 import {
   View,
   Text,
-  TouchableOpacity,
   ScrollView,
+  TouchableOpacity,
+  Modal,
   TextInput,
-  Switch,
+  Alert,
+  SafeAreaView,
 } from "react-native";
+import { ChevronRight } from "lucide-react-native";
 import { useGlobalContext } from "@/lib/global-provider";
-import { updateProfile, logout } from "@/lib/firebase";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { ActivityIndicator } from "react-native-paper";
-import Header from "@/components/home/Header";
-import ExpBar from "@/components/home/ExpBar";
-
-const ProfilePage = () => {
-  const { userProfile } = useGlobalContext();
-  const [isEditing, setIsEditing] = useState(false);
-  const [editedProfile, setEditedProfile] = useState(userProfile);
-  const [notificationsEnabled, setNotificationsEnabled] = useState(
-    userProfile.notifications || false
+import { signOut } from "firebase/auth";
+import { auth } from "@/lib/firebase";
+import { router } from "expo-router";
+const SettingsPage = () => {
+  const [showFeatureModal, setShowFeatureModal] = useState(false);
+  const [featureRequest, setFeatureRequest] = useState("");
+  const [editField, setEditField] = useState<string | null>(null);
+  const [editableValue, setEditableValue] = useState("");
+  const [editingMealTimeKey, setEditingMealTimeKey] = useState<string | null>(
+    null
   );
+  const { userProfile } = useGlobalContext();
 
-  const handleSave = async () => {
-    try {
-      await updateProfile({
-        ...editedProfile,
-        notifications: notificationsEnabled,
-      });
-      setIsEditing(false);
-    } catch (error) {
-      console.error("Error updating profile:", error);
-    }
+  const [userDoc, setUserDoc] = useState({
+    nickname: userProfile?.nickname,
+    age: userProfile?.age,
+    gender: userProfile?.gender,
+    goals: {
+      primary_goal: userProfile?.goals.primary_goal,
+      target_weight_kg: userProfile?.goals.target_weight_kg,
+      current_weight_kg: userProfile?.goals.current_weight_kg,
+      height_cm: userProfile?.goals.height_cm,
+    },
+    diet: {
+      eating_style: userProfile?.diet.eating_style,
+      diet_type: userProfile?.diet.diet_type,
+      meal_times: userProfile?.diet.meal_times,
+    },
+    activity: {
+      activity_level: userProfile?.activity.activity_level,
+      preferred_workouts: userProfile?.activity.preferred_workouts,
+    },
+    personalization: {
+      tone: userProfile?.personalization.tone,
+      language: userProfile?.personalization.language,
+      country: userProfile?.personalization.country,
+    },
+    notifications: {
+      reminder_times: userProfile?.notifications.reminder_times,
+      reminder_types: userProfile?.notifications.reminder_types,
+    },
+  });
+
+  const handleSendFeature = () => {
+    if (!featureRequest.trim())
+      return Alert.alert("Please write something first!");
+    Alert.alert("Thank you!", "Your suggestion has been received.");
+    setFeatureRequest("");
+    setShowFeatureModal(false);
   };
 
-  if (!userProfile) {
-    return (
-      <View className="flex-1 justify-center items-center bg-white">
-        <ActivityIndicator size="large" color="black" />
-        <Text className="text-gray-400 mt-4">Loading profile...</Text>
-      </View>
-    );
-  }
+  const handleSaveEdit = () => {
+    if (editField) {
+      const updatedDoc = { ...userDoc };
+      if (editField === "nickname") updatedDoc.nickname = editableValue;
+      else if (editField === "diet_type")
+        updatedDoc.diet.diet_type = editableValue;
+      else if (editField === "tone")
+        updatedDoc.personalization.tone = editableValue;
+      else if (editField === "language")
+        updatedDoc.personalization.language = editableValue as "en" | "th";
+      else if (editField === "goal")
+        updatedDoc.goals.primary_goal = editableValue;
+      setUserDoc(updatedDoc);
+    } else if (editingMealTimeKey) {
+      const updatedDoc = { ...userDoc };
+      updatedDoc.diet.meal_times[editingMealTimeKey] = editableValue;
+      setUserDoc(updatedDoc);
+    }
+    setEditField(null);
+    setEditableValue("");
+    setEditingMealTimeKey(null);
+  };
 
   return (
     <SafeAreaView className="flex-1 bg-white">
-      <ScrollView className="flex-1 px-6">
-        {/* Header */}
-        <View className="border-b border-gray-700 pb-4">
-          <Text className="text-black font-rubik-bold text-3xl">Profile</Text>
-        </View>
-        <View className=" my-4">
-          <ExpBar
-            level={userProfile.level_meta.level}
-            exp={userProfile.level_meta.experience}
-            maxExp={userProfile.level_meta.next_level}
+      <ScrollView className="bg-white flex-1 p-4">
+        <Text className="text-2xl font-bold text-black mb-4">Settings</Text>
+
+        {/* Personal Info */}
+        <Text className="text-lg font-semibold mb-2 text-black">Your Info</Text>
+        <EditableItem
+          label="Nickname"
+          value={userDoc.nickname}
+          onEdit={() => {
+            setEditField("nickname");
+            setEditableValue(userDoc.nickname);
+          }}
+        />
+        <EditableItem
+          label="Goal"
+          value={userDoc.goals.primary_goal}
+          onEdit={() => {
+            setEditField("goal");
+            setEditableValue(userDoc.goals.primary_goal);
+          }}
+        />
+
+        <EditableItem
+          label="Gender"
+          value={userDoc.gender}
+          onEdit={null}
+          disabled
+        />
+        <EditableItem
+          label="Age"
+          value={userDoc.age.toString()}
+          onEdit={null}
+          disabled
+        />
+        <EditableItem
+          label="Height"
+          value={`${userDoc.goals.height_cm} cm`}
+          onEdit={null}
+          disabled
+        />
+
+        {/* Diet Settings */}
+        <Text className="text-lg font-semibold mt-6 mb-2 text-black">
+          Diet & Meals
+        </Text>
+        <EditableItem
+          label="Diet Type"
+          value={userDoc.diet.diet_type}
+          onEdit={() => {
+            setEditField("diet_type");
+            setEditableValue(userDoc.diet.diet_type);
+          }}
+        />
+
+        <Text className="text-base font-semibold text-gray-800 mb-1">
+          Meal Times
+        </Text>
+        {Object.entries(userDoc.diet.meal_times).map(([key, val]) => (
+          <EditableItem
+            key={key}
+            label={key.charAt(0).toUpperCase() + key.slice(1)}
+            value={val}
+            onEdit={() => {
+              setEditingMealTimeKey(key);
+              setEditableValue(val);
+            }}
           />
-        </View>
-        {/* Profile Info */}
-        <View className="mb-6">
-          <Text className="text-gray-400 text-sm">Full Name</Text>
-          {isEditing ? (
-            <TextInput
-              className="text-gray-800 text-lg bg-white p-3 rounded-md border border-gray-600 mb-4"
-              value={editedProfile.fullName}
-              onChangeText={(text) =>
-                setEditedProfile({ ...editedProfile, fullName: text })
-              }
-            />
-          ) : (
-            <Text className="text-gray-800 text-lg mb-4">
-              {userProfile.fullName}
-            </Text>
-          )}
+        ))}
 
-          <Text className="text-gray-400 text-sm">Email</Text>
-          <Text className="text-gray-800 text-lg mb-4">
-            {userProfile.email}
-          </Text>
-        </View>
+        {/* Preferences */}
+        <Text className="text-lg font-semibold mt-6 mb-2 text-black">
+          Preferences
+        </Text>
+        <EditableItem
+          label="Tone"
+          value={userDoc.personalization.tone}
+          onEdit={() => {
+            setEditField("tone");
+            setEditableValue(userDoc.personalization.tone);
+          }}
+        />
+        <EditableItem
+          label="Language"
+          value={userDoc.personalization.language}
+          onEdit={() => {
+            setEditField("language");
+            setEditableValue(userDoc.personalization.language);
+          }}
+        />
 
-        {/* Health Stats */}
-        <View className="mb-6">
-          <Text className="text-gray-800 font-rubik-bold text-xl mb-4">
-            Health Stats
-          </Text>
+        {/* FAQ */}
+        <Text className="text-lg font-semibold mt-6 mb-2 text-black">FAQ</Text>
+        <SettingLink
+          label="How does the AI calculate calories?"
+          onPress={() =>
+            Alert.alert("We use BMR, TDEE, and your food logs to calculate.")
+          }
+        />
+        <SettingLink
+          label="Can I change my goal or tone later?"
+          onPress={() =>
+            Alert.alert("Yes! Just tap to edit any setting above.")
+          }
+        />
+        <SettingLink
+          label="How are reminders personalized?"
+          onPress={() =>
+            Alert.alert("They're based on your habits and meal times.")
+          }
+        />
 
-          {[
-            { label: "Height (cm)", field: "height" },
-            { label: "Weight (kg)", field: "weight" },
-            { label: "Age", field: "age" },
-            { label: "Activity Level", field: "activityLevel" },
-            { label: "Health Goal", field: "healthGoal" },
-          ].map(({ label, field }) => (
-            <View
-              className="flex-row justify-between items-center mb-4"
-              key={field}
-            >
-              <Text className="text-gray-400">{label}</Text>
-              {isEditing ? (
-                <TextInput
-                  className="text-gray-800 text-lg bg-white p-3 rounded-md border border-gray-600 w-24"
-                  value={editedProfile[field]}
-                  onChangeText={(text) =>
-                    setEditedProfile({ ...editedProfile, [field]: text })
-                  }
-                />
-              ) : (
-                <Text className="text-gray-800 text-lg">
-                  {userProfile[field]}
-                </Text>
-              )}
+        {/* Suggest Feature */}
+        <Text className="text-lg font-semibold mt-6 mb-2 text-black">
+          Feedback
+        </Text>
+        <TouchableOpacity
+          onPress={() => setShowFeatureModal(true)}
+          className="p-4 rounded-xl border border-gray-300 "
+        >
+          <Text className="text-black text-center">Suggest a Feature ✨</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => {
+            signOut(auth);
+            router.replace("/sign-in");
+          }}
+          className="p-4 rounded-xl bg-newblue border border-gray-300 mb-10 mt-4"
+        >
+          <Text className="text-white text-center">Logout</Text>
+        </TouchableOpacity>
+
+        {/* Edit Modal */}
+        <Modal
+          visible={!!editField || !!editingMealTimeKey}
+          transparent
+          animationType="slide"
+        >
+          <View className="flex-1 justify-center items-center bg-black/40">
+            <View className="bg-white w-11/12 p-6 rounded-xl">
+              <Text className="text-lg font-bold mb-2 text-black">
+                Edit {editField || editingMealTimeKey}
+              </Text>
+              <TextInput
+                placeholder={`Enter new value`}
+                value={editableValue}
+                onChangeText={setEditableValue}
+                className="h-12 bg-gray-100 p-3 rounded-lg text-black"
+              />
+              <TouchableOpacity
+                onPress={handleSaveEdit}
+                className="mt-4 bg-newblue p-3 rounded-xl"
+              >
+                <Text className="text-center text-white font-bold">Save</Text>
+              </TouchableOpacity>
             </View>
-          ))}
-        </View>
+          </View>
+        </Modal>
 
-        {/* Notifications Toggle */}
-        <View className="flex-row justify-between items-center mb-6">
-          <Text className="text-gray-400">Notifications</Text>
-          <Switch
-            value={notificationsEnabled}
-            onValueChange={(value) => setNotificationsEnabled(value)}
-            trackColor={{ false: "#555", true: "#00C853" }}
-            thumbColor={notificationsEnabled ? "#fff" : "#888"}
-          />
-        </View>
-
-        {/* Buttons */}
-        <View className="mt-6">
-          {isEditing ? (
-            <TouchableOpacity
-              className="bg-green-500 py-4 rounded-lg shadow-md"
-              onPress={handleSave}
-            >
-              <Text className="text-gray-800 text-center font-rubik-bold text-lg">
-                Save Changes
+        {/* Feature Modal */}
+        <Modal visible={showFeatureModal} transparent animationType="slide">
+          <View className="flex-1 justify-center items-center bg-black/40">
+            <View className="bg-white w-11/12 p-6 rounded-xl">
+              <Text className="text-lg font-bold mb-2 text-black">
+                Have an idea?
               </Text>
-            </TouchableOpacity>
-          ) : (
-            <TouchableOpacity
-              className="bg-newblue py-4 rounded-lg shadow-md"
-              onPress={() => setIsEditing(true)}
-            >
-              <Text className="text-white text-center font-rubik-bold text-lg">
-                Edit Profile
-              </Text>
-            </TouchableOpacity>
-          )}
-
-          <TouchableOpacity
-            className="bg-red-600 py-4 rounded-lg shadow-md mt-4"
-            onPress={logout}
-          >
-            <Text className="text-white text-center font-rubik-bold text-lg">
-              Logout
-            </Text>
-          </TouchableOpacity>
-        </View>
-
-        <View className="mb-10"></View>
+              <TextInput
+                placeholder="Tell us what you'd like to see..."
+                multiline
+                className="h-32 bg-gray-100 p-3 rounded-lg text-black"
+                value={featureRequest}
+                onChangeText={setFeatureRequest}
+              />
+              <TouchableOpacity
+                onPress={handleSendFeature}
+                className="mt-4 bg-newblue p-3 rounded-xl"
+              >
+                <Text className="text-center text-white font-bold">Send</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </Modal>
       </ScrollView>
     </SafeAreaView>
   );
 };
 
-export default ProfilePage;
+const EditableItem = ({
+  label,
+  value,
+  onEdit,
+  disabled = false,
+}: {
+  label: string;
+  value: string;
+  onEdit: (() => void) | null;
+  disabled?: boolean;
+}) => (
+  <TouchableOpacity
+    onPress={onEdit ?? (() => {})}
+    disabled={disabled}
+    className="flex-row justify-between items-center py-3 border-b border-gray-200"
+  >
+    <Text className="text-gray-700 font-medium w-1/2 capitalize">{label}</Text>
+    <Text className="text-gray-900 text-right w-1/2">{value}</Text>
+  </TouchableOpacity>
+);
+
+const SettingLink = ({
+  label,
+  onPress,
+}: {
+  label: string;
+  onPress: () => void;
+}) => (
+  <TouchableOpacity
+    onPress={onPress}
+    className="flex-row justify-between items-center py-3"
+  >
+    <Text className="text-blue-600 font-medium text-base">{label}</Text>
+    <ChevronRight size={18} color="gray" />
+  </TouchableOpacity>
+);
+
+export default SettingsPage;

@@ -26,7 +26,7 @@ const Auth = () => {
   const { refetch, loading, isLogged } = useGlobalContext();
 
   // Redirect if already logged in
-  if (!loading && isLogged) return <Redirect href="/" />;
+  if (!loading && isLogged) return <Redirect href="/daily" />;
 
   const [request, response, promptAsync] = Google.useAuthRequest({
     clientId: process.env.EXPO_PUBLIC_GOOGLE_CLIENT_ID,
@@ -36,16 +36,12 @@ const Auth = () => {
 
   const login = async () => {
     try {
-      console.log("Initiating login...");
       const result = await promptAsync();
-      console.log("Prompt async result:", result);
 
       if (result.type === "success" && result.authentication) {
         const { idToken } = result.authentication;
-        console.log("Google ID Token:", idToken);
       } else {
         console.error("Login cancelled or failed:", result);
-        Alert.alert("Error", "Google login was cancelled or failed.");
       }
     } catch (error) {
       console.error("Error during login:", error);
@@ -136,16 +132,16 @@ const Auth = () => {
         />
 
         <View className="px-10">
-          <Text className="text-base text-center uppercase font-rubik text-black-200">
+          <Text className="text-base text-center uppercase san text-black-200">
             Welcome To Real Scout
           </Text>
 
-          <Text className="text-3xl font-rubik-bold text-black-300 text-center mt-2">
+          <Text className="text-3xl san-bold text-black-300 text-center mt-2">
             Let's Get You Closer To {"\n"}
             <Text className="text-primary-300">Your Ideal Home</Text>
           </Text>
 
-          <Text className="text-lg font-rubik text-black-200 text-center mt-12">
+          <Text className="text-lg san text-black-200 text-center mt-12">
             Login to Real Scout with Google
           </Text>
 
@@ -160,7 +156,7 @@ const Auth = () => {
                 className="w-5 h-5"
                 resizeMode="contain"
               />
-              <Text className="text-lg font-rubik-medium text-black-300 ml-2">
+              <Text className="text-lg san-medium text-black-300 ml-2">
                 Continue with Google
               </Text>
             </View>
