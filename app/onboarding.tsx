@@ -136,6 +136,7 @@ export default function OnboardingScreen() {
         primary_goal: form.primaryGoal,
         target_weight_kg: parseFloat(form.targetWeight),
         current_weight_kg: parseFloat(form.weight),
+        original_weight_kg: parseFloat(form.weight),
         height_cm: parseFloat(form.height),
       },
       diet: {
@@ -177,6 +178,7 @@ export default function OnboardingScreen() {
         on_going: 0,
         consecutive_days: 0,
       },
+      isOnboarded: true,
     };
     const maintenance = metrics.tdee;
     const goal =
@@ -185,10 +187,10 @@ export default function OnboardingScreen() {
         : form.primaryGoal === "gain weight"
         ? metrics.calorie_target + 500
         : metrics.calorie_target;
-    onboardingData.macronutrients.max = calculateMacros(goal, true);
+    onboardingData.macronutrients.max = calculateMacros(goal, false);
     onboardingData.macronutrients.suggested = calculateMacros(
       maintenance,
-      false
+      true
     );
     setLoading(true);
     // await sendOnboardingData(uid, onboardingData);
@@ -216,7 +218,7 @@ export default function OnboardingScreen() {
       // Optionally handle error
     });
     // setLoading(false);
-    // router.replace("/");
+    router.replace("/");
   };
   const stepComponents = [
     <StepBasics form={form as any} handleInput={handleInput} key="step-1" />,

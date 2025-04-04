@@ -92,7 +92,7 @@ const TabsLayout = () => {
             href: "/empty",
             tabBarIcon: ({ focused }) => (
               <>
-                <Image
+                {/* <Image
                   source={images.chat2}
                   style={{
                     width: 50,
@@ -101,7 +101,7 @@ const TabsLayout = () => {
                     // Remove tintColor to show original image colors
                   }}
                   resizeMode="contain"
-                />
+                /> */}
               </>
             ),
           }}

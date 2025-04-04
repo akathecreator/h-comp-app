@@ -113,25 +113,7 @@ export const StepBasics = ({
         </TouchableOpacity>
       ))}
     </View>
-    <Text className="text-lg font-bold text-newblue mt-2">Country</Text>
-    <Text className="text-sm text-newblue mb-2">
-      will affect recommendations*
-    </Text>
-    <ScrollView className="max-h-40 mb-4">
-      {countries.map((country) => (
-        <TouchableOpacity
-          key={country}
-          className={`p-3 border rounded-lg mb-2 ${
-            form.country === country
-              ? "border-newblue bg-newblue/10"
-              : "border-gray-300"
-          }`}
-          onPress={() => handleInput("country", country)}
-        >
-          <Text className="capitalize text-gray-700">{country}</Text>
-        </TouchableOpacity>
-      ))}
-    </ScrollView>
+
     <Text className="text-lg font-bold text-newblue mb-2">Gender</Text>
     <View className="flex-row justify-between gap-2 mb-4">
       {["male", "female"].map((g) => (
@@ -156,6 +138,26 @@ export const StepBasics = ({
       placeholder="28"
       className="bg-gray-100 p-3 rounded-lg"
     />
+    <Text className="text-lg font-bold text-newblue mt-2">Country</Text>
+    <Text className="text-sm text-newblue mb-2">
+      will affect recommendations*
+    </Text>
+
+    <ScrollView className="max-h-[300px] mb-4">
+      {countries.map((country) => (
+        <TouchableOpacity
+          key={country}
+          className={`p-3 border rounded-lg mb-2 ${
+            form.country === country
+              ? "border-newblue bg-newblue/10"
+              : "border-gray-300"
+          }`}
+          onPress={() => handleInput("country", country)}
+        >
+          <Text className="capitalize text-gray-700">{country}</Text>
+        </TouchableOpacity>
+      ))}
+    </ScrollView>
   </View>
 );
 // Macronutrients Calculation (Used in completeOnboarding)
@@ -324,7 +326,7 @@ export const StepPreferences = ({
       </TouchableOpacity>
     ))}
 
-    <Text className="text-lg font-bold text-newblue mt-4 mb-2">
+    {/* <Text className="text-lg font-bold text-newblue mt-4 mb-2">
       Meal Times (24h format)
     </Text>
     {Object.entries(form.mealTimes).map(([key, value]) => (
@@ -339,7 +341,7 @@ export const StepPreferences = ({
           className="bg-gray-100 p-3 rounded-lg"
         />
       </View>
-    ))}
+    ))} */}
   </View>
 );
 

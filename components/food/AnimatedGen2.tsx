@@ -124,7 +124,7 @@ const CaloriesTracker = ({ date }) => {
             </Text>
           </View>
         </View>
-        <View className="mt flex w-[60px] mr-6">
+        <View className="mt flex w-[70px] mr-6">
           {nutrients.map((nutrient, index) => (
             <View key={index} className="mb-2">
               <Text className="text-sm font-semibold">{nutrient.label}</Text>
@@ -137,8 +137,8 @@ const CaloriesTracker = ({ date }) => {
                 height={6}
                 style={{ width: "100%" }}
               />
-              <Text className="text-xs text-gray-500">
-                {nutrient.value}/{nutrient.max} g
+              <Text className="text-sm text-gray-500">
+                {Math.round(nutrient.value)}/{Math.round(nutrient.max)} g
               </Text>
               {/* {nutrient.value > nutrient.max && (
                 <Text className="text-xs text-red-500">

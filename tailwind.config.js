@@ -20,6 +20,9 @@ module.exports = {
         black: ["NotoSansThai-Black", "sans-serif"],
       },
       colors: {
+        primary: {
+          DEFAULT: "#594715",
+        },
         bone: {
           DEFAULT: "#E8E4D9", // Main bone color
           light: "#F4F2ED", // Lighter shade
@@ -50,7 +53,7 @@ module.exports = {
 
         earthseaweed: "#594715",
         earthbrown: "#c2a968",
-        
+
         earthspinach: "#847d3b",
       },
     },

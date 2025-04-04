@@ -62,28 +62,28 @@ const SettingsPage = () => {
     setShowFeatureModal(false);
   };
 
-  const handleSaveEdit = () => {
-    if (editField) {
-      const updatedDoc = { ...userDoc };
-      if (editField === "nickname") updatedDoc.nickname = editableValue;
-      else if (editField === "diet_type")
-        updatedDoc.diet.diet_type = editableValue;
-      else if (editField === "tone")
-        updatedDoc.personalization.tone = editableValue;
-      else if (editField === "language")
-        updatedDoc.personalization.language = editableValue as "en" | "th";
-      else if (editField === "goal")
-        updatedDoc.goals.primary_goal = editableValue;
-      setUserDoc(updatedDoc);
-    } else if (editingMealTimeKey) {
-      const updatedDoc = { ...userDoc };
-      updatedDoc.diet.meal_times[editingMealTimeKey] = editableValue;
-      setUserDoc(updatedDoc);
-    }
-    setEditField(null);
-    setEditableValue("");
-    setEditingMealTimeKey(null);
-  };
+  // const handleSaveEdit = () => {
+  //   if (editField) {
+  //     const updatedDoc = { ...userDoc };
+  //     if (editField === "nickname") updatedDoc.nickname = editableValue;
+  //     else if (editField === "diet_type")
+  //       updatedDoc.diet.diet_type = editableValue;
+  //     else if (editField === "tone")
+  //       updatedDoc.personalization.tone = editableValue;
+  //     else if (editField === "language")
+  //       updatedDoc.personalization.language = editableValue as "en" | "th";
+  //     else if (editField === "goal")
+  //       updatedDoc.goals.primary_goal = editableValue;
+  //     setUserDoc(updatedDoc);
+  //   } else if (editingMealTimeKey) {
+  //     const updatedDoc = { ...userDoc };
+  //     updatedDoc.diet.meal_times[editingMealTimeKey] = editableValue;
+  //     setUserDoc(updatedDoc);
+  //   }
+  //   setEditField(null);
+  //   setEditableValue("");
+  //   setEditingMealTimeKey(null);
+  // };
 
   return (
     <SafeAreaView className="flex-1 bg-white">
@@ -141,7 +141,7 @@ const SettingsPage = () => {
           }}
         />
 
-        <Text className="text-base font-semibold text-gray-800 mb-1">
+        {/* <Text className="text-base font-semibold text-gray-800 mb-1">
           Meal Times
         </Text>
         {Object.entries(userDoc.diet.meal_times).map(([key, val]) => (
@@ -154,7 +154,7 @@ const SettingsPage = () => {
               setEditableValue(val);
             }}
           />
-        ))}
+        ))} */}
 
         {/* Preferences */}
         <Text className="text-lg font-semibold mt-6 mb-2 text-black">
@@ -219,7 +219,7 @@ const SettingsPage = () => {
         </TouchableOpacity>
 
         {/* Edit Modal */}
-        <Modal
+        {/* <Modal
           visible={!!editField || !!editingMealTimeKey}
           transparent
           animationType="slide"
@@ -243,7 +243,7 @@ const SettingsPage = () => {
               </TouchableOpacity>
             </View>
           </View>
-        </Modal>
+        </Modal> */}
 
         {/* Feature Modal */}
         <Modal visible={showFeatureModal} transparent animationType="slide">

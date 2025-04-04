@@ -75,14 +75,14 @@ const WeeklySlider = ({
                       cx="25"
                       cy="32.5"
                       r="17"
-                      stroke={isSelected ? "#594715" : isToday ? "#c58b49" : "#594715"}
+                      stroke={isSelected ? "#c58b49" : isToday ? "#594715" : "#594715"}
                       strokeWidth="2"
                       strokeDasharray={isToday || isSelected ? "#c58b49" : "4 4"}
                       fill={
                         isSelected
-                          ? "#594715"
-                          : isToday
                           ? "#c58b49"
+                          : isToday
+                          ? "#594715"
                           : "transparent"
                       }
                     />

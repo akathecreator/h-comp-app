@@ -23,6 +23,7 @@ interface UserProfile {
     current_weight_kg: number;
     height_cm: number;
   };
+  isOnboarded: boolean;
   diet: {
     eating_style: string[]; // e.g. ["delivery", "outside"]
     diet_type: "normal" | "vegetarian" | "vegan" | string;
@@ -113,7 +114,6 @@ export const GlobalProvider = ({ children }: GlobalProviderProps) => {
   const [lifeGroup, setLifeGroup] = useState<string>("Health");
   const [dialogVisible, setDialogVisible] = useState<boolean>(false);
   const [loadingFood, setLoadingFood] = useState<boolean>(false);
-
   // Monitor Firebase Auth State
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
@@ -133,7 +133,8 @@ export const GlobalProvider = ({ children }: GlobalProviderProps) => {
     const unsubscribe = onSnapshot(userDocRef, (doc) => {
       if (doc.exists()) {
         console.log("profile fetched", doc.data());
-        setUserProfile(doc.data() as UserProfile);
+        const profile = doc.data() as UserProfile;
+        setUserProfile(profile);
       } else {
         console.error("User profile not found.");
         setUserProfile(null);
