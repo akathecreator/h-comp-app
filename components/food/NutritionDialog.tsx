@@ -96,117 +96,119 @@ const NutritionDialog: React.FC<NutritionDialogProps> = ({
       animationType="fade"
       onRequestClose={onClose}
     >
-        <View className="flex-1 justify-center items-center bg-black/40">
-          <Animated.View
-            style={{ opacity: fadeAnim }}
-            className="w-4/5 bg-white rounded-lg p-6 shadow-lg"
-          >
-            <Text className="text-black text-lg font-bold text-center mb-4">
-              Food Summary
-            </Text>
+      <View className="flex-1 justify-center items-center bg-black/40">
+        <Animated.View
+          style={{ opacity: fadeAnim }}
+          className="w-4/5 bg-white rounded-lg p-6 shadow-lg"
+        >
+          <Text className="text-black text-lg font-bold text-center mb-4">
+            Food Summary
+          </Text>
 
-            <View className="items-center mb-6">
-              <Image
-                source={meal.image_url ? { uri: meal.image_url } : flame2}
-                className="rounded-lg w-60 h-60"
-                resizeMode="cover"
-              />
-            </View>
-
-            {/* Calories and Macros */}
-            <View className="mb-4 bg-earthseaweed rounded-lg p-4">
-              {editing ? (
-                <>
-                  <Text className="text-white mb-2 font-semibold">
-                    Total Calories:
-                  </Text>
-                  <TextInput
-                    keyboardType="numeric"
-                    value={editedCalories.toString()}
-                    onChangeText={(val) =>
-                      setEditedCalories(parseInt(val) || 0)
-                    }
-                    className="bg-white text-gray-800 rounded-md p-2 mb-2"
-                  />
-
-                  {["protein", "carbs", "fat"].map((type) => (
-                    <View key={type} className="mb-2">
-                      <Text className="text-white capitalize">{type} (g):</Text>
-                      <TextInput
-                        keyboardType="numeric"
-                        value={editedMacros[type].toString()}
-                        onChangeText={(val) =>
-                          setEditedMacros((prev) => ({
-                            ...prev,
-                            [type]: parseInt(val) || 0,
-                          }))
-                        }
-                        className="bg-white text-gray-800 rounded-md p-2"
-                      />
-                    </View>
-                  ))}
-                </>
-              ) : (
-                <>
-                  <Text className="text-white text-base font-semibold">
-                    Total Calories: {editedCalories} kcal
-                  </Text>
-                  <View className="flex-col justify-between mt-2">
-                    <Text className="text-white ">
-                      Protein: {editedMacros.protein}g ({macroPercent.protein}%)
-                    </Text>
-                    <Text className="text-white ">
-                      Carbs: {editedMacros.carbs}g ({macroPercent.carbs}%)
-                    </Text>
-                    <Text className="text-white ">
-                      Fat: {editedMacros.fat}g ({macroPercent.fat}%)
-                    </Text>
-                  </View>
-                </>
-              )}
-
-              <TouchableOpacity
-                onPress={() => setEditing((prev) => !prev)}
-                className="mt-2"
-              >
-                <Text className="text-xs text-white underline">
-                  {editing ? "Done Editing" : "Edit Calories & Macros"}
-                </Text>
-              </TouchableOpacity>
-            </View>
-
-            {/* Ingredient Items */}
-            <Text className="text-black text-lg font-bold mb-2">Items:</Text>
-            <FlatList
-              className={editing ? "max-h-[100px] overflow-y-auto" : "max-h-[200px] overflow-y-auto"}
-              data={editableItems}
-              keyExtractor={(_, index) => index.toString()}
-              renderItem={({ item, index }) => (
-                <View className="flex-row justify-between items-center bg-gray-light p-2 mb-2 rounded-lg">
-                  <Text className="text-black text-sm flex-1">- {item}</Text>
-                  {editing && (
-                    <TouchableOpacity onPress={() => handleRemoveItem(index)}>
-                      <Text className="text-red-500 font-bold">✕</Text>
-                    </TouchableOpacity>
-                  )}
-                </View>
-              )}
+          <View className="items-center mb-6">
+            <Image
+              source={meal.image_url ? { uri: meal.image_url } : flame2}
+              className="rounded-lg w-60 h-60"
+              resizeMode="cover"
             />
+          </View>
 
-            {/* Daily Goal Comparison + Tips */}
-            <Text className="text-xs text-gray-400 mt-2">
-              📊 This meal is {((editedCalories / dailyGoal) * 100).toFixed(0)}%
-              of your daily calorie goal.
-            </Text>
-            {macroPercent.fat > 50 && (
+          {/* Calories and Macros */}
+          <View className="mb-4 bg-earthseaweed rounded-lg p-4">
+            {editing ? (
+              <>
+                <Text className="text-white mb-2 font-semibold">
+                  Total Calories:
+                </Text>
+                <TextInput
+                  keyboardType="numeric"
+                  value={editedCalories.toString()}
+                  onChangeText={(val) => setEditedCalories(parseInt(val) || 0)}
+                  className="bg-white text-gray-800 rounded-md p-2 mb-2"
+                />
+
+                {["protein", "carbs", "fat"].map((type) => (
+                  <View key={type} className="mb-2">
+                    <Text className="text-white capitalize">{type} (g):</Text>
+                    <TextInput
+                      keyboardType="numeric"
+                      value={editedMacros[type].toString()}
+                      onChangeText={(val) =>
+                        setEditedMacros((prev) => ({
+                          ...prev,
+                          [type]: parseInt(val) || 0,
+                        }))
+                      }
+                      className="bg-white text-gray-800 rounded-md p-2"
+                    />
+                  </View>
+                ))}
+              </>
+            ) : (
+              <>
+                <Text className="text-white text-base font-semibold">
+                  Total Calories: {editedCalories} kcal
+                </Text>
+                <View className="flex-col justify-between mt-2">
+                  <Text className="text-white ">
+                    Protein: {editedMacros.protein}g ({macroPercent.protein}%)
+                  </Text>
+                  <Text className="text-white ">
+                    Carbs: {editedMacros.carbs}g ({macroPercent.carbs}%)
+                  </Text>
+                  <Text className="text-white ">
+                    Fat: {editedMacros.fat}g ({macroPercent.fat}%)
+                  </Text>
+                </View>
+              </>
+            )}
+
+            <TouchableOpacity
+              onPress={() => setEditing((prev) => !prev)}
+              className="mt-2"
+            >
+              <Text className="text-xs text-white underline">
+                {editing ? "Done Editing" : "Edit Calories & Macros"}
+              </Text>
+            </TouchableOpacity>
+          </View>
+
+          {/* Ingredient Items */}
+          <Text className="text-black text-lg font-bold mb-2">Items:</Text>
+          <FlatList
+            className={
+              editing
+                ? "max-h-[100px] overflow-y-auto"
+                : "max-h-[200px] overflow-y-auto"
+            }
+            data={editableItems}
+            keyExtractor={(_, index) => index.toString()}
+            renderItem={({ item, index }) => (
+              <View className="flex-row justify-between items-center bg-gray-light p-2 mb-2 rounded-lg">
+                <Text className="text-black text-sm flex-1">- {item}</Text>
+                {editing && (
+                  <TouchableOpacity onPress={() => handleRemoveItem(index)}>
+                    <Text className="text-red-500 font-bold">✕</Text>
+                  </TouchableOpacity>
+                )}
+              </View>
+            )}
+          />
+
+          {/* Daily Goal Comparison + Tips */}
+          <Text className="text-xs text-gray-400 my-2">
+            📊 This meal is {((editedCalories / dailyGoal) * 100).toFixed(0)}%
+            of your daily calorie goal.
+          </Text>
+          {/* {macroPercent.fat > 50 && (
               <Text className="text-xs text-red-500 mt-1">
                 ⚠️ High fat content. Try balancing with more lean protein or
                 fiber-rich carbs.
               </Text>
-            )}
+            )} */}
 
-            {/* Action Buttons */}
-            <View className="flex-row justify-between mt-5">
+          {/* Action Buttons */}
+          {/* <View className="flex-row justify-between mt-5">
               <TouchableOpacity
                 onPress={handleSaveFavorite}
                 className="bg-green-600 px-3 py-2 rounded-lg"
@@ -215,15 +217,16 @@ const NutritionDialog: React.FC<NutritionDialogProps> = ({
                   Save as Favorite
                 </Text>
               </TouchableOpacity>
-              <TouchableOpacity
-                onPress={onClose}
-                className="bg-earthbrown px-4 py-2 rounded-lg"
-              >
-                <Text className="text-white font-bold">Close</Text>
-              </TouchableOpacity>
-            </View>
-          </Animated.View>
-        </View>
+              
+            </View> */}
+          <TouchableOpacity
+            onPress={onClose}
+            className="bg-earthbrown px-4 py-2 rounded-lg"
+          >
+            <Text className="text-white font-bold">Close</Text>
+          </TouchableOpacity>
+        </Animated.View>
+      </View>
     </Modal>
   );
 };

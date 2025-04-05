@@ -75,22 +75,18 @@ const WeeklySlider = ({
                       cx="25"
                       cy="32.5"
                       r="17"
-                      stroke={isSelected ? "#c58b49" : isToday ? "#594715" : "#594715"}
+                      stroke={isSelected ? "#594715" : isToday ? "#594715" : "#594715"}
                       strokeWidth="2"
                       strokeDasharray={isToday || isSelected ? "#c58b49" : "4 4"}
                       fill={
-                        isSelected
-                          ? "#c58b49"
-                          : isToday
-                          ? "#594715"
-                          : "transparent"
+                        isToday ? "594715" : "transparent"
                       }
                     />
                   </Svg>
                   <View className="absolute inset-0 flex items-center justify-center pb-1">
                     <Text
                       className={`text-lg mb-1 ${
-                        (isSelected || isToday) ? "font-bold text-white" : "text-gray-600"
+                        (isSelected) ? "font-bold text-black" : isToday ? "font-bold text-white" : "text-gray-600"
                       }`}
                     >
                       {item.date}

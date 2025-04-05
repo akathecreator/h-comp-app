@@ -14,6 +14,7 @@ import MacroSelector from "@/components/MacroSelector";
 
 const HomeScreen = () => {
   const { userProfile, loading } = useGlobalContext();
+  if (loading || !userProfile) return null;
 
   const { on_going } = userProfile?.streaks ?? { on_going: 0 };
   const goals = userProfile?.goals ?? {};
@@ -49,8 +50,6 @@ const HomeScreen = () => {
     const { protein_g, fats_g, carbs_g } = customMacros;
     return protein_g * 4 + fats_g * 9 + carbs_g * 4;
   }, [customMacros]);
-
-  if (loading || !userProfile) return null;
 
   return (
     <SafeAreaView className="flex-1 bg-white">
