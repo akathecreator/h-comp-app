@@ -21,7 +21,6 @@ import {
   savePushTokenToUser,
 } from "@/lib/noti";
 import { useGlobalContext } from "@/lib/global-provider";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import {
   StepBasics,
   StepBodyStats,
@@ -196,8 +195,6 @@ export default function OnboardingScreen() {
     // await sendOnboardingData(uid, onboardingData);
     const token = await registerForPushNotificationsAsync();
     if (token) await savePushTokenToUser(token);
-    await AsyncStorage.setItem("isOnboarded", "true");
-    await AsyncStorage.setItem("onboardingStatus", "completed");
     // Simulate upload and progress (skip API for now)
     let currentProgress = 0;
     const duration = 5000; // 5 seconds

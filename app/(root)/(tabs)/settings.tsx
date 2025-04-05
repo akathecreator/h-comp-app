@@ -11,7 +11,7 @@ import {
 } from "react-native";
 import { ChevronRight } from "lucide-react-native";
 import { useGlobalContext } from "@/lib/global-provider";
-import { signOut } from "firebase/auth";
+// import { signOut } from "firebase/auth";
 import { auth } from "@/lib/firebase";
 import { router } from "expo-router";
 const SettingsPage = () => {
@@ -22,7 +22,7 @@ const SettingsPage = () => {
   const [editingMealTimeKey, setEditingMealTimeKey] = useState<string | null>(
     null
   );
-  const { userProfile } = useGlobalContext();
+  const { userProfile,clearAndLogout } = useGlobalContext();
 
   const [userDoc, setUserDoc] = useState({
     nickname: userProfile?.nickname,
@@ -210,7 +210,7 @@ const SettingsPage = () => {
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => {
-            signOut(auth);
+            clearAndLogout();
             router.replace("/sign-in");
           }}
           className="p-4 rounded-xl bg-newblue border border-gray-300 mb-10 mt-4"

@@ -6,60 +6,64 @@ import React, {
   useState,
 } from "react";
 import {
-  getAuth,
   onAuthStateChanged,
   User as FirebaseUser,
+  signOut,
 } from "firebase/auth";
-import { doc, getDoc, onSnapshot } from "firebase/firestore";
-import { auth, db } from "@/lib/firebase"; // Ensure you have Firestore initialized
+import { doc, onSnapshot } from "firebase/firestore";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
+import { auth, db } from "@/lib/firebase"; // Your Firebase setup
+
+// --- Interfaces ---
 
 interface UserProfile {
   nickname: string;
   age: number;
   gender: "male" | "female";
   goals: {
-    primary_goal: "lose_weight" | "gain_muscle" | "maintain" | string;
+    primary_goal: string;
     target_weight_kg: number;
     current_weight_kg: number;
     height_cm: number;
   };
   isOnboarded: boolean;
   diet: {
-    eating_style: string[]; // e.g. ["delivery", "outside"]
-    diet_type: "normal" | "vegetarian" | "vegan" | string;
+    eating_style: string[];
+    diet_type: string;
     diet_type_custom: string;
     disliked_foods: string[];
     allergies: string[];
     meal_times: {
-      breakfast: string; // "HH:mm"
+      breakfast: string;
       lunch: string;
       dinner: string;
     };
   };
   activity: {
-    activity_level: "none" | "light" | "moderate" | "heavy";
+    activity_level: string;
     preferred_workouts: string[];
     limitations: string[];
   };
   personalization: {
-    tone: "supportive" | "informative" | "funny" | "tough_love";
-    language: "en" | "th";
+    tone: string;
+    language: string;
     country: string;
-    suggestive_preference: string; // e.g. "I want meal plans"
+    suggestive_preference: string;
   };
   notifications: {
-    reminder_times: string[]; // e.g. ["morning", "evening"]
-    reminder_types: string[]; // e.g. ["meals", "water", "workouts"]
+    reminder_times: string[];
+    reminder_types: string[];
   };
-  created_at: any; // Firebase FieldValue.serverTimestamp
-  last_updated: any; // Firebase FieldValue.serverTimestamp
+  created_at: any;
+  last_updated: any;
   metrics: {
     bmi: number;
-    bmi_category: "underweight" | "normal" | "overweight" | "obese" | string;
+    bmi_category: string;
     bmr: number;
     tdee: number;
     calorie_target: number;
-    last_calculated: any; // Firebase FieldValue.serverTimestamp
+    last_calculated: any;
   };
   daily_calories: {
     goal: number;
@@ -87,7 +91,7 @@ interface UserProfile {
 interface GlobalContextType {
   isLogged: boolean;
   user: FirebaseUser | null;
-  userProfile: UserProfile;
+  userProfile: UserProfile | null;
   loading: boolean;
   lifeGroup: string;
   date: Date;
@@ -95,10 +99,14 @@ interface GlobalContextType {
   setDate: (date: Date) => void;
   setLifeGroup: (lifeGroup: string) => void;
   dialogVisible: boolean;
-  setDialogVisible: (dialogVisible: boolean) => void;
+  setDialogVisible: (visible: boolean) => void;
   loadingFood: boolean;
-  setLoadingFood: (loadingFood: boolean) => void;
+  setLoadingFood: (loading: boolean) => void;
+  setUserProfile: (profile: UserProfile | null) => void;
+  clearAndLogout: () => Promise<void>; // 👈 NEW
 }
+
+// --- Context Setup ---
 
 const GlobalContext = createContext<GlobalContextType | undefined>(undefined);
 
@@ -114,7 +122,23 @@ export const GlobalProvider = ({ children }: GlobalProviderProps) => {
   const [lifeGroup, setLifeGroup] = useState<string>("Health");
   const [dialogVisible, setDialogVisible] = useState<boolean>(false);
   const [loadingFood, setLoadingFood] = useState<boolean>(false);
-  // Monitor Firebase Auth State
+
+  const isLogged = !!user;
+
+  // 👇 This handles logout + storage clearing
+  const clearAndLogout = async () => {
+    try {
+      console.log("🚨 Clearing storage and signing out...");
+      await AsyncStorage.clear();
+      await signOut(auth);
+      setUser(null);
+      setUserProfile(null);
+    } catch (err) {
+      console.error("❌ Failed to clear and logout:", err);
+    }
+  };
+
+  // Monitor Firebase auth
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       setUser(currentUser);
@@ -123,25 +147,25 @@ export const GlobalProvider = ({ children }: GlobalProviderProps) => {
       }
       setLoading(false);
     });
-
     return () => unsubscribe();
   }, []);
 
   const fetchUserProfile = (userId: string) => {
     const userDocRef = doc(db, "users", userId);
-    console.log("fetching profile");
+    console.log("📡 Fetching user profile...");
+
     const unsubscribe = onSnapshot(userDocRef, (doc) => {
       if (doc.exists()) {
-        console.log("profile fetched", doc.data());
         const profile = doc.data() as UserProfile;
+        console.log("✅ Profile loaded", profile);
         setUserProfile(profile);
       } else {
-        console.error("User profile not found.");
+        console.warn("⚠️ No user profile found.");
         setUserProfile(null);
       }
     });
 
-    return unsubscribe; // Allow cleanup
+    return unsubscribe;
   };
 
   const refetchUserProfile = async () => {
@@ -149,8 +173,6 @@ export const GlobalProvider = ({ children }: GlobalProviderProps) => {
       await fetchUserProfile(user.uid);
     }
   };
-
-  const isLogged = !!user;
 
   return (
     <GlobalContext.Provider
@@ -169,6 +191,7 @@ export const GlobalProvider = ({ children }: GlobalProviderProps) => {
         setDialogVisible,
         loadingFood,
         setLoadingFood,
+        clearAndLogout, // 👈 Make available globally
       }}
     >
       {children}
@@ -176,11 +199,12 @@ export const GlobalProvider = ({ children }: GlobalProviderProps) => {
   );
 };
 
+// --- Hook to use context ---
+
 export const useGlobalContext = (): GlobalContextType => {
   const context = useContext(GlobalContext);
   if (!context)
     throw new Error("useGlobalContext must be used within a GlobalProvider");
-
   return context;
 };
 
