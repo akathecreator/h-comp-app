@@ -46,7 +46,7 @@ export default function AppLayout() {
     return <Redirect href="/sign-in" />;
   }
 
-  if (isLogged && userProfile && !userProfile?.isOnboarded) {
+  if (isLogged && !loading && userProfile && !userProfile?.isOnboarded) {
     return <Redirect href="/onboarding" />;
   }
 
