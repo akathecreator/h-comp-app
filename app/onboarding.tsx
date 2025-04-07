@@ -191,6 +191,7 @@ export default function OnboardingScreen() {
       maintenance,
       true
     );
+    onboardingData.daily_calories.goal = goal;
     setLoading(true);
     // await sendOnboardingData(uid, onboardingData);
     const token = await registerForPushNotificationsAsync();
@@ -210,10 +211,13 @@ export default function OnboardingScreen() {
         router.replace("/");
       }
     }, interval);
-    saveOnboardingData(onboardingData, uid).catch((error) => {
-      console.error("Error saving onboarding data:", error);
-      // Optionally handle error
-    });
+    if (onboardingData.daily_calories.goal > 0) {
+      saveOnboardingData(onboardingData, uid).catch((error) => {
+        console.error("Error saving onboarding data:", error);
+        // Optionally handle error
+      });
+    }
+
     // setLoading(false);
     router.replace("/");
   };

@@ -20,7 +20,7 @@
     "name": "Leafi",
     "slug": "c6-companion",
     "owner": "archbishop",
-    "version": "1.0.3",
+    "version": "1.0.4",
     "orientation": "portrait",
     "icon": "./assets/images/icon-real.png",
     "scheme": "com.archbishop.c6companion",
@@ -92,7 +92,7 @@
     "experiments": {
       "typedRoutes": true
     },
-    "runtimeVersion": "1.0.3",
+    "runtimeVersion": "1.0.4",
     "updates": {
       "url": "https://u.expo.dev/a3271ed2-47da-4e33-9d3f-649ed63f618f"
     }

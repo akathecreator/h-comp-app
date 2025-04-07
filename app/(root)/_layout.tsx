@@ -6,7 +6,7 @@ import { useGlobalContext } from "@/lib/global-provider";
 import { ActivityIndicator } from "react-native-paper";
 
 export default function AppLayout() {
-  const { loading, isLogged, userProfile } = useGlobalContext();
+  const { loading, isLogged, userProfile, clearAndLogout } = useGlobalContext();
   const [isOnboarded, setIsOnboarded] = useState<boolean | null>(null);
 
   // Check onboarding status once user is loaded
@@ -30,6 +30,9 @@ export default function AppLayout() {
     }
   }, [loading, isLogged, userProfile]);
 
+  if (!isLogged) {
+    return <Redirect href="/sign-in" />;
+  }
   // Show loading indicator while auth or onboarding check is happening
   if (loading || isOnboarded === null) {
     return (
@@ -40,9 +43,6 @@ export default function AppLayout() {
   }
 
   // Redirect unauthenticated users
-  if (!isLogged) {
-    return <Redirect href="/sign-in" />;
-  }
 
   // Redirect onboard-incomplete users
   if (!isOnboarded) {

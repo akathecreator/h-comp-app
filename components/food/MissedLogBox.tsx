@@ -220,32 +220,50 @@ const QuickLogBox = ({ date }: { date: Date }) => {
     }
   };
   return (
-    <View className="flex-1 justify-center items-center">
-      <TouchableOpacity onPress={pickImage} className="w-full">
-        <View
-          className="border border-dotted border-[#A3A3A3] rounded-xl overflow-hidden my-2"
-          style={{ aspectRatio: 2.4 }} // Keeps it nicely rectangular
-        >
-          <ImageBackground
-            source={require("@/assets/images/onboarding2.png")}
-            className="flex-1 items-center justify-center"
-            imageStyle={{ borderRadius: 12 }}
-          >
-            <Text className="text-white font-semibold text-lg bg-black/50 px-4 py-2 rounded-md">
-              + Snap a Meal
-            </Text>
-          </ImageBackground>
-        </View>
-      </TouchableOpacity>
+    <View className="flex-1">
       {/* Upload Box */}
-      <View className="px-4 mb-2 flex flex-row gap-4 justify-start">
+      <View className="px-4 mb-2 flex flex-row gap-4 justify-center mx-2">
         {/* <TouchableOpacity
             onPress={pickImage}
             className="border-2 border-dashed border-newblue rounded-lg p-5 items-center justify-center"
           >
             <Text className="text-newblue">+ Capture Your Meal</Text>
           </TouchableOpacity> */}
-
+        <TouchableOpacity
+          onPress={() => setShowChatBox(true)}
+          className="w-1/2"
+        >
+          <View
+            className="border border-dotted border-[#A3A3A3] rounded-xl overflow-hidden"
+            style={{ aspectRatio: 2.4 }} // Keeps it nicely rectangular
+          >
+            <ImageBackground
+              source={require("@/assets/images/onboarding3.png")}
+              className="flex-1 items-center justify-center"
+              imageStyle={{ borderRadius: 12 }}
+            >
+              <Text className="text-white font-semibold text-lg bg-black/50 px-4 py-2 rounded-md">
+                + Manual Log
+              </Text>
+            </ImageBackground>
+          </View>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={pickImage} className="w-1/2">
+          <View
+            className="border border-dotted border-[#A3A3A3] rounded-xl overflow-hidden"
+            style={{ aspectRatio: 2.4 }} // Keeps it nicely rectangular
+          >
+            <ImageBackground
+              source={require("@/assets/images/onboarding2.png")}
+              className="flex-1 items-center justify-center"
+              imageStyle={{ borderRadius: 12 }}
+            >
+              <Text className="text-white font-semibold text-lg bg-black/50 px-4 py-2 rounded-md">
+                {isToday ? "+ Snap a Meal" : "+ Missed a Meal?"}
+              </Text>
+            </ImageBackground>
+          </View>
+        </TouchableOpacity>
         {/* <TouchableOpacity
             onPress={() => setShowChatBox(true)}
             className="border-2 border-dashed border-newblue rounded-lg p-5 items-center justify-center"

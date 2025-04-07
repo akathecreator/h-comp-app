@@ -16,6 +16,8 @@ import NutritionDialog from "./NutritionDialog";
 import { removeMeal } from "@/lib/firebase";
 import { router } from "expo-router";
 import flame2 from "../../assets/images/food.png";
+import QuickLogBox from "./QuickLogBox";
+import dayjs from "dayjs";
 interface Meal {
   id: string;
   description: string;
@@ -32,7 +34,7 @@ interface Meal {
 const RecentLogs = ({ date }: { date: Date }) => {
   const { user } = useGlobalContext();
   if (!user) return null;
-
+  const isToday = dayjs(date).isSame(dayjs(), "day");
   const { recentMeals, loading } = useRecentMeals(user.uid, date);
   const [dialogVisible, setDialogVisible] = useState(false);
   const [mealId, setMealId] = useState("");
@@ -77,9 +79,10 @@ const RecentLogs = ({ date }: { date: Date }) => {
         {/* <Text className="text-lg san-semibold text-black mb-4">
           Recent Meals
         </Text> */}
-        <Text className="text-lg text-black-muted san">
+        {/* <Text className="text-lg text-black-muted san">
           Let me know what you are having today!
-        </Text>
+        </Text> */}
+        {/* {isToday && <QuickLogBox date={date} />} */}
       </View>
     );
   }
@@ -166,6 +169,7 @@ const RecentLogs = ({ date }: { date: Date }) => {
           </TouchableOpacity>
         </Swipeable>
       ))}
+      {/* {isToday && <QuickLogBox date={date} />} */}
       {/* Nutrition Dialog */}
       {mealId && (
         <NutritionDialog

@@ -71,7 +71,7 @@ const Auth = () => {
       // Login the user with email and password
       const userCredential = await signInWithEmailAndPassword(
         auth,
-        "gunpod@sasss.com",
+        "gunpod@leafi.ai",
         "12341234"
       );
 
@@ -116,7 +116,7 @@ const Auth = () => {
           {/* handleLoginGoogle */}
           <TouchableOpacity
             disabled={!request}
-            onPress={handleLoginGoogle}
+            onPress={signInWithEmail}
             className="bg-white shadow-md shadow-zinc-300 rounded-full w-full py-4 mt-5"
           >
             <View className="flex flex-row items-center justify-center">

@@ -162,6 +162,7 @@ export const GlobalProvider = ({ children }: GlobalProviderProps) => {
       } else {
         console.warn("⚠️ No user profile found.");
         setUserProfile(null);
+        clearAndLogout();
       }
     });
 

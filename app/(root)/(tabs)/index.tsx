@@ -1,223 +1,217 @@
-import React, { useState, useMemo, useEffect } from "react";
+import MealSuggestions from "@/components/food/MealSuggestions";
+import Header from "@/components/home/Header";
+import { useGlobalContext } from "@/lib/global-provider";
+import { isToday } from "date-fns";
+import React, { useState } from "react";
 import {
-  SafeAreaView,
+  ScrollView,
   View,
   Text,
-  ScrollView,
-  TextInput,
-  Pressable,
+  TouchableOpacity,
+  Image,
+  SafeAreaView,
+  Modal,
+  ImageBackground,
 } from "react-native";
-import Header from "@/components/home/Header";
-import DynamicHabitTracker from "@/components/home/WaterTracker";
-import { useGlobalContext } from "@/lib/global-provider";
-import MacroSelector from "@/components/MacroSelector";
+import LearningCard from "@/components/LearningCards";
+const mockedLearningData = [
+  {
+    id: 1,
+    title: "Intermittent Fasting Explained",
+    duration: "1 min",
+    action: "Try today",
+  },
+  {
+    id: 2,
+    title: "Why Protein Keeps You Full",
+    duration: "1 min",
+    action: "Get Reminder",
+  },
+];
 
-const HomeScreen = () => {
-  const { userProfile, loading } = useGlobalContext();
-  if (loading || !userProfile) return null;
+const mockedMealsData = [
+  {
+    id: 1,
+    title: "Thai Chicken Salad",
+    calories: 450,
+    time: "15 mins",
+    image: "https://via.placeholder.com/150",
+  },
+  {
+    id: 2,
+    title: "Tofu Stir Fry",
+    calories: 400,
+    time: "20 mins",
+    image: "https://via.placeholder.com/150",
+  },
+];
 
-  const { on_going } = userProfile?.streaks ?? { on_going: 0 };
-  const goals = userProfile?.goals ?? {};
-  const metrics = userProfile?.metrics ?? {};
-  const macronutrients = userProfile?.macronutrients ?? {};
-  // Base calculations
-  const weightLossKg = goals?.current_weight_kg - goals?.target_weight_kg;
-  const kcalPerKg = 7700;
-  const totalCaloriesToBurn = weightLossKg * kcalPerKg;
-  const defaultDeficit = metrics?.tdee - metrics?.calorie_target;
-  const defaultDaysToGoal = Math.ceil(totalCaloriesToBurn / defaultDeficit);
-  const defaultWeeks = Math.ceil(defaultDaysToGoal / 7);
+const mockedFeedData = [
+  "Someone logged a post-workout meal: Chicken & rice",
+  "3 people hit their protein goals today",
+  "A user matched with an accountability buddy",
+];
+const mockedLearningTip = {
+  id: 1,
+  title: "Intermittent Fasting Explained",
+  content: "Understand the basics of intermittent fasting...",
+};
+const mockedFeedMeals = [
+  {
+    id: 1,
+    title: "Thai Chicken Salad",
+    calories: 450,
+    image: "https://via.placeholder.com/150",
+  },
+  {
+    id: 2,
+    title: "Tofu Stir Fry",
+    calories: 400,
+    image: "https://via.placeholder.com/150",
+  },
+];
 
-  // User-adjustable weeks
-  const [targetWeeks, setTargetWeeks] = useState(defaultWeeks);
-  const [originalTargetWeeks, setOriginalTargetWeeks] = useState(defaultWeeks);
-  const [manualMacros, setManualMacros] = useState(false);
-  const [customMacros, setCustomMacros] = useState({
-    protein_g: macronutrients?.max?.protein_g ?? 0,
-    fats_g: macronutrients?.max?.fats_g ?? 0,
-    carbs_g: macronutrients?.max?.carbs_g ?? 0,
-  });
-
-  // Dynamic calorie target based on targetWeeks
-  const adjustedDeficit = useMemo(
-    () => Math.floor(totalCaloriesToBurn / (targetWeeks * 7)),
-    [targetWeeks]
+export default function HomePage() {
+  const [activeTrack, setActiveTrack] = useState("Lose Weight");
+  const { userProfile } = useGlobalContext();
+  const [mealModal, setMealModal] = useState(false);
+  const [accountability, setAccountabilityText] = useState(
+    "Find an Accountability Buddy"
   );
-  const adjustedTargetCalories = metrics?.tdee - adjustedDeficit;
-
-  // Macro calorie estimate
-  const customMacroCalories = useMemo(() => {
-    const { protein_g, fats_g, carbs_g } = customMacros;
-    return protein_g * 4 + fats_g * 9 + carbs_g * 4;
-  }, [customMacros]);
-
+  const [learningTip, setLearningTip] = useState(mockedLearningTip);
+  if (!userProfile) return null;
   return (
-    <SafeAreaView className="flex-1 bg-white">
-      <ScrollView className="px-6 bg-white">
-        {/* Header */}
-        <Header streak={on_going} />
+    <SafeAreaView className="flex-1">
+      <View className="px-6 my-1">
+        <Header streak={userProfile?.streaks.on_going} />
+      </View>
 
-        {/* Intro */}
-        <View className="mt-4 mb-2">
-          <Text className="text-gray-600 font-sans mt-1">
-            Let’s stay consistent today! You’re{" "}
-            <Text className="font-bold text-newblue">{weightLossKg} kg</Text>{" "}
-            away from your goal.
+      <ScrollView className="pt-2 px-6">
+        {/* <Text className="text-2xl font-bold mb-4">Empowerment Hub</Text> */}
+
+        {/* Section 1: What's Happening Now */}
+
+        {/* Section 2: 30 Days to a Better You */}
+        {/* <View className="mb-6">
+          <Text className="text-xl font-semibold mb-2">Today's Insight</Text>
+          <TouchableOpacity
+            className="bg-blue-100 rounded-xl p-4"
+            onPress={() => alert(learningTip.content)}
+          >
+            <Text className="font-semibold mb-1">{learningTip.title}</Text>
+            <View className="flex-row justify-between mt-3">
+              <TouchableOpacity className="bg-green-500 rounded px-3 py-1">
+                <Text className="text-white">Interested</Text>
+              </TouchableOpacity>
+              <TouchableOpacity className="bg-red-500 rounded px-3 py-1">
+                <Text className="text-white">Not Interested</Text>
+              </TouchableOpacity>
+            </View>
+          </TouchableOpacity>
+        </View> */}
+{/* 
+        <View className="mb-6 my-4">
+          <Text className="text-xl font-semibold mb-2">
+            Community Exemplary
+          </Text>
+        </View> */}
+        <View className="mb-6 my-4">
+          <Text className="text-xl font-bold mb-2 text-earthseaweed ">
+            30 Days To a Better You
           </Text>
         </View>
+        <LearningCard />
 
-        {/* Goal Summary */}
-        <View className="bg-newblue rounded-lg p-6 mb-4">
-          <Text className="text-lg text-white font-semibold">🎯 Your Goal</Text>
-          <Text className="text-white mt-1 font-sans">
-            From {goals.current_weight_kg} kg → {goals.target_weight_kg} kg
-          </Text>
-          <Text className="text-white font-sans mt-1">
-            To lose {weightLossKg} kg of fat (~
-            {totalCaloriesToBurn.toLocaleString()} kcal), you need a daily
-            calorie deficit.
-          </Text>
-
-          <Text className="text-white font-sans mt-3">
-            Estimated Time:{" "}
-            <Text className="font-bold">{targetWeeks} weeks</Text>
-          </Text>
-          <Text className="text-white font-sans">
-            Deficit:{" "}
-            <Text className="font-bold">{adjustedDeficit} kcal/day</Text>
-          </Text>
-          <Text className="text-white font-sans">
-            Target Intake:{" "}
-            <Text className="font-bold">{adjustedTargetCalories} kcal/day</Text>
-          </Text>
-
-          {/* Week Select */}
-          <View className="flex-row flex-wrap gap-2 mt-4">
-            {[
-              originalTargetWeeks - 6,
-              originalTargetWeeks - 4,
-              originalTargetWeeks - 2,
-              originalTargetWeeks,
-              originalTargetWeeks + 2,
-              originalTargetWeeks + 4,
-            ].map((w) => (
-              <Pressable
-                key={w}
-                className={`px-3 py-1 rounded-full border ${
-                  w === targetWeeks
-                    ? "bg-white border-white"
-                    : "border-gray-300"
-                }`}
-                onPress={() => setTargetWeeks(w)}
+        {/* Section 3: Meal Ideas */}
+        {/* <View className="mb-6">
+          <Text className="text-xl font-semibold mb-2">Meal Ideas</Text>
+          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+            {mockedFeedMeals.map((meal) => (
+              <View
+                key={meal.id}
+                className="bg-gray-100 rounded-xl p-3 mr-4 items-center"
               >
-                <Text
-                  className={`text-sm ${
-                    w === targetWeeks ? "text-newblue font-bold" : "text-white"
-                  }`}
-                >
-                  {w} weeks
+                <Image
+                  source={{ uri: meal.image }}
+                  className="w-40 h-40 rounded-lg"
+                />
+                <Text className="mt-2 font-semibold">{meal.title}</Text>
+                <Text className="text-sm text-gray-600">
+                  {meal.calories} kcal
                 </Text>
-              </Pressable>
+              </View>
             ))}
+          </ScrollView>
+        </View> */}
+        {/* Section 4: Accountability Match */}
+        <View className="mb-4">
+          <TouchableOpacity
+            className="w-full"
+            onPress={() =>
+              setAccountabilityText(
+                "We'll find you the right match..."
+              )
+            }
+          >
+            <View
+              className="border border-dotted border-[#A3A3A3] rounded-xl overflow-hidden"
+              style={{ aspectRatio: 2.4 }} // Keeps it nicely rectangular
+            >
+              <ImageBackground
+                source={require("@/assets/images/together.png")}
+                className="flex-1 items-center justify-center"
+                imageStyle={{ borderRadius: 12 }}
+              >
+                <Text className="text-white font-semibold text-md bg-black/50 px-4 py-2 rounded-md">
+                  {accountability}
+                </Text>
+              </ImageBackground>
+            </View>
+          </TouchableOpacity>
+        </View>
+
+        <MealSuggestions date={new Date()} />
+
+        {/* Meal Modal */}
+        <Modal visible={mealModal} transparent animationType="slide">
+          <View className="flex-1 bg-black bg-opacity-50 justify-center items-center">
+            <View className="bg-white rounded-xl p-6 w-10/12">
+              <Text className="text-xl font-semibold mb-2">
+                Thai Chicken Salad Recipe
+              </Text>
+              <Text className="text-gray-600 mb-4">
+                Step by step recipe breakdown goes here...
+              </Text>
+              <TouchableOpacity
+                className="bg-green-500 py-2 rounded-xl"
+                onPress={() => setMealModal(false)}
+              >
+                <Text className="text-white text-center font-semibold">
+                  Close
+                </Text>
+              </TouchableOpacity>
+            </View>
           </View>
+        </Modal>
 
-          <Text className="text-xs text-gray-200 mt-3">
-            1 kg of fat ≈ 7,700 kcal. A 500 kcal/day deficit is ideal for
-            sustainable weight loss.
+        {/* <View className="mb-10">
+          <Text className="text-xl font-semibold mb-2">
+            Accountability Buddy
           </Text>
-        </View>
-
-        {/* Calorie Info */}
-        <View className="bg-earthspinach rounded-lg p-6 mb-4">
-          <Text className="text-lg text-white font-semibold mb-2">
-            🔥 Calorie Plan
-          </Text>
-          <Text className="text-white font-sans">BMR: {metrics.bmr} kcal</Text>
-          <Text className="text-xs text-gray-300">Calories burned at rest</Text>
-
-          <Text className="text-white font-sans mt-2">
-            TDEE: {metrics.tdee} kcal
-          </Text>
-          <Text className="text-xs text-gray-300">
-            Total energy usage per day
-          </Text>
-
-          <Text className="text-white font-sans mt-2">
-            Target Intake:{" "}
-            <Text className="font-bold">{adjustedTargetCalories} kcal/day</Text>
-          </Text>
-          <Text className="text-xs text-gray-300">
-            Based on your selected {targetWeeks} week goal
-          </Text>
-        </View>
-        {/* <MacroSelector calorieTarget={adjustedTargetCalories} /> */}
-
-        {/* Macros Section */}
-        {/* <MacroSelector
-          adjustedTargetCalories={adjustedTargetCalories}
-          macronutrients={macronutrients}
-        /> */}
-        <View className="bg-earthbrown rounded-lg p-6 mb-4">
-          <View className="flex-row justify-between items-center mb-2">
-            <Text className="text-lg text-white font-semibold">
-              🥗 Suggested Macros
+          <TouchableOpacity
+            className="bg-purple-500 py-2 rounded-xl"
+            onPress={() =>
+              alert(
+                "We will match you with someone with similar goals and set a friendly competition!"
+              )
+            }
+          >
+            <Text className="text-white text-center font-semibold">
+              Find a Buddy
             </Text>
-            <Pressable onPress={() => setManualMacros((prev) => !prev)}>
-              <Text className="text-sm text-white underline">
-                {manualMacros ? "Use Suggested" : "Customize"}
-              </Text>
-            </Pressable>
-          </View>
-
-          {manualMacros ? (
-            <>
-              {["protein_g", "fats_g", "carbs_g"].map((type) => (
-                <View className="mb-2" key={type}>
-                  <Text className="text-white font-sans capitalize">
-                    {type.replace("_g", "").toUpperCase()}
-                  </Text>
-                  <TextInput
-                    className="border rounded-md bg-white p-2 text-gray-800 mt-1"
-                    keyboardType="numeric"
-                    value={customMacros[type].toString()}
-                    onChangeText={(val) =>
-                      setCustomMacros((prev) => ({
-                        ...prev,
-                        [type]: parseInt(val) || 0,
-                      }))
-                    }
-                  />
-                </View>
-              ))}
-              <Text className="text-xs text-gray-300 mt-2">
-                Your custom macros add up to ~
-                <Text className="font-bold"> {customMacroCalories} kcal</Text>
-              </Text>
-            </>
-          ) : (
-            <>
-              <Text className="text-white font-sans">
-                🍗 Protein: {macronutrients.max.protein_g}g
-              </Text>
-              <Text className="text-white font-sans">
-                🥑 Fat: {macronutrients.max.fats_g}g
-              </Text>
-              <Text className="text-white font-sans">
-                🍚 Carbs: {macronutrients.max.carbs_g}g
-              </Text>
-            </>
-          )}
-        </View>
-
-        {/* Meal Reminder */}
-        <View className="mt-4 mb-6">
-          <Text className="text-center text-sm text-gray-600 font-sans">
-            👉 Don’t forget to log your first meal of the day!
-          </Text>
-        </View>
+          </TouchableOpacity>
+        </View> */}
       </ScrollView>
     </SafeAreaView>
   );
-};
-
-export default HomeScreen;
+}

@@ -1,10 +1,11 @@
 import React, { useState } from "react";
-import { View, Text } from "react-native";
+import { View, Text, TouchableOpacity } from "react-native";
 import { Circle, Svg, G } from "react-native-svg";
 import * as Progress from "react-native-progress";
 import useDailyMacros from "@/hooks/useDailyMacros";
 import { useGlobalContext } from "@/lib/global-provider";
-
+import { Ionicons } from "@expo/vector-icons";
+import { router } from "expo-router";
 const CaloriesTracker = ({ date }) => {
   const { userProfile } = useGlobalContext();
   const { daily_calories, macronutrients } = userProfile;
@@ -59,7 +60,9 @@ const CaloriesTracker = ({ date }) => {
   const RADIUS = 80;
   const STROKE_WIDTH = 12;
   const CIRCUMFERENCE = 2 * Math.PI * RADIUS;
-
+  const handleInfoPress = () => {
+    router.push("/metrics"); // Adjust path if inside a folder like /app/(tabs)
+  };
   // Ensure progress is within bounds (0 to 1)
   // const progress = Math.min(1, netCalories / suggestedCalories);
   // const strokeDashoffset = (1 - progress) * CIRCUMFERENCE;
@@ -75,6 +78,15 @@ const CaloriesTracker = ({ date }) => {
   return (
     <View className="bg-white p-8 rounded-lg shadow-md items-center mx-7 my-4 mb-6">
       {/* Circular Progress Bar */}
+      <View className="absolute right-5 top-2">
+        <TouchableOpacity onPress={handleInfoPress}>
+          <Ionicons
+            name="information-circle-outline"
+            size={22}
+            color="#594715"
+          />
+        </TouchableOpacity>
+      </View>
       <View className="flex-row items-center ">
         <View className="items-center justify-center mr-6">
           <Svg height="180" width="180" viewBox="0 0 200 200">

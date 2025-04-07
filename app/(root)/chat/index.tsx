@@ -80,7 +80,7 @@ export default function C6() {
         const weightLossKg = goals.current_weight_kg - goals.target_weight_kg;
         const welcomeMessage: IMessage = {
           _id: uuidv4(),
-          text: `Hi ${nickname}, So you want to lose ${weightLossKg} kg (from ${goals.current_weight_kg} kg to ${goals.target_weight_kg} kg). I have created a weekly suggested meal plan for you but if you don't feel like following them you can just send pictures of what you eat for me to log and analyze`,
+          text: `Hi ${nickname}, So you want to lose ${weightLossKg} kg (from ${goals.current_weight_kg} kg to ${goals.target_weight_kg} kg). Just drop a message anytime you eat something, do a workout. weigh yourself, have a question or need motivation. I am trained with famous nutritionists data so I can answer questions about health, food and workout.`,
           createdAt: new Date(),
           user: {
             _id: "bot",

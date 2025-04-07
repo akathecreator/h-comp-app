@@ -75,8 +75,8 @@ const MealSuggestions = ({ date }: { date: Date }) => {
     }
   };
   return (
-    <View className="mt-3 px-6">
-      <Text className="text-lg font-bold text-black mb-2">
+    <View className="mt-3">
+      <Text className="text-xl text-earthseaweed font-bold text-black mb-2">
         Meal Suggestions
       </Text>
 
@@ -121,7 +121,7 @@ const MealSuggestions = ({ date }: { date: Date }) => {
                     <Feather
                       name="thumbs-up"
                       size={20}
-                      color={liked ? "#4F46E5" : "gray"}
+                      color={liked ? "#594715" : "gray"}
                     />
                   </TouchableOpacity>
                   <Text className="text-md text-gray-500 mb-3">
@@ -133,7 +133,7 @@ const MealSuggestions = ({ date }: { date: Date }) => {
                     <Feather
                       name="thumbs-down"
                       size={20}
-                      color={disliked ? "tomato" : "gray"}
+                      color={disliked ? "#847d3b" : "gray"}
                     />
                   </TouchableOpacity>
                 </View>

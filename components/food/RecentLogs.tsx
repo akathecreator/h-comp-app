@@ -4,6 +4,8 @@ import RecentActivityList from "@/components/activity/RecentActivityList";
 import Meallogs from "@/components/food/Meallogs";
 import { useGlobalContext } from "@/lib/global-provider";
 import { FlatList } from "react-native-gesture-handler";
+import QuickLogBox from "./QuickLogBox";
+import { isToday } from "date-fns";
 
 const RecentLogs = ({ date }: { date: any }) => {
   // const { date } = useGlobalContext();
@@ -12,6 +14,8 @@ const RecentLogs = ({ date }: { date: any }) => {
   return (
     <View className="flex-1 px-1">
       {/* Tab Header */}
+      {/* <QuickLogBox date={date} /> */}
+
       <View className="flex-row justify-between  border-gray-700">
         <TouchableOpacity
           className="flex-1 items-center py-3"

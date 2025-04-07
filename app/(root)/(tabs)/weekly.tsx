@@ -15,13 +15,13 @@ import { useGlobalContext } from "@/lib/global-provider";
 import BodyProgress from "@/components/weekly/BodyProgress";
 import { ScrollView } from "react-native-gesture-handler";
 import useWeeklyLogs from "@/hooks/useWeeklyData";
-
+import { Divider } from "react-native-paper";
 const screenWidth = Dimensions.get("window").width;
 
 const WeeklyPage = () => {
-  const { userProfile } = useGlobalContext();
+  const { user, userProfile } = useGlobalContext();
   const [currentWeek, setCurrentWeek] = useState(new Date());
-  const { weeklyLogs, loading } = useWeeklyLogs(userProfile.id, currentWeek);
+  const { weeklyLogs, loading } = useWeeklyLogs(user?.uid, currentWeek);
 
   const weekStart = startOfWeek(currentWeek, { weekStartsOn: 1 });
   const weekEnd = addDays(weekStart, 6);
@@ -39,11 +39,12 @@ const WeeklyPage = () => {
     <SafeAreaView className="flex-1 bg-white px-6">
       <ScrollView contentContainerStyle={{ paddingBottom: 10 }}>
         <View className="px-4 mx-4">
-          <Header streak={userProfile.streaks.on_going} />
+          <Header streak={userProfile?.streaks.on_going} />
         </View>
         <View className="px-4">
           <BodyProgress />
         </View>
+        {/* <Divider /> */}
         <View className="flex-1 bg-white px-4">
           <View className="flex-row justify-between items-center mb-1">
             <TouchableOpacity
