@@ -8,6 +8,7 @@ import {
   Alert,
   Modal,
   KeyboardAvoidingView,
+  ImageBackground,
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import { Plus, X } from "lucide-react-native";
@@ -169,11 +170,13 @@ const BodyProgress = () => {
         </View>
       </Modal>
       <Text className="text-black font-bold text-lg">Body Progress</Text>
+
       {photos.length === 0 && (
         <Text className="text-grey text-sm mb-2">
           You can track your body progress daily or weekly here!
         </Text>
       )}
+
       <ScrollView showsHorizontalScrollIndicator={false} className="flex-row">
         {/* Add Photo Button */}
         <TouchableOpacity
@@ -216,6 +219,13 @@ const BodyProgress = () => {
           )}
         />
       </ScrollView>
+      <ImageBackground    
+        source={require("@/assets/images/body.png")}
+        className="flex-1 items-center justify-center h-40"
+        imageStyle={{ borderRadius: 15 }}
+      >
+        {/* <Text className="text-white text-2xl font-bold">That's You</Text> */}
+      </ImageBackground>
     </View>
   );
 };

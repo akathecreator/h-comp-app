@@ -8,12 +8,18 @@ import {
   TextInput,
   Alert,
   SafeAreaView,
+  Keyboard,
+  TouchableWithoutFeedback,
 } from "react-native";
 import { ChevronRight } from "lucide-react-native";
 import { useGlobalContext } from "@/lib/global-provider";
 // import { signOut } from "firebase/auth";
 import { auth } from "@/lib/firebase";
 import { router } from "expo-router";
+import { suggestFeatures } from "@/lib/log-service";
+import { updateUserProfile } from "@/lib/user-service";
+import { Link } from "expo-router";
+import { deleteUser } from "firebase/auth";
 const SettingsPage = () => {
   const [showFeatureModal, setShowFeatureModal] = useState(false);
   const [featureRequest, setFeatureRequest] = useState("");
@@ -22,7 +28,7 @@ const SettingsPage = () => {
   const [editingMealTimeKey, setEditingMealTimeKey] = useState<string | null>(
     null
   );
-  const { userProfile,clearAndLogout } = useGlobalContext();
+  const { userProfile, user, clearAndLogout } = useGlobalContext();
 
   const [userDoc, setUserDoc] = useState({
     nickname: userProfile?.nickname,
@@ -54,36 +60,43 @@ const SettingsPage = () => {
     },
   });
 
-  const handleSendFeature = () => {
-    if (!featureRequest.trim())
+  const handleSendFeature = async () => {
+    if (!featureRequest.trim() || !user?.uid)
       return Alert.alert("Please write something first!");
+    const message = featureRequest.trim();
+    await suggestFeatures(user?.uid, message);
     Alert.alert("Thank you!", "Your suggestion has been received.");
     setFeatureRequest("");
     setShowFeatureModal(false);
+    Keyboard.dismiss();
   };
 
-  // const handleSaveEdit = () => {
-  //   if (editField) {
-  //     const updatedDoc = { ...userDoc };
-  //     if (editField === "nickname") updatedDoc.nickname = editableValue;
-  //     else if (editField === "diet_type")
-  //       updatedDoc.diet.diet_type = editableValue;
-  //     else if (editField === "tone")
-  //       updatedDoc.personalization.tone = editableValue;
-  //     else if (editField === "language")
-  //       updatedDoc.personalization.language = editableValue as "en" | "th";
-  //     else if (editField === "goal")
-  //       updatedDoc.goals.primary_goal = editableValue;
-  //     setUserDoc(updatedDoc);
-  //   } else if (editingMealTimeKey) {
-  //     const updatedDoc = { ...userDoc };
-  //     updatedDoc.diet.meal_times[editingMealTimeKey] = editableValue;
-  //     setUserDoc(updatedDoc);
-  //   }
-  //   setEditField(null);
-  //   setEditableValue("");
-  //   setEditingMealTimeKey(null);
-  // };
+  const handleSaveEdit = async () => {
+    if (editField && user?.uid) {
+      const updatedDoc = { ...userDoc };
+      if (editField === "nickname") updatedDoc.nickname = editableValue;
+      else if (editField === "diet_type")
+        updatedDoc.diet.diet_type = editableValue;
+      else if (editField === "tone")
+        updatedDoc.personalization.tone = editableValue;
+      else if (editField === "language")
+        updatedDoc.personalization.language = editableValue as "en" | "th";
+      else if (editField === "gender")
+        updatedDoc.gender = editableValue as "male" | "female";
+      else if (editField === "goal")
+        updatedDoc.goals.primary_goal = editableValue;
+      else if (editField === "height")
+        updatedDoc.goals.height_cm = parseInt(editableValue);
+      else if (editField === "weight")
+        updatedDoc.goals.current_weight_kg = parseFloat(editableValue);
+      else if (editField === "age") updatedDoc.age = parseInt(editableValue);
+      setUserDoc(updatedDoc);
+      await updateUserProfile(user?.uid, updatedDoc);
+    }
+    setEditField(null);
+    setEditableValue("");
+    setEditingMealTimeKey(null);
+  };
 
   return (
     <SafeAreaView className="flex-1 bg-white">
@@ -94,42 +107,68 @@ const SettingsPage = () => {
         <Text className="text-lg font-semibold mb-2 text-black">Your Info</Text>
         <EditableItem
           label="Nickname"
-          value={userDoc.nickname}
+          value={userDoc.nickname || ""}
           onEdit={() => {
             setEditField("nickname");
-            setEditableValue(userDoc.nickname);
+            setEditableValue(userDoc.nickname || "");
           }}
         />
         <EditableItem
           label="Goal"
-          value={userDoc.goals.primary_goal}
+          value={userDoc.goals.primary_goal || ""}
           onEdit={() => {
             setEditField("goal");
-            setEditableValue(userDoc.goals.primary_goal);
+            setEditableValue(userDoc.goals.primary_goal || "");
           }}
         />
 
         <EditableItem
           label="Gender"
-          value={userDoc.gender}
-          onEdit={null}
-          disabled
+          value={userDoc.gender || ""}
+          onEdit={() => {
+            setEditField("gender");
+            setEditableValue(userDoc?.gender || "");
+          }}
         />
         <EditableItem
           label="Age"
-          value={userDoc.age.toString()}
-          onEdit={null}
-          disabled
+          value={userDoc.age?.toString() || ""}
+          onEdit={() => {
+            setEditField("age");
+            setEditableValue(userDoc.age?.toString() || "");
+          }}
         />
         <EditableItem
           label="Height"
           value={`${userDoc.goals.height_cm} cm`}
+          onEdit={() => {
+            setEditField("height");
+            setEditableValue(userDoc.goals.height_cm?.toString() || "");
+          }}
+        />
+        <EditableItem
+          label="Weight"
+          value={`${userDoc.goals.current_weight_kg} kg`}
+          onEdit={() => {
+            setEditField("weight");
+            setEditableValue(userDoc.goals.current_weight_kg?.toString() || "");
+          }}
+        />
+        {/* <EditableItem
+          label="Langauge"
+          value={`${userDoc.personalization.language}`}
           onEdit={null}
           disabled
         />
+        <EditableItem
+          label="Location"
+          value={`${userDoc.personalization.country}`}
+          onEdit={null}
+          disabled
+        /> */}
 
         {/* Diet Settings */}
-        <Text className="text-lg font-semibold mt-6 mb-2 text-black">
+        {/* <Text className="text-lg font-semibold mt-6 mb-2 text-black">
           Diet & Meals
         </Text>
         <EditableItem
@@ -139,7 +178,7 @@ const SettingsPage = () => {
             setEditField("diet_type");
             setEditableValue(userDoc.diet.diet_type);
           }}
-        />
+        /> */}
 
         {/* <Text className="text-base font-semibold text-gray-800 mb-1">
           Meal Times
@@ -157,7 +196,7 @@ const SettingsPage = () => {
         ))} */}
 
         {/* Preferences */}
-        <Text className="text-lg font-semibold mt-6 mb-2 text-black">
+        {/* <Text className="text-lg font-semibold mt-6 mb-2 text-black">
           Preferences
         </Text>
         <EditableItem
@@ -175,7 +214,7 @@ const SettingsPage = () => {
             setEditField("language");
             setEditableValue(userDoc.personalization.language);
           }}
-        />
+        /> */}
 
         {/* FAQ */}
         <Text className="text-lg font-semibold mt-6 mb-2 text-black">FAQ</Text>
@@ -198,6 +237,67 @@ const SettingsPage = () => {
           }
         />
 
+        {/* Support */}
+        <Text className="text-lg font-semibold mt-6 mb-2 text-black">
+          Support
+        </Text>
+        <SettingLink
+          label="Contact Support"
+          onPress={() =>
+            Alert.alert("Contact Us", "Email us at labsarchangel@gmail.com")
+          }
+        />
+        {/* Legal */}
+        <Text className="text-lg font-semibold mt-6 mb-2 text-black">
+          Legal
+        </Text>
+        <SettingLink
+          label="Privacy Policy"
+          onPress={() => router.push("/legal/privacy")} // Replace with your actual route
+        />
+        <SettingLink
+          label="Terms of Use"
+          onPress={() => router.push("/legal/terms")} // Replace with your actual route
+        />
+
+        {/* Account */}
+        <Text className="text-lg font-semibold mt-6 mb-2 text-black">
+          Account
+        </Text>
+        <SettingLink
+          label="Delete My Account"
+          onPress={() =>
+            Alert.alert(
+              "Delete Account",
+              "Are you sure? This will permanently delete your data.",
+              [
+                { text: "Cancel", style: "cancel" },
+                {
+                  text: "Delete",
+                  style: "destructive",
+                  onPress: async () => {
+                    try {
+                      // TODO: implement delete logic (Firebase / Firestore / auth)
+                      if (user?.uid) {
+                        await deleteUser(user);
+                        Alert.alert(
+                          "Account Deleted",
+                          "Your account has been removed."
+                        );
+                        clearAndLogout();
+                        router.replace("/sign-in");
+                      } else {
+                        Alert.alert("Error", "User ID is not available.");
+                      }
+                    } catch (err) {
+                      Alert.alert("Error", "Something went wrong.");
+                    }
+                  },
+                },
+              ]
+            )
+          }
+        />
         {/* Suggest Feature */}
         <Text className="text-lg font-semibold mt-6 mb-2 text-black">
           Feedback
@@ -219,7 +319,7 @@ const SettingsPage = () => {
         </TouchableOpacity>
 
         {/* Edit Modal */}
-        {/* <Modal
+        <Modal
           visible={!!editField || !!editingMealTimeKey}
           transparent
           animationType="slide"
@@ -243,30 +343,37 @@ const SettingsPage = () => {
               </TouchableOpacity>
             </View>
           </View>
-        </Modal> */}
+        </Modal>
 
         {/* Feature Modal */}
-        <Modal visible={showFeatureModal} transparent animationType="slide">
-          <View className="flex-1 justify-center items-center bg-black/40">
-            <View className="bg-white w-11/12 p-6 rounded-xl">
-              <Text className="text-lg font-bold mb-2 text-black">
-                Have an idea?
-              </Text>
-              <TextInput
-                placeholder="Tell us what you'd like to see..."
-                multiline
-                className="h-32 bg-gray-100 p-3 rounded-lg text-black"
-                value={featureRequest}
-                onChangeText={setFeatureRequest}
-              />
-              <TouchableOpacity
-                onPress={handleSendFeature}
-                className="mt-4 bg-newblue p-3 rounded-xl"
-              >
-                <Text className="text-center text-white font-bold">Send</Text>
-              </TouchableOpacity>
+        <Modal visible={showFeatureModal} transparent>
+          <TouchableWithoutFeedback
+            onPress={() => {
+              setShowFeatureModal(false);
+              Keyboard.dismiss(); // Optional: dismiss keyboard
+            }}
+          >
+            <View className="flex-1 justify-center items-center bg-black/40">
+              <View className="bg-white w-11/12 p-6 rounded-xl">
+                <Text className="text-lg font-bold mb-2 text-black">
+                  Have an idea?
+                </Text>
+                <TextInput
+                  placeholder="Tell us what you'd like to see..."
+                  multiline
+                  className="h-32 bg-gray-100 p-3 rounded-lg text-black"
+                  value={featureRequest}
+                  onChangeText={setFeatureRequest}
+                />
+                <TouchableOpacity
+                  onPress={handleSendFeature}
+                  className="mt-4 bg-newblue p-3 rounded-xl"
+                >
+                  <Text className="text-center text-white font-bold">Send</Text>
+                </TouchableOpacity>
+              </View>
             </View>
-          </View>
+          </TouchableWithoutFeedback>
         </Modal>
       </ScrollView>
     </SafeAreaView>

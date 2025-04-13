@@ -91,18 +91,7 @@ const TabsLayout = () => {
             headerShown: false,
             href: "/empty",
             tabBarIcon: ({ focused }) => (
-              <>
-                {/* <Image
-                  source={images.chat2}
-                  style={{
-                    width: 50,
-                    height: 60,
-                    borderRadius: 50,
-                    // Remove tintColor to show original image colors
-                  }}
-                  resizeMode="contain"
-                /> */}
-              </>
+              <></>
             ),
           }}
         />
@@ -157,8 +146,8 @@ const TabsLayout = () => {
         <Image
           source={images.chat2}
           style={{
-            width: 50,
-            height: 60,
+            width: 60,
+            height: 65,
             borderRadius: 50,
             // Remove tintColor to show original image colors
           }}

@@ -79,9 +79,9 @@ const RecentLogs = ({ date }: { date: Date }) => {
         {/* <Text className="text-lg san-semibold text-black mb-4">
           Recent Meals
         </Text> */}
-        {/* <Text className="text-lg text-black-muted san">
+        <Text className="text-lg text-black-muted mx-auto">
           Let me know what you are having today!
-        </Text> */}
+        </Text>
         {/* {isToday && <QuickLogBox date={date} />} */}
       </View>
     );

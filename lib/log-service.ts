@@ -5,6 +5,10 @@ import {
   collection,
   query,
   where,
+  getDoc,
+  doc,
+  setDoc,
+  updateDoc,
 } from "firebase/firestore";
 import { db } from "./firebase";
 import { startOfDay, endOfDay, subDays, format, addDays } from "date-fns";
@@ -71,7 +75,30 @@ export const fetchWeeklyLogs = async (
       }
     );
   });
-//   console.log(weeklyData);
+  //   console.log(weeklyData);
 
   return weeklyData;
+};
+
+export const suggestFeatures = async (userId: string, message: string) => {
+  //write doc called in collection features with user_id and message and timestamp, doc id is new everytime
+  const featuresRef = collection(db, "features");
+  const docRef = doc(featuresRef);
+  const docSnap = await getDoc(docRef);
+
+  await setDoc(docRef, {
+    user_id: userId,
+    message,
+    timestamp: Timestamp.now(),
+  });
+};
+
+export const findAMatch = async (userId: string) => {
+  //update field find_match doc in users collection with true
+  const userRef = doc(db, "users", userId);
+  const docSnap = await getDoc(userRef);
+  const { find_match } = docSnap.data();
+  await updateDoc(userRef, {
+    find_match: !find_match,
+  });
 };

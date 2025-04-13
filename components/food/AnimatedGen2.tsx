@@ -34,21 +34,21 @@ const CaloriesTracker = ({ date }) => {
       value: currentProtein,
       max: macronutrients.suggested.protein_g,
       // color: "#6f7cf8",
-      color: "#c2a968",
+      color: "#594715",
     },
     {
       label: "Fat",
       value: currentFats,
       max: macronutrients.suggested.fats_g,
       // color: "#6f7cf8",
-      color: "#c2a968",
+      color: "#594715",
     },
     {
       label: "Carbs",
       value: currentCarbs,
       max: macronutrients.suggested.carbs_g,
       // color: "#6f7cf8",
-      color: "#c2a968",
+      color: "#594715",
     },
   ];
   // 🔥 Ensure progress doesn't exceed 120% (1.2)

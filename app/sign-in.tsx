@@ -1,45 +1,31 @@
 import React, { useCallback, useEffect } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import {
-  Alert,
-  Image,
-  ScrollView,
+  View,
   Text,
   TouchableOpacity,
-  View,
+  Image,
+  StyleSheet,
+  Dimensions,
 } from "react-native";
-import * as Google from "expo-auth-session/providers/google";
-import * as AuthSession from "expo-auth-session";
-import { makeRedirectUri } from "expo-auth-session";
+import { useGlobalContext } from "@/lib/global-provider";
+import { Redirect, router } from "expo-router";
+import { useIdTokenAuthRequest as useGoogleIdTokenAuthRequest } from "expo-auth-session/providers/google";
 import {
   GoogleAuthProvider,
-  OAuthCredential,
   signInWithCredential,
+  signInWithEmailAndPassword,
 } from "firebase/auth";
-import { useIdTokenAuthRequest as useGoogleIdTokenAuthRequest } from "expo-auth-session/providers/google";
-import { auth } from "@/lib/firebase"; // Ensure Firebase is correctly set up
-import { Redirect } from "expo-router";
-import { useGlobalContext } from "@/lib/global-provider";
-import icons from "@/constants/icons";
-import images from "@/constants/images";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "@/lib/firebase";
+import { useVideoPlayer, VideoView } from "expo-video";
+import { useEvent } from "expo";
 import { OnboardingSlider } from "@/components/auth/OnboardingSlider";
+import icons from "@/constants/icons";
+
+const { width, height } = Dimensions.get("window");
+
 const Auth = () => {
   const { refetchUserProfile, loading, isLogged } = useGlobalContext();
-  // Redirect if already logged in
-  if (!loading && isLogged) return <Redirect href="/" />;
-
-  // ✅ Correct client IDs for each platform
-  // const [request, response, promptAsync] = Google.useAuthRequest({
-  //   iosClientId: process.env.EXPO_PUBLIC_GOOGLE_IOS_CLIENT_ID,
-  //   scopes: ["profile", "email"],
-  //   redirectUri: makeRedirectUri({
-  //     native:
-  //       "com.googleusercontent.apps.491833149622-218tq9r1n71ooub7sq466scl07o8vijc:/oauthredirect", // Replace with your app’s iOS scheme
-  //     scheme: "com.archbishop.c6companion",
-  //     path: "oauthredirect",
-  //   }),
-  // });
 
   const [request, googleResponse, promptAsyncGoogle] =
     useGoogleIdTokenAuthRequest({
@@ -47,77 +33,78 @@ const Auth = () => {
       iosClientId: process.env.EXPO_PUBLIC_GOOGLE_IOS_CLIENT_ID,
     });
 
-  // Handles the login via the Google Provider
-  const handleLoginGoogle = async () => {
-    await promptAsyncGoogle();
-  };
+  const player = useVideoPlayer(
+    require("@/assets/videos/signin.mp4"),
+    (player) => {
+      player.loop = true;
+      player.play();
+    }
+  );
 
-  // Function that logs into firebase using the credentials from an OAuth provider
-  const loginToFirebase = useCallback(async (credentials: OAuthCredential) => {
-    const signInResponse = await signInWithCredential(auth, credentials);
-  }, []);
+  const { isPlaying } = useEvent(player, "playingChange", {
+    isPlaying: player.playing,
+  });
 
   useEffect(() => {
     if (googleResponse?.type === "success") {
       const credentials = GoogleAuthProvider.credential(
         googleResponse.params.id_token
       );
-      loginToFirebase(credentials);
+      signInWithCredential(auth, credentials);
     }
   }, [googleResponse]);
 
   const signInWithEmail = async () => {
     try {
-      // Login the user with email and password
       const userCredential = await signInWithEmailAndPassword(
         auth,
         "gunpod@leafi.ai",
         "12341234"
       );
-
-      // The logged-in user
-      const user = userCredential.user;
-
-      console.log("User logged in successfully:", user);
-      Alert.alert("Success", "You are now logged in!");
-
-      // Refetch global context data
       refetchUserProfile();
-
-      return user; // Return the user for further use
+      // alert("Logged in");
     } catch (error) {
       console.error("Login failed:", error);
-      // Show error message
-      return null;
     }
   };
+
+  if (!loading && isLogged) return <Redirect href="/" />;
+
   return (
-    <SafeAreaView className="bg-white h-full">
-      <ScrollView contentContainerStyle={{ height: "100%" }}>
-        {/* <Image
-          source={images.onboarding}
-          className="w-full h-4/6"
-          resizeMode="contain"
-        /> */}
+    <SafeAreaView style={{ flex: 1 }}>
+      {/* 🎥 Background Video */}
+      <VideoView
+        player={player}
+        allowsFullscreen={false}
+        allowsPictureInPicture={false}
+        style={StyleSheet.absoluteFill}
+        contentFit="cover"
+      />
+
+      {/* 🔲 Optional: overlay for readability */}
+      <View
+        style={[
+          StyleSheet.absoluteFill,
+          { backgroundColor: "rgba(0, 0, 0, 0.4)" },
+        ]}
+      />
+
+      {/* 🌱 Foreground content */}
+      <View style={styles.overlay}>
         <OnboardingSlider />
 
-        <View className="px-10">
-          <Text className="text-xl text-semibold text-center uppercase san text-black-300 mt-5">
-            Hi! I’m Leafi, your health companion 🌱
+        <View className="px-10 mt-4">
+          <Text className="text-xl text-center font-semibold text-white mt-5 font-sans-bold">
+            I’m Leafi, your food companion 🌱
           </Text>
-
-          <Text className="text-lg san-bold text-black-300 text-center mt-4">
-            Ready when you are!
-          </Text>
-
-          {/* <Text className="text-lg san text-black-200 text-center mt-4">
-            Login to H-Companion with Google
+          {/* <Text className="text-lg text-center font-bold text-white mt-4 font-sans-bold">
+            Ready when you are! 🌱
           </Text> */}
-          {/* handleLoginGoogle */}
+
           <TouchableOpacity
             disabled={!request}
-            onPress={handleLoginGoogle}
-            className="bg-white shadow-md shadow-zinc-300 rounded-full w-full py-4 mt-5"
+            onPress={() => promptAsyncGoogle()}
+            className="bg-black shadow-md  rounded-full w-full py-4 mt-5"
           >
             <View className="flex flex-row items-center justify-center">
               <Image
@@ -125,15 +112,45 @@ const Auth = () => {
                 className="w-5 h-5"
                 resizeMode="contain"
               />
-              <Text className="text-lg san-medium text-black-300 ml-2">
+              <Text className="text-lg ml-2 text-white font-medium">
                 Continue with Google
               </Text>
             </View>
           </TouchableOpacity>
+          {/* 👇 Disclaimer */}
+          <View className="mt-4 px-10">
+            <Text className="text-center text-white text-xs">
+              By continuing, you agree to our{" "}
+              <Text
+                className="underline"
+                onPress={() => router.push("/legal/terms")}
+              >
+                Terms of Use
+              </Text>{" "}
+              and{" "}
+              <Text
+                className="underline"
+                onPress={() => router.push("/legal/privacy")}
+              >
+                Privacy Policy
+              </Text>
+              .
+            </Text>
+          </View>
         </View>
-      </ScrollView>
+      </View>
     </SafeAreaView>
   );
 };
+
+const styles = StyleSheet.create({
+  overlay: {
+    flex: 1,
+    position: "relative",
+    justifyContent: "space-between",
+    paddingTop: 50,
+    paddingBottom: 20,
+  },
+});
 
 export default Auth;

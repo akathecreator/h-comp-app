@@ -30,7 +30,7 @@ export const OnboardingSlider = () => {
   const renderDots = () => {
     return (
       <View className="flex-row justify-center space-x-2 -mt-24">
-        {slides.map((_, index) => {
+        {/* {slides.map((_, index) => {
           const inputRange = [
             (index - 1) * width,
             index * width,
@@ -59,14 +59,14 @@ export const OnboardingSlider = () => {
               }}
             />
           );
-        })}
+        })} */}
       </View>
     );
   };
 
   return (
     <View>
-      <FlatList
+      {/* <FlatList
         data={slides}
         renderItem={renderItem}
         horizontal
@@ -83,7 +83,7 @@ export const OnboardingSlider = () => {
           setCurrentIndex(newIndex);
         }}
       />
-      {renderDots()}
+      {renderDots()} */}
     </View>
   );
 };

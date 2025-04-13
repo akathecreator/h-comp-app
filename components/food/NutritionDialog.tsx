@@ -221,7 +221,7 @@ const NutritionDialog: React.FC<NutritionDialogProps> = ({
             </View> */}
           <TouchableOpacity
             onPress={onClose}
-            className="bg-earthbrown px-4 py-2 rounded-lg"
+            className="bg-earthseaweed px-4 py-2 rounded-lg"
           >
             <Text className="text-white font-bold">Close</Text>
           </TouchableOpacity>

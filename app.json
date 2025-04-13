@@ -87,6 +87,13 @@
           "microphonePermission": "Allow this app to access your microphone",
           "photosPermission": "Allow this app to access your photo library"
         }
+      ],
+      [
+        "expo-video",
+        {
+          "supportsBackgroundPlayback": true,
+          "supportsPictureInPicture": true
+        }
       ]
     ],
     "experiments": {

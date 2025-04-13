@@ -234,13 +234,13 @@ const QuickLogBox = ({ date }: { date: Date }) => {
           className="w-1/2"
         >
           <View
-            className="border border-dotted border-[#A3A3A3] rounded-xl overflow-hidden"
+            className="overflow-hidden"
             style={{ aspectRatio: 2.4 }} // Keeps it nicely rectangular
           >
             <ImageBackground
               source={require("@/assets/images/onboarding3.png")}
               className="flex-1 items-center justify-center"
-              imageStyle={{ borderRadius: 12 }}
+              imageStyle={{ borderRadius: 15 }}
             >
               <Text className="text-white font-semibold text-lg bg-black/50 px-4 py-2 rounded-md">
                 + Manual Log
@@ -248,9 +248,9 @@ const QuickLogBox = ({ date }: { date: Date }) => {
             </ImageBackground>
           </View>
         </TouchableOpacity>
-        <TouchableOpacity onPress={pickImage} className="w-1/2">
+        <TouchableOpacity onPress={pickImage} className={"w-1/2"}>
           <View
-            className="border border-dotted border-[#A3A3A3] rounded-xl overflow-hidden"
+            className="rounded-xl overflow-hidden"
             style={{ aspectRatio: 2.4 }} // Keeps it nicely rectangular
           >
             <ImageBackground

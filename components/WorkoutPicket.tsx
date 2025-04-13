@@ -10,7 +10,7 @@ const WorkoutPicker = ({
   options?: string[];
 }) => {
   const [customWorkout, setCustomWorkout] = useState("");
-  const [options, setOptions] = useState<string[]>(["home", "running", "badminton"]);
+  const [options, setOptions] = useState<string[]>(["home gym", "local gym", "running", "walking","yoga"]);
   const toggleOption = (workout: string) => {
     const exists = value.includes(workout);
     const updated = exists

@@ -1,54 +1,70 @@
-import { Redirect, Slot } from "expo-router";
-import { StyleSheet, View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { useEffect, useState } from "react";
-import { useGlobalContext } from "@/lib/global-provider";
+import { Redirect, Slot, usePathname } from "expo-router";
+import { StyleSheet } from "react-native";
 import { ActivityIndicator } from "react-native-paper";
+import { useGlobalContext } from "@/lib/global-provider";
+import { useEffect, useState } from "react";
+import { useVideoPlayer, VideoView } from "expo-video";
 
 export default function AppLayout() {
-  const { loading, isLogged, userProfile, clearAndLogout } = useGlobalContext();
+  const { loading, isLogged, userProfile } = useGlobalContext();
+  const [profileLoading, setProfileLoading] = useState(true);
   const [isOnboarded, setIsOnboarded] = useState<boolean | null>(null);
+  const pathname = usePathname();
 
-  // Check onboarding status once user is loaded
+  // ✅ Allow public access to legal pages
+  const isPublicRoute =
+    pathname?.startsWith("/legal/privacy") ||
+    pathname?.startsWith("/legal/terms");
+
   useEffect(() => {
-    if (!loading && isLogged && userProfile) {
-      const checkOnboarding = async () => {
-        try {
-          // If user has completed onboarding
-          if (userProfile?.isOnboarded) {
-            setIsOnboarded(true);
-          } else {
-            setIsOnboarded(false);
-          }
-        } catch (error) {
-          console.error("Error checking onboarding status:", error);
-          setIsOnboarded(false);
-        }
-      };
+    if (!loading && isLogged) {
+      if (userProfile) {
+        setIsOnboarded(userProfile?.isOnboarded === true);
+        setProfileLoading(false);
+      }
+    }
 
-      checkOnboarding();
+    if (!loading && !isLogged) {
+      setProfileLoading(false);
     }
   }, [loading, isLogged, userProfile]);
+  const player = useVideoPlayer(
+    require("@/assets/videos/signin.mp4"),
+    (player) => {
+      player.loop = true;
+      player.play();
+    }
+  );
+  // ✅ Bypass auth check for public pages
+  if (isPublicRoute) return <Slot />;
 
-  if (!isLogged) {
-    return <Redirect href="/sign-in" />;
-  }
-  // Show loading indicator while auth or onboarding check is happening
-  if (loading || isOnboarded === null) {
+  if (loading || profileLoading || isOnboarded === null) {
     return (
-      <View className="flex-1 justify-center items-center">
-        <ActivityIndicator size="large" />
-      </View>
+      // <View className="flex-1 justify-center items-center">
+      //   <ActivityIndicator color="black" size="large" />
+      // </View>
+      <VideoView
+        player={player}
+        allowsFullscreen={false}
+        allowsPictureInPicture={false}
+        style={StyleSheet.absoluteFill}
+        contentFit="cover"
+      />
     );
   }
 
-  // Redirect unauthenticated users
+  if (!isLogged) return <Redirect href="/sign-in" />;
+  if (!isOnboarded) return <Redirect href="/onboarding" />;
 
-  // Redirect onboard-incomplete users
-  if (!isOnboarded) {
-    return <Redirect href="/onboarding" />;
-  }
-
-  // Show main app
   return <Slot />;
 }
+
+const styles = StyleSheet.create({
+  overlay: {
+    flex: 1,
+    position: "relative",
+    justifyContent: "space-between",
+    paddingTop: 50,
+    paddingBottom: 20,
+  },
+});

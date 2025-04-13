@@ -1,7 +1,7 @@
 // This is a full onboarding flow broken into 5 steps, each one wrapped under a single component with step navigation and shared state.
 // You will need Tailwind support with NativeWind or equivalent and routing/navigation.
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -11,7 +11,7 @@ import {
   ScrollView,
   Alert,
 } from "react-native";
-import { useRouter } from "expo-router";
+import { Redirect, useRouter } from "expo-router";
 import { ProgressBar } from "react-native-paper";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 // import { sendOnboardingData } from "@/lib/chat";
@@ -28,7 +28,7 @@ import {
   StepEatingHabits,
   StepPreferences,
 } from "@/components/steps";
-
+import * as Haptics from "expo-haptics";
 import { OnboardingForm } from "@/types/onboarding";
 
 const defaultForm: OnboardingForm = {
@@ -56,8 +56,8 @@ const steps = [
   "Basics",
   "Body Stats",
   "Lifestyle",
-  "Eating Habits",
-  "Preferences",
+  // "Eating Habits",
+  // "Preferences",
 ];
 const calculateMacros = (calories: number, isSuggested = true) => {
   const pct = isSuggested
@@ -73,7 +73,7 @@ const calculateMacros = (calories: number, isSuggested = true) => {
 
 export default function OnboardingScreen() {
   const router = useRouter();
-  const { user } = useGlobalContext();
+  const { user, userProfile } = useGlobalContext();
   const [step, setStep] = useState(0);
   const [form, setForm] = useState(defaultForm);
   const [loading, setLoading] = useState(false);
@@ -83,6 +83,23 @@ export default function OnboardingScreen() {
     setForm((prev) => ({ ...prev, [key]: value }));
   };
 
+  // useEffect(() => {
+  //   if (userProfile?.isOnboarded) {
+  //     router.replace("/");
+  //   }
+  // }, [loading, userProfile]);
+
+  const handleNext = (type: "next" | "back") => {
+    // 🔴 Invalid input – shake the phone
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+
+    // ✅ Valid – go to next step
+    if (type === "next") {
+      setStep(step + 1);
+    } else {
+      setStep(step - 1);
+    }
+  };
   const calculateDerivedMetrics = () => {
     const weight = parseFloat(form.weight);
     const targetWeight = parseFloat(form.targetWeight);
@@ -122,11 +139,111 @@ export default function OnboardingScreen() {
     };
   };
 
+  // const completeOnboarding = async () => {
+  //   const uid = user?.uid;
+  //   if (!uid) return Alert.alert("User not found");
+
+  //   const metrics = calculateDerivedMetrics();
+  //   const onboardingData = {
+  //     nickname: form.nickname,
+  //     age: parseInt(form.age),
+  //     gender: form.gender,
+  //     goals: {
+  //       primary_goal: form.primaryGoal,
+  //       target_weight_kg: parseFloat(form.targetWeight),
+  //       current_weight_kg: parseFloat(form.weight),
+  //       original_weight_kg: parseFloat(form.weight),
+  //       height_cm: parseFloat(form.height),
+  //     },
+  //     diet: {
+  //       eating_style: form.eatingStyle,
+  //       diet_type: form.dietType,
+  //       diet_type_custom: "",
+  //       disliked_foods: [],
+  //       allergies: [],
+  //       meal_times: form.mealTimes,
+  //     },
+  //     activity: {
+  //       activity_level: form.activityLevel.toLowerCase(),
+  //       preferred_workouts: form.preferredWorkouts,
+  //       limitations: [],
+  //     },
+  //     personalization: {
+  //       tone: form.tone,
+  //       language: "th",
+  //       country: form.country,
+  //       suggestive_preference: "I want meal plans",
+  //     },
+  //     notifications: {
+  //       reminder_times: ["morning", "evening"],
+  //       reminder_types: ["meals", "water", "workouts"],
+  //     },
+  //     metrics: {
+  //       ...metrics,
+  //       last_calculated: new Date(),
+  //     },
+  //     daily_calories: {
+  //       goal: metrics.calorie_target,
+  //       maintenance: metrics.tdee,
+  //     },
+  //     macronutrients: {
+  //       max: { carbs_g: 180, fats_g: 70, protein_g: 170 },
+  //       suggested: { carbs_g: 280, fats_g: 87, protein_g: 135 },
+  //     },
+  //     streaks: {
+  //       on_going: 0,
+  //       consecutive_days: 0,
+  //     },
+  //     isOnboarded: true,
+  //   };
+  //   const maintenance = metrics.tdee;
+  //   const goal =
+  //     form.primaryGoal === "lose weight"
+  //       ? metrics.calorie_target - 500
+  //       : form.primaryGoal === "gain weight"
+  //       ? metrics.calorie_target + 500
+  //       : metrics.calorie_target;
+  //   onboardingData.macronutrients.max = calculateMacros(goal, false);
+  //   onboardingData.macronutrients.suggested = calculateMacros(
+  //     maintenance,
+  //     true
+  //   );
+  //   onboardingData.daily_calories.goal = goal;
+  //   setLoading(true);
+  //   // await sendOnboardingData(uid, onboardingData);
+  //   const token = await registerForPushNotificationsAsync();
+  //   if (token) await savePushTokenToUser(token);
+  //   // Simulate upload and progress (skip API for now)
+  //   let currentProgress = 0;
+  //   const duration = 5000; // 5 seconds
+  //   const interval = 100; // update every 100ms
+  //   const increment = interval / duration;
+
+  //   const progressInterval = setInterval(() => {
+  //     currentProgress += increment;
+  //     setProgress(currentProgress);
+  //     if (currentProgress >= 1) {
+  //       clearInterval(progressInterval);
+  //       setLoading(false);
+  //       router.replace("/");
+  //     }
+  //   }, interval);
+  //   if (onboardingData.daily_calories.goal > 0) {
+  //     saveOnboardingData(onboardingData, uid).catch((error) => {
+  //       console.error("Error saving onboarding data:", error);
+  //       // Optionally handle error
+  //     });
+  //   }
+
+  //   // setLoading(false);
+  //   router.replace("/");
+  // };
   const completeOnboarding = async () => {
     const uid = user?.uid;
     if (!uid) return Alert.alert("User not found");
 
     const metrics = calculateDerivedMetrics();
+
     const onboardingData = {
       nickname: form.nickname,
       age: parseInt(form.age),
@@ -186,55 +303,36 @@ export default function OnboardingScreen() {
         : form.primaryGoal === "gain weight"
         ? metrics.calorie_target + 500
         : metrics.calorie_target;
+
     onboardingData.macronutrients.max = calculateMacros(goal, false);
     onboardingData.macronutrients.suggested = calculateMacros(
       maintenance,
       true
     );
     onboardingData.daily_calories.goal = goal;
-    setLoading(true);
-    // await sendOnboardingData(uid, onboardingData);
-    const token = await registerForPushNotificationsAsync();
-    if (token) await savePushTokenToUser(token);
-    // Simulate upload and progress (skip API for now)
-    let currentProgress = 0;
-    const duration = 5000; // 5 seconds
-    const interval = 100; // update every 100ms
-    const increment = interval / duration;
 
-    const progressInterval = setInterval(() => {
-      currentProgress += increment;
-      setProgress(currentProgress);
-      if (currentProgress >= 1) {
-        clearInterval(progressInterval);
-        setLoading(false);
-        router.replace("/");
-      }
-    }, interval);
-    if (onboardingData.daily_calories.goal > 0) {
-      saveOnboardingData(onboardingData, uid).catch((error) => {
-        console.error("Error saving onboarding data:", error);
-        // Optionally handle error
-      });
-    }
-
-    // setLoading(false);
-    router.replace("/");
+    router.push({
+      pathname: "/onboarding/loading",
+      params: {
+        uid,
+        data: encodeURIComponent(JSON.stringify(onboardingData)),
+      },
+    });
   };
   const stepComponents = [
     <StepBasics form={form as any} handleInput={handleInput} key="step-1" />,
     <StepBodyStats form={form as any} handleInput={handleInput} key="step-2" />,
     <StepLifestyle form={form as any} handleInput={handleInput} key="step-3" />,
-    <StepEatingHabits
-      form={form as any}
-      handleInput={handleInput}
-      key="step-4"
-    />,
-    <StepPreferences
-      form={form as any}
-      handleInput={handleInput}
-      key="step-5"
-    />,
+    // <StepEatingHabits
+    //   form={form as any}
+    //   handleInput={handleInput}
+    //   key="step-4"
+    // />,
+    // <StepPreferences
+    //   form={form as any}
+    //   handleInput={handleInput}
+    //   key="step-5"
+    // />,
   ];
   // const StepComponent = () => {
   //   switch (step) {
@@ -269,7 +367,7 @@ export default function OnboardingScreen() {
           <View className="flex-row justify-between mt-8">
             {step > 0 && (
               <TouchableOpacity
-                onPress={() => setStep(step - 1)}
+                onPress={() => handleNext("back")}
                 className="bg-gray-200 p-4 rounded-lg w-1/2 mr-2 flex-1"
               >
                 <Text className="text-center">Back</Text>
@@ -277,7 +375,7 @@ export default function OnboardingScreen() {
             )}
             {step < steps.length - 1 ? (
               <TouchableOpacity
-                onPress={() => setStep(step + 1)}
+                onPress={() => handleNext("next")}
                 className="bg-newblue p-4 rounded-lg w-full flex-1"
               >
                 <Text className="text-white text-center font-semibold">

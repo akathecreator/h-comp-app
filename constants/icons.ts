@@ -32,7 +32,7 @@ import wifi from "@/assets/icons/wifi.png";
 import location from "@/assets/icons/location.png";
 import edit from "@/assets/icons/edit.png";
 import flame from "@/assets/icons/flame.png";
-import flame2 from "@/assets/icons/flame5.png";
+import flame2 from "@/assets/icons/flame6.png";
 // import logo from "@/assets/icons/logo.png";
 export default {
   google,

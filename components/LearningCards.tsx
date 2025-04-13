@@ -141,7 +141,7 @@ const mockTips = {
 };
 
 const { width } = Dimensions.get("window");
-
+import * as Haptics from "expo-haptics";
 export default function LearningCard() {
   const [index, setIndex] = useState(0);
   const { userProfile } = useGlobalContext();
@@ -149,8 +149,10 @@ export default function LearningCard() {
   const learningTip = mockTips[streak as keyof typeof mockTips][index];
 
   const handleNext = () => {
-    if (index < mockTips[streak as keyof typeof mockTips].length - 1)
+    if (index < mockTips[streak as keyof typeof mockTips].length - 1) {
       setIndex(index + 1);
+      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    }
   };
 
   const handleBack = () => {

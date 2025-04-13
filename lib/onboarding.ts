@@ -11,5 +11,5 @@ import { sendForMealSuggestions } from "./chat";
 export const saveOnboardingData = async (userData: any, uid: string) => {
   const userRef = doc(collection(db, "users"), uid);
   await updateDoc(userRef, userData);
-  await sendForMealSuggestions(uid);
+  // await sendForMealSuggestions(uid);
 };

@@ -12,76 +12,23 @@ import {
   SafeAreaView,
   Modal,
   ImageBackground,
+  KeyboardAvoidingView,
 } from "react-native";
 import LearningCard from "@/components/LearningCards";
-const mockedLearningData = [
-  {
-    id: 1,
-    title: "Intermittent Fasting Explained",
-    duration: "1 min",
-    action: "Try today",
-  },
-  {
-    id: 2,
-    title: "Why Protein Keeps You Full",
-    duration: "1 min",
-    action: "Get Reminder",
-  },
-];
-
-const mockedMealsData = [
-  {
-    id: 1,
-    title: "Thai Chicken Salad",
-    calories: 450,
-    time: "15 mins",
-    image: "https://via.placeholder.com/150",
-  },
-  {
-    id: 2,
-    title: "Tofu Stir Fry",
-    calories: 400,
-    time: "20 mins",
-    image: "https://via.placeholder.com/150",
-  },
-];
-
-const mockedFeedData = [
-  "Someone logged a post-workout meal: Chicken & rice",
-  "3 people hit their protein goals today",
-  "A user matched with an accountability buddy",
-];
-const mockedLearningTip = {
-  id: 1,
-  title: "Intermittent Fasting Explained",
-  content: "Understand the basics of intermittent fasting...",
-};
-const mockedFeedMeals = [
-  {
-    id: 1,
-    title: "Thai Chicken Salad",
-    calories: 450,
-    image: "https://via.placeholder.com/150",
-  },
-  {
-    id: 2,
-    title: "Tofu Stir Fry",
-    calories: 400,
-    image: "https://via.placeholder.com/150",
-  },
-];
+import { findAMatch } from "@/lib/log-service";
 
 export default function HomePage() {
   const [activeTrack, setActiveTrack] = useState("Lose Weight");
-  const { userProfile } = useGlobalContext();
+  const { userProfile, user } = useGlobalContext();
   const [mealModal, setMealModal] = useState(false);
-  const [accountability, setAccountabilityText] = useState(
-    "Find an Accountability Buddy"
-  );
-  const [learningTip, setLearningTip] = useState(mockedLearningTip);
+
+  const manageFindMatch = async () => {
+    if (!user?.uid) return;
+    await findAMatch(user?.uid);
+  };
   if (!userProfile) return null;
   return (
-    <SafeAreaView className="flex-1">
+    <KeyboardAvoidingView className="flex-1 h-full pt-16">
       <View className="px-6 my-1">
         <Header streak={userProfile?.streaks.on_going} />
       </View>
@@ -109,7 +56,7 @@ export default function HomePage() {
             </View>
           </TouchableOpacity>
         </View> */}
-{/* 
+        {/* 
         <View className="mb-6 my-4">
           <Text className="text-xl font-semibold mb-2">
             Community Exemplary
@@ -145,14 +92,7 @@ export default function HomePage() {
         </View> */}
         {/* Section 4: Accountability Match */}
         <View className="mb-4">
-          <TouchableOpacity
-            className="w-full"
-            onPress={() =>
-              setAccountabilityText(
-                "We'll find you the right match..."
-              )
-            }
-          >
+          <TouchableOpacity className="w-full" onPress={manageFindMatch}>
             <View
               className="border border-dotted border-[#A3A3A3] rounded-xl overflow-hidden"
               style={{ aspectRatio: 2.4 }} // Keeps it nicely rectangular
@@ -162,9 +102,15 @@ export default function HomePage() {
                 className="flex-1 items-center justify-center"
                 imageStyle={{ borderRadius: 12 }}
               >
-                <Text className="text-white font-semibold text-md bg-black/50 px-4 py-2 rounded-md">
-                  {accountability}
-                </Text>
+                {userProfile && userProfile?.find_match == false ? (
+                  <Text className="text-white font-semibold text-md bg-black/50 px-4 py-2 rounded-md">
+                    Find an Accountability Buddy
+                  </Text>
+                ) : (
+                  <Text className="text-white font-semibold text-md bg-black/50 px-4 py-2 rounded-md">
+                    We're finding you the right match...
+                  </Text>
+                )}
               </ImageBackground>
             </View>
           </TouchableOpacity>
@@ -212,6 +158,6 @@ export default function HomePage() {
           </TouchableOpacity>
         </View> */}
       </ScrollView>
-    </SafeAreaView>
+    </KeyboardAvoidingView>
   );
 }

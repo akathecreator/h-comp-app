@@ -1,9 +1,14 @@
 import { useState, useEffect } from "react";
 import { startOfWeek, addDays, format, subWeeks, addWeeks } from "date-fns";
 import { fetchWeeklyLogs } from "@/lib/log-service"; // 🔹 Assume this function fetches logs per day
+interface WeeklyLog {
+  date: string;
+  calories?: number;
+  weight?: number;
+}
 
-const useWeeklyLogs = (userId: string, weekStart: Date) => {
-  const [weeklyLogs, setWeeklyLogs] = useState([]);
+const useWeeklyLogs = (userId?: string, weekStart?: Date) => {
+  const [weeklyLogs, setWeeklyLogs] = useState<WeeklyLog[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {

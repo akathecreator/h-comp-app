@@ -152,7 +152,6 @@ const QuickLogBox = ({ date }: { date: Date }) => {
       await uploadBytes(imageRef, blob);
 
       const imageURL = await getDownloadURL(imageRef);
-      console.log("Uploaded Image URL:", imageURL);
       return {
         imageUrl: imageURL,
         uniqueId: uniqueId,
@@ -163,11 +162,9 @@ const QuickLogBox = ({ date }: { date: Date }) => {
     }
   };
   const sendMessageToBackend = async () => {
-    console.log("Submitted meal:", textLog);
     setLoadingFood(true);
     setShowChatBox(false);
     if (!textLog.trim() || !user) {
-      console.log("no text or user");
       return;
     }
     const payload = {
@@ -176,11 +173,9 @@ const QuickLogBox = ({ date }: { date: Date }) => {
       userId: user.uid,
       roomId: `default-room-${agentId}`,
     };
-    console.log("userid sent", user.uid);
     if (selectedFile) {
       const fileName = selectedFile.uri.split("/").pop() || "image.jpg";
       const fileType = fileName.split(".").pop() || "jpg";
-      console.log("uri", selectedFile.uri);
       const image_meta = await uploadImage(selectedFile.uri);
       if (!image_meta) return;
       const { uniqueId } = image_meta;
@@ -213,6 +208,8 @@ const QuickLogBox = ({ date }: { date: Date }) => {
         }
       }
       setTextLog("");
+      setImage(null);
+      setSelectedFile(null);
       setLoadingFood(false);
     } catch (error) {
       console.error("Error sending message:", error);
@@ -286,6 +283,7 @@ const QuickLogBox = ({ date }: { date: Date }) => {
                 setShowChatBox(false);
                 setImage(null);
                 setTextLog("");
+                setSelectedFile(null);
               }}
               className="px-4 py-2 bg-gray-200 rounded-lg"
             >

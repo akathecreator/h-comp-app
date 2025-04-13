@@ -53,3 +53,4 @@ Deployment notes
 - eas build -p ios --profile production
 - eas submit -p ios
 
+   

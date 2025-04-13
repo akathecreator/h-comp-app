@@ -138,7 +138,7 @@ export const StepBasics = ({
       placeholder="28"
       className="bg-gray-100 p-3 rounded-lg"
     />
-    <Text className="text-lg font-bold text-newblue mt-2">Country</Text>
+    {/* <Text className="text-lg font-bold text-newblue mt-2">Country</Text>
     <Text className="text-sm text-newblue mb-2">
       will affect recommendations*
     </Text>
@@ -157,7 +157,7 @@ export const StepBasics = ({
           <Text className="capitalize text-gray-700">{country}</Text>
         </TouchableOpacity>
       ))}
-    </ScrollView>
+    </ScrollView> */}
   </View>
 );
 // Macronutrients Calculation (Used in completeOnboarding)
@@ -198,6 +198,34 @@ export const StepBodyStats = ({
       placeholder="75"
       className="bg-gray-100 p-3 rounded-lg"
     />
+    {form.weight && form.targetWeight && (
+      <View className="mt-4 bg-newblue/10 p-4 rounded-lg">
+        {(() => {
+          const current = parseFloat(form.weight);
+          const target = parseFloat(form.targetWeight);
+          const diff = Math.max(current - target, 0);
+          const minWeeks = Math.ceil(diff / 1);
+          const maxWeeks = Math.ceil(diff / 0.5);
+
+          if (diff === 0)
+            return (
+              <Text className="text-black">You’re already at your goal!</Text>
+            );
+
+          return (
+            <Text className="text-black">
+              At a healthy pace of 0.5–1 kg per week, reaching your goal of{" "}
+              <Text className="font-bold">{target} kg</Text> from{" "}
+              <Text className="font-bold">{current} kg</Text> could take{" "}
+              <Text className="font-bold">
+                {minWeeks}–{maxWeeks} weeks
+              </Text>
+              . Let's do this!
+            </Text>
+          );
+        })()}
+      </View>
+    )}
   </View>
 );
 const lifestyle = {

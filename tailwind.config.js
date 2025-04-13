@@ -24,7 +24,7 @@ module.exports = {
           DEFAULT: "#594715",
         },
         bone: {
-          DEFAULT: "#E8E4D9", // Main bone color
+          DEFAULT: "#594715", // Main bone color
           light: "#F4F2ED", // Lighter shade
           dark: "#D6D1C4", // Darker shade
         },

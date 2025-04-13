@@ -15,7 +15,11 @@ const RecentActivityList = ({ date }: { date: any }) => {
   return (
     <View className="px-6 py-2 gap-2">
       {recentActivity.length === 0 ? (
-        <Text className="text-center text-gray-500">No recent activities</Text>
+        <View className="flex-1 px-4 m-3">
+          <Text className="text-lg text-black-muted mx-auto">
+            Let me know about your activities!
+          </Text>
+        </View>
       ) : (
         <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
           {recentActivity.map((item) => {
