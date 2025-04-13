@@ -76,9 +76,11 @@ const MealSuggestions = ({ date }: { date: Date }) => {
   };
   return (
     <View className="mt-3">
-      <Text className="text-xl text-earthseaweed font-bold text-black mb-2">
-        Meal Suggestions
-      </Text>
+      {sortedSuggestions.length > 0 && (
+        <Text className="text-xl text-earthseaweed font-bold text-black mb-2">
+          Meal Suggestions
+        </Text>
+      )}
 
       <ScrollView
         horizontal
