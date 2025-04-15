@@ -462,6 +462,7 @@ export default function C6() {
 
     // Reset texts
     setLoading(false);
+    setSelectedFile(null);
   };
 
   // Customize message bubble appearance
