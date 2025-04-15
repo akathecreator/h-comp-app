@@ -2,7 +2,7 @@ import MealSuggestions from "@/components/food/MealSuggestions";
 import Header from "@/components/home/Header";
 import { useGlobalContext } from "@/lib/global-provider";
 import { isToday } from "date-fns";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   ScrollView,
   View,
@@ -16,17 +16,27 @@ import {
 } from "react-native";
 import LearningCard from "@/components/LearningCards";
 import { findAMatch } from "@/lib/log-service";
+import { Alert } from "react-native";
+import { router } from "expo-router";
 
 export default function HomePage() {
   const [activeTrack, setActiveTrack] = useState("Lose Weight");
   const { userProfile, user } = useGlobalContext();
   const [mealModal, setMealModal] = useState(false);
+  const [offerings, setOfferings] = useState<any>(null);
 
   const manageFindMatch = async () => {
     if (!user?.uid) return;
     await findAMatch(user?.uid);
   };
   if (!userProfile) return null;
+  router.push({
+    pathname: "/onboarding/loading",
+    params: {
+      uid: user?.uid,
+      data: encodeURIComponent(JSON.stringify(userProfile)),
+    },
+  });
   return (
     <KeyboardAvoidingView className="flex-1 h-full pt-16">
       <View className="px-6 my-1">

@@ -11,6 +11,9 @@ PODS:
     - ExpoModulesCore
   - EXApplication (6.0.2):
     - ExpoModulesCore
+  - EXAV (15.0.2):
+    - ExpoModulesCore
+    - ReactCommon/turbomodule/core
   - EXConstants (17.0.7):
     - ExpoModulesCore
   - EXImageLoader (5.0.0):
@@ -244,13 +247,13 @@ PODS:
     - ZXingObjC/PDF417
   - ExpoCrypto (14.0.1):
     - ExpoModulesCore
-  - ExpoDevice (7.0.2):
+  - ExpoDevice (7.0.3):
     - ExpoModulesCore
   - ExpoFileSystem (18.0.6):
     - ExpoModulesCore
   - ExpoFont (13.0.2):
     - ExpoModulesCore
-  - ExpoHaptics (14.0.0):
+  - ExpoHaptics (14.0.1):
     - ExpoModulesCore
   - ExpoHead (4.0.15):
     - ExpoModulesCore
@@ -290,6 +293,8 @@ PODS:
   - ExpoSymbols (0.2.0):
     - ExpoModulesCore
   - ExpoSystemUI (4.0.6):
+    - ExpoModulesCore
+  - ExpoVideo (2.0.6):
     - ExpoModulesCore
   - ExpoWebBrowser (14.0.1):
     - ExpoModulesCore
@@ -349,6 +354,11 @@ PODS:
   - libwebp/sharpyuv (1.5.0)
   - libwebp/webp (1.5.0):
     - libwebp/sharpyuv
+  - PurchasesHybridCommon (13.28.0):
+    - RevenueCat (= 5.21.0)
+  - PurchasesHybridCommonUI (13.28.0):
+    - PurchasesHybridCommon (= 13.28.0)
+    - RevenueCatUI (= 5.21.0)
   - RCT-Folly (2024.01.01.00):
     - boost
     - DoubleConversion
@@ -1941,6 +1951,9 @@ PODS:
     - React-logger (= 0.76.7)
     - React-perflogger (= 0.76.7)
     - React-utils (= 0.76.7)
+  - RevenueCat (5.21.0)
+  - RevenueCatUI (5.21.0):
+    - RevenueCat (= 5.21.0)
   - RNCAsyncStorage (1.23.1):
     - DoubleConversion
     - glog
@@ -2051,6 +2064,12 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
+  - RNPaywalls (8.9.4):
+    - PurchasesHybridCommonUI (= 13.28.0)
+    - React-Core
+  - RNPurchases (8.9.4):
+    - PurchasesHybridCommon (= 13.28.0)
+    - React-Core
   - RNReanimated (3.16.2):
     - DoubleConversion
     - glog
@@ -2245,6 +2264,7 @@ DEPENDENCIES:
   - DoubleConversion (from `../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec`)
   - EASClient (from `../node_modules/expo-eas-client/ios`)
   - EXApplication (from `../node_modules/expo-application/ios`)
+  - EXAV (from `../node_modules/expo-av/ios`)
   - EXConstants (from `../node_modules/expo-constants/ios`)
   - EXImageLoader (from `../node_modules/expo-image-loader/ios`)
   - EXJSONUtils (from `../node_modules/expo-json-utils/ios`)
@@ -2273,6 +2293,7 @@ DEPENDENCIES:
   - ExpoSplashScreen (from `../node_modules/expo-splash-screen/ios`)
   - ExpoSymbols (from `../node_modules/expo-symbols/ios`)
   - ExpoSystemUI (from `../node_modules/expo-system-ui/ios`)
+  - ExpoVideo (from `../node_modules/expo-video/ios`)
   - ExpoWebBrowser (from `../node_modules/expo-web-browser/ios`)
   - EXStructuredHeaders (from `../node_modules/expo-structured-headers/ios`)
   - EXUpdates (from `../node_modules/expo-updates/ios`)
@@ -2348,6 +2369,8 @@ DEPENDENCIES:
   - RNFastImage (from `../node_modules/react-native-fast-image`)
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - "RNGoogleSignin (from `../node_modules/@react-native-google-signin/google-signin`)"
+  - RNPaywalls (from `../node_modules/react-native-purchases-ui`)
+  - RNPurchases (from `../node_modules/react-native-purchases`)
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
   - RNSVG (from `../node_modules/react-native-svg`)
@@ -2360,7 +2383,11 @@ SPEC REPOS:
     - GTMAppAuth
     - GTMSessionFetcher
     - libwebp
+    - PurchasesHybridCommon
+    - PurchasesHybridCommonUI
     - ReachabilitySwift
+    - RevenueCat
+    - RevenueCatUI
     - SDWebImage
     - SDWebImageWebPCoder
     - SocketRocket
@@ -2375,6 +2402,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/expo-eas-client/ios"
   EXApplication:
     :path: "../node_modules/expo-application/ios"
+  EXAV:
+    :path: "../node_modules/expo-av/ios"
   EXConstants:
     :path: "../node_modules/expo-constants/ios"
   EXImageLoader:
@@ -2431,6 +2460,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/expo-symbols/ios"
   ExpoSystemUI:
     :path: "../node_modules/expo-system-ui/ios"
+  ExpoVideo:
+    :path: "../node_modules/expo-video/ios"
   ExpoWebBrowser:
     :path: "../node_modules/expo-web-browser/ios"
   EXStructuredHeaders:
@@ -2578,6 +2609,10 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-gesture-handler"
   RNGoogleSignin:
     :path: "../node_modules/@react-native-google-signin/google-signin"
+  RNPaywalls:
+    :path: "../node_modules/react-native-purchases-ui"
+  RNPurchases:
+    :path: "../node_modules/react-native-purchases"
   RNReanimated:
     :path: "../node_modules/react-native-reanimated"
   RNScreens:
@@ -2593,6 +2628,7 @@ SPEC CHECKSUMS:
   DoubleConversion: f16ae600a246532c4020132d54af21d0ddb2a385
   EASClient: 88b5fd19d0787186a0c7e6ba76deb2d4f96395ce
   EXApplication: 4c72f6017a14a65e338c5e74fca418f35141e819
+  EXAV: 4c41f0a6ae54a0b96597abc90e37962ab2ee0d85
   EXConstants: 30c43b9ca8391c31bab9cc45c97f16eddcf11042
   EXImageLoader: e5da974e25b13585c196b658a440720c075482d5
   EXJSONUtils: 01fc7492b66c234e395dcffdd5f53439c5c29c93
@@ -2608,10 +2644,10 @@ SPEC CHECKSUMS:
   ExpoBlur: 2b92367da8158eeaee9bfa940d82512a09c8e0c6
   ExpoCamera: 0a3e78de7b1ca8c438ee6784fa6f22c5b1b36966
   ExpoCrypto: 483fc758365923f89ddaab4327c21cae9534841d
-  ExpoDevice: 1662ecdf42a8b5b2cf60ef7cecaf5a297639dd63
+  ExpoDevice: d36ab4186b6799a28fd449bb9a1c77455f23fd1a
   ExpoFileSystem: a38e1bb58d77f41717293a7b73ebd4014d8cb8dd
   ExpoFont: b089994dac1fe603deda1cec151e32c81f46c2f1
-  ExpoHaptics: f8eacde90398b8be3648ed823b6e9e6bf87ece3f
+  ExpoHaptics: 8d199b2f33245ea85289ff6c954c7ee7c00a5b5d
   ExpoHead: 09fa14b978c938d40bf6b516460da411ae54a7c2
   ExpoImagePicker: 24e5ba8da111f74519b1e6dc556e0b438b2b8464
   ExpoKeepAwake: 22173f45d767c7d37403fdf48292726901d69ce7
@@ -2621,6 +2657,7 @@ SPEC CHECKSUMS:
   ExpoSplashScreen: 5397c2419fb3ca0788de37ea2547deac376aad83
   ExpoSymbols: ed2f35e4a0290ff242eb295bd47adff2e46f5bfc
   ExpoSystemUI: 778d700c6f38d3d7b8794460f50c1ca05c4f7462
+  ExpoVideo: 10e69b9c0652aba5c2edee2c572090e0412bd7ce
   ExpoWebBrowser: b658ba8a9161f1b54afb279591cfce2cb73330fa
   EXStructuredHeaders: 09c70347b282e3d2507e25fb4c747b1b885f87f6
   EXUpdates: 059dcaaf29c76f428ccdd717982beb08d5237da4
@@ -2633,6 +2670,8 @@ SPEC CHECKSUMS:
   GTMSessionFetcher: 5aea5ba6bd522a239e236100971f10cb71b96ab6
   hermes-engine: eb4a80f6bf578536c58a44198ec93a30f6e69218
   libwebp: 02b23773aedb6ff1fd38cec7a77b81414c6842a8
+  PurchasesHybridCommon: f0d344e7073314988b3d98fbb9da69db85aaff38
+  PurchasesHybridCommonUI: e582b0eea9b7413ee8b20f20ce30abef0412b3a6
   RCT-Folly: 84578c8756030547307e4572ab1947de1685c599
   RCTDeprecation: 7691283dd69fed46f6653d376de6fa83aaad774c
   RCTRequired: eac044a04629288f272ee6706e31f81f3a2b4bfe
@@ -2693,12 +2732,16 @@ SPEC CHECKSUMS:
   React-utils: 0342746d2cf989cf5e0d1b84c98cfa152edbdf3f
   ReactCodegen: e1c019dc68733dd2c5d3b263b4a6dc72002c0045
   ReactCommon: 81e0744ee33adfd6d586141b927024f488bc49ea
+  RevenueCat: 57028a8673201fdaacd1354065e8adbcba5739a4
+  RevenueCatUI: 1433a74137c9297e7647037ea0a138921d6f9e16
   RNCAsyncStorage: ff8f69859448bde50f1c25d3e7eb37555fed33ab
   RNCPicker: cee1bca865d795657e931de5aad98b1650f3237b
   RNDateTimePicker: 9ec036a62ad0f5a2d04c1c7829338e87b4e423e7
   RNFastImage: 462a183c4b0b6b26fdfd639e1ed6ba37536c3b87
   RNGestureHandler: 16ef3dc2d7ecb09f240f25df5255953c4098819b
   RNGoogleSignin: 6d8a0559ee6d3da693322963821a6ab5ba58243b
+  RNPaywalls: 4f725e952e470141368777e79e8c8997e75c72f6
+  RNPurchases: 6fdd1000ce7cf8168ed6407d4f9166068906d2f2
   RNReanimated: 01d743d77838211eeec6bb9fbee99458b0bcf857
   RNScreens: 351f431ef2a042a1887d4d90e1c1024b8ae9d123
   RNSVG: 030717ff82ea8f2117347c2fcf52a2d1eafba9ba

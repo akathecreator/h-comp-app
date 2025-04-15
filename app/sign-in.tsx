@@ -100,7 +100,8 @@ const Auth = () => {
           {/* <Text className="text-lg text-center font-bold text-white mt-4 font-sans-bold">
             Ready when you are! 🌱
           </Text> */}
-
+          {/* onPress={signInWithEmail} */}
+          {/* onPress={() => promptAsyncGoogle()} */}
           <TouchableOpacity
             disabled={!request}
             onPress={() => promptAsyncGoogle()}

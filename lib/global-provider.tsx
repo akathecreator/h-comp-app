@@ -5,6 +5,7 @@ import React, {
   useEffect,
   useState,
 } from "react";
+import { Platform } from "react-native";
 import {
   onAuthStateChanged,
   User as FirebaseUser,
@@ -14,7 +15,8 @@ import { doc, onSnapshot } from "firebase/firestore";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import { auth, db } from "@/lib/firebase"; // Your Firebase setup
-
+import Purchases, { LOG_LEVEL} from 'react-native-purchases';
+import * as Device from "expo-device";
 // --- Interfaces ---
 
 interface UserProfile {
@@ -139,14 +141,38 @@ export const GlobalProvider = ({ children }: GlobalProviderProps) => {
   };
 
   // Monitor Firebase auth
+  // useEffect(() => {
+  //   const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
+  //     setUser(currentUser);
+  //     if (currentUser) {
+  //       await fetchUserProfile(currentUser.uid);
+  //     }
+  //     setLoading(false);
+  //   });
+  //   return () => unsubscribe();
+  // }, []);
+  //with rev
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       setUser(currentUser);
       if (currentUser) {
         await fetchUserProfile(currentUser.uid);
+
+        // ✅ RevenueCat setup here
+        try {
+          Purchases.setLogLevel(LOG_LEVEL.VERBOSE);
+          await Purchases.configure({
+            apiKey: "appl_VLmHcPZampSHPqkoVEzGcKurCNm",
+            appUserID: currentUser.uid,
+          });
+          console.log("🔑 RevenueCat initialized");
+        } catch (e) {
+          console.warn("⚠️ RevenueCat init failed:", e);
+        }
       }
       setLoading(false);
     });
+
     return () => unsubscribe();
   }, []);
 
@@ -157,7 +183,7 @@ export const GlobalProvider = ({ children }: GlobalProviderProps) => {
     const unsubscribe = onSnapshot(userDocRef, (doc) => {
       if (doc.exists()) {
         const profile = doc.data() as UserProfile;
-        console.log("✅ Profile loaded", profile);
+        // console.log("✅ Profile loaded", profile);
         setUserProfile(profile);
       } else {
         console.warn("⚠️ No user profile found.");

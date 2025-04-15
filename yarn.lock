@@ -2382,6 +2382,11 @@
   dependencies:
     web-streams-polyfill "^3.1.1"
 
+"@revenuecat/purchases-typescript-internal@13.28.0":
+  version "13.28.0"
+  resolved "https://registry.yarnpkg.com/@revenuecat/purchases-typescript-internal/-/purchases-typescript-internal-13.28.0.tgz#cc91a29811cb7377687755295c5f30082f9c92df"
+  integrity sha512-LeQyN4C4J0SOOKIk4qduWReMqe2L/sUFaUNyc6jy9M3LCvQkdr0KX//qPJT541yTiY0UAhNJdqp0VpUb9v4xYg==
+
 "@segment/loosely-validate-event@^2.0.0":
   version "2.0.0"
   resolved "https://registry.npmjs.org/@segment/loosely-validate-event/-/loosely-validate-event-2.0.0.tgz"
@@ -4313,10 +4318,10 @@ expo-dev-menu@6.0.21:
   dependencies:
     expo-dev-menu-interface "1.9.3"
 
-expo-device@~7.0.2:
-  version "7.0.2"
-  resolved "https://registry.npmjs.org/expo-device/-/expo-device-7.0.2.tgz"
-  integrity sha512-0PkTixE4Qi8VQBjixnj4aw2f6vE4tUZH7GK8zHROGKlBypZKcWmsA+W/Vp3RC5AyREjX71pO/hjKTSo/vF0E2w==
+expo-device@~7.0.3:
+  version "7.0.3"
+  resolved "https://registry.yarnpkg.com/expo-device/-/expo-device-7.0.3.tgz#e8d502ac5ff7644dd617fa38a71fe49e7508856b"
+  integrity sha512-uNGhDYmpDj/3GySWZmRiYSt52Phdim11p0pXfgpCq/nMks0+UPZwl3D0vin5N8/gpVe5yzb13GYuFxiVoDyniw==
   dependencies:
     ua-parser-js "^0.7.33"
 
@@ -7751,6 +7756,21 @@ react-native-progress@^5.0.1:
   integrity sha512-TYfJ4auAe5vubDma2yfFvt7ktSI+UCfysqJnkdHEcLXqAitRFOozgF/cLgN5VNi/iLdaf3ga1ETi2RF4jVZ/+g==
   dependencies:
     prop-types "^15.7.2"
+
+react-native-purchases-ui@^8.9.4:
+  version "8.9.4"
+  resolved "https://registry.yarnpkg.com/react-native-purchases-ui/-/react-native-purchases-ui-8.9.4.tgz#be0a0174036ee9338ed2f266f1fa8c3a121ccdfb"
+  integrity sha512-5d5VE82vmd7GrmOmIw3gbz6Zz85hVctdcURcrReAZGAxRfAmO7ytgKqq7WqRvmjgrgdYxHIVD/FJ4jPfoHY4Bg==
+  dependencies:
+    "@revenuecat/purchases-typescript-internal" "13.28.0"
+    react-native-purchases "8.9.4"
+
+react-native-purchases@8.9.4, react-native-purchases@^8.9.4:
+  version "8.9.4"
+  resolved "https://registry.yarnpkg.com/react-native-purchases/-/react-native-purchases-8.9.4.tgz#8b8d7655b3043515f14c7e7923d45f65f7bfa3e1"
+  integrity sha512-/wcxDblbsQdUPS11IKVa8AQGQT8o9TH/qZOJHBiPvuZUTtdF434fPhs28tslkYUmua5pMMJ+rIEy4i6Jn5QimQ==
+  dependencies:
+    "@revenuecat/purchases-typescript-internal" "13.28.0"
 
 react-native-reanimated@3.16.2:
   version "3.16.2"

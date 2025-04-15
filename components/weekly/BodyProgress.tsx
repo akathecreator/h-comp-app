@@ -179,13 +179,7 @@ const BodyProgress = () => {
 
       <ScrollView showsHorizontalScrollIndicator={false} className="flex-row">
         {/* Add Photo Button */}
-        <TouchableOpacity
-          onPress={handleAddPhoto}
-          className="mt-2 w-24 h-24 border-dashed border-2 border-newblue rounded-full flex items-center justify-center mr-3"
-        >
-          <Plus size={32} color="#847d3b" />
-        </TouchableOpacity>
-
+       
         {/* Display Progress Photos */}
         <FlatList
           data={photos}

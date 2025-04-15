@@ -130,7 +130,7 @@ export default function AppLayout() {
   }
 
   if (!isLogged) return <Redirect href="/sign-in" />;
-  if (!isOnboarded) return <Redirect href="/onboarding" />;
+  if (!isOnboarded && userProfile && !loading) return <Redirect href="/onboarding" />;
 
   return <Slot />;
 }

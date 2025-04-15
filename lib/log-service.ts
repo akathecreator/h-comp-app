@@ -12,7 +12,6 @@ import {
 } from "firebase/firestore";
 import { db } from "./firebase";
 import { startOfDay, endOfDay, subDays, format, addDays } from "date-fns";
-import WeeklyData from "@/types/weeklyData";
 
 //fetch weight logs
 //fetch meals to calculate calories
@@ -91,7 +90,7 @@ export const suggestFeatures = async (userId: string, message: string) => {
     message,
     timestamp: Timestamp.now(),
   });
-};
+};  
 
 export const findAMatch = async (userId: string) => {
   //update field find_match doc in users collection with true

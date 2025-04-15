@@ -7,49 +7,49 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0E364026526740ABB38A4D8E /* Rubik-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A069827317C043D8B5CAE52C /* Rubik-SemiBold.ttf */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.mm */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
+		2FE36759DD3B4C219A8B25CD /* Rubik-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = EA3EC3437C6D4B6BBF9BA729 /* Rubik-Light.ttf */; };
 		3E461D99554A48A4959DE609 /* SplashScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */; };
-		57A6178CFB094860895685BD /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E9933092B7004D898EA898CB /* GoogleService-Info.plist */; };
-		5B74211293244D28937C4D3E /* Rubik-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 44CA8907BAEC4114B2A04B3A /* Rubik-ExtraBold.ttf */; };
-		6DEB9A4E5604BF0A2B41E575 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 1490B3BEB7DE5136BADDE70E /* PrivacyInfo.xcprivacy */; };
-		7486333141294B069621058F /* Rubik-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2A88495AD0804AAFB2FBF0B4 /* Rubik-Medium.ttf */; };
-		8F92FDC16C66435EB0B93B91 /* Rubik-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E0AA103113D04EFC95FEED6A /* Rubik-Regular.ttf */; };
+		46C36865F4124227B5446FDA /* Rubik-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E96D3ABAAC0546CE9052CE6B /* Rubik-Regular.ttf */; };
+		91831CD75FF142FDAA488A16 /* Rubik-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F32DDB3D213147B489795996 /* Rubik-ExtraBold.ttf */; };
 		96905EF65AED1B983A6B3ABC /* libPods-Leafi.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 58EEBF8E8E6FB1BC6CAF49B5 /* libPods-Leafi.a */; };
+		ACEBD74BB6AA4F7796209B7E /* Rubik-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 21BE5BC5C2374908A750F50C /* Rubik-Bold.ttf */; };
+		B0C4C2E7C7A842978BACC3FF /* NotoSansThai-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 03664EF5A42E49EBAF6DA892 /* NotoSansThai-Regular.ttf */; };
 		B18059E884C0ABDD17F3DC3D /* ExpoModulesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC715A2D49A985799AEE119 /* ExpoModulesProvider.swift */; };
-		B68F96565CD441818A542F65 /* Rubik-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = AD1FFEFA1C8B42798A3AFE38 /* Rubik-Bold.ttf */; };
+		B2A193DC581045FCBCD6413C /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = CE1EEEFC467949F286CBEA9C /* GoogleService-Info.plist */; };
+		B8602A0F44F84072B832A938 /* Rubik-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DE804816265946F3A1507E1B /* Rubik-Medium.ttf */; };
 		BB2F792D24A3F905000567C9 /* Expo.plist in Resources */ = {isa = PBXBuildFile; fileRef = BB2F792C24A3F905000567C9 /* Expo.plist */; };
-		C37C03C8D8CA46CABFBD13FF /* Rubik-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 019005F143F041F583BC67A3 /* Rubik-SemiBold.ttf */; };
-		C42EFC8D35CA4F0483D1E4A2 /* noop-file.swift in Sources */ = {isa = PBXBuildFile; fileRef = 766B6FEEF87A4253BADEB4BE /* noop-file.swift */; };
-		C7D5505E8A5A4CC78839E65D /* NotoSansThai-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B8C425BB634D491D85ACA78B /* NotoSansThai-Regular.ttf */; };
-		FFC4092AB44C410AA9755D7C /* Rubik-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CFF304CA21CB48F3B716AF9E /* Rubik-Light.ttf */; };
+		CB5E44B1A0304A2AB43C8036 /* noop-file.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66B433F52FB34B238DE0F9B8 /* noop-file.swift */; };
+		E32A699078384359BBF06992 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 2196BBD2DD3915D4A244B10B /* PrivacyInfo.xcprivacy */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		019005F143F041F583BC67A3 /* Rubik-SemiBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Rubik-SemiBold.ttf"; path = "../assets/fonts/Rubik-SemiBold.ttf"; sourceTree = "<group>"; };
+		03664EF5A42E49EBAF6DA892 /* NotoSansThai-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "NotoSansThai-Regular.ttf"; path = "../assets/fonts/NotoSansThai-Regular.ttf"; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* Leafi.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Leafi.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = Leafi/AppDelegate.h; sourceTree = "<group>"; };
 		13B07FB01A68108700A75B9A /* AppDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = AppDelegate.mm; path = Leafi/AppDelegate.mm; sourceTree = "<group>"; };
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = Leafi/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = Leafi/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = Leafi/main.m; sourceTree = "<group>"; };
-		1490B3BEB7DE5136BADDE70E /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; name = PrivacyInfo.xcprivacy; path = Leafi/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
-		2A88495AD0804AAFB2FBF0B4 /* Rubik-Medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Rubik-Medium.ttf"; path = "../assets/fonts/Rubik-Medium.ttf"; sourceTree = "<group>"; };
-		44CA8907BAEC4114B2A04B3A /* Rubik-ExtraBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Rubik-ExtraBold.ttf"; path = "../assets/fonts/Rubik-ExtraBold.ttf"; sourceTree = "<group>"; };
-		57DC39BFA1884B1CBE302C63 /* Leafi-Bridging-Header.h */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.c.h; name = "Leafi-Bridging-Header.h"; path = "Leafi/Leafi-Bridging-Header.h"; sourceTree = "<group>"; };
+		191B00FD8FBD427BB69056FD /* Leafi-Bridging-Header.h */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.c.h; name = "Leafi-Bridging-Header.h"; path = "Leafi/Leafi-Bridging-Header.h"; sourceTree = "<group>"; };
+		2196BBD2DD3915D4A244B10B /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; name = PrivacyInfo.xcprivacy; path = Leafi/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		21BE5BC5C2374908A750F50C /* Rubik-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Rubik-Bold.ttf"; path = "../assets/fonts/Rubik-Bold.ttf"; sourceTree = "<group>"; };
 		58EEBF8E8E6FB1BC6CAF49B5 /* libPods-Leafi.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Leafi.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		66B433F52FB34B238DE0F9B8 /* noop-file.swift */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.swift; name = "noop-file.swift"; path = "Leafi/noop-file.swift"; sourceTree = "<group>"; };
 		6C2E3173556A471DD304B334 /* Pods-Leafi.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Leafi.debug.xcconfig"; path = "Target Support Files/Pods-Leafi/Pods-Leafi.debug.xcconfig"; sourceTree = "<group>"; };
-		766B6FEEF87A4253BADEB4BE /* noop-file.swift */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.swift; name = "noop-file.swift"; path = "Leafi/noop-file.swift"; sourceTree = "<group>"; };
 		7A4D352CD337FB3A3BF06240 /* Pods-Leafi.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Leafi.release.xcconfig"; path = "Target Support Files/Pods-Leafi/Pods-Leafi.release.xcconfig"; sourceTree = "<group>"; };
+		A069827317C043D8B5CAE52C /* Rubik-SemiBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Rubik-SemiBold.ttf"; path = "../assets/fonts/Rubik-SemiBold.ttf"; sourceTree = "<group>"; };
 		AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = SplashScreen.storyboard; path = Leafi/SplashScreen.storyboard; sourceTree = "<group>"; };
-		AD1FFEFA1C8B42798A3AFE38 /* Rubik-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Rubik-Bold.ttf"; path = "../assets/fonts/Rubik-Bold.ttf"; sourceTree = "<group>"; };
-		B8C425BB634D491D85ACA78B /* NotoSansThai-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "NotoSansThai-Regular.ttf"; path = "../assets/fonts/NotoSansThai-Regular.ttf"; sourceTree = "<group>"; };
 		BB2F792C24A3F905000567C9 /* Expo.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Expo.plist; sourceTree = "<group>"; };
-		CFF304CA21CB48F3B716AF9E /* Rubik-Light.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Rubik-Light.ttf"; path = "../assets/fonts/Rubik-Light.ttf"; sourceTree = "<group>"; };
-		E0AA103113D04EFC95FEED6A /* Rubik-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Rubik-Regular.ttf"; path = "../assets/fonts/Rubik-Regular.ttf"; sourceTree = "<group>"; };
-		E9933092B7004D898EA898CB /* GoogleService-Info.plist */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "Leafi/GoogleService-Info.plist"; sourceTree = "<group>"; };
+		CE1EEEFC467949F286CBEA9C /* GoogleService-Info.plist */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "Leafi/GoogleService-Info.plist"; sourceTree = "<group>"; };
+		DE804816265946F3A1507E1B /* Rubik-Medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Rubik-Medium.ttf"; path = "../assets/fonts/Rubik-Medium.ttf"; sourceTree = "<group>"; };
+		E96D3ABAAC0546CE9052CE6B /* Rubik-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Rubik-Regular.ttf"; path = "../assets/fonts/Rubik-Regular.ttf"; sourceTree = "<group>"; };
+		EA3EC3437C6D4B6BBF9BA729 /* Rubik-Light.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Rubik-Light.ttf"; path = "../assets/fonts/Rubik-Light.ttf"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
+		F32DDB3D213147B489795996 /* Rubik-ExtraBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Rubik-ExtraBold.ttf"; path = "../assets/fonts/Rubik-ExtraBold.ttf"; sourceTree = "<group>"; };
 		FAC715A2D49A985799AEE119 /* ExpoModulesProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ExpoModulesProvider.swift; path = "Pods/Target Support Files/Pods-Leafi/ExpoModulesProvider.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -75,10 +75,10 @@
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				13B07FB71A68108700A75B9A /* main.m */,
 				AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */,
-				E9933092B7004D898EA898CB /* GoogleService-Info.plist */,
-				766B6FEEF87A4253BADEB4BE /* noop-file.swift */,
-				57DC39BFA1884B1CBE302C63 /* Leafi-Bridging-Header.h */,
-				1490B3BEB7DE5136BADDE70E /* PrivacyInfo.xcprivacy */,
+				CE1EEEFC467949F286CBEA9C /* GoogleService-Info.plist */,
+				66B433F52FB34B238DE0F9B8 /* noop-file.swift */,
+				191B00FD8FBD427BB69056FD /* Leafi-Bridging-Header.h */,
+				2196BBD2DD3915D4A244B10B /* PrivacyInfo.xcprivacy */,
 			);
 			name = Leafi;
 			sourceTree = "<group>";
@@ -108,7 +108,7 @@
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				D65327D7A22EEC0BE12398D9 /* Pods */,
 				D7E4C46ADA2E9064B798F356 /* ExpoModulesProviders */,
-				B17B4D03B8664D679F918886 /* Resources */,
+				D65B21F9A78C40CB852E5CF0 /* Resources */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -131,21 +131,6 @@
 			name = Leafi;
 			sourceTree = "<group>";
 		};
-		B17B4D03B8664D679F918886 /* Resources */ = {
-			isa = PBXGroup;
-			children = (
-				AD1FFEFA1C8B42798A3AFE38 /* Rubik-Bold.ttf */,
-				44CA8907BAEC4114B2A04B3A /* Rubik-ExtraBold.ttf */,
-				CFF304CA21CB48F3B716AF9E /* Rubik-Light.ttf */,
-				2A88495AD0804AAFB2FBF0B4 /* Rubik-Medium.ttf */,
-				E0AA103113D04EFC95FEED6A /* Rubik-Regular.ttf */,
-				019005F143F041F583BC67A3 /* Rubik-SemiBold.ttf */,
-				B8C425BB634D491D85ACA78B /* NotoSansThai-Regular.ttf */,
-			);
-			name = Resources;
-			path = "";
-			sourceTree = "<group>";
-		};
 		BB2F792B24A3F905000567C9 /* Supporting */ = {
 			isa = PBXGroup;
 			children = (
@@ -164,6 +149,21 @@
 			path = Pods;
 			sourceTree = "<group>";
 		};
+		D65B21F9A78C40CB852E5CF0 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				21BE5BC5C2374908A750F50C /* Rubik-Bold.ttf */,
+				F32DDB3D213147B489795996 /* Rubik-ExtraBold.ttf */,
+				EA3EC3437C6D4B6BBF9BA729 /* Rubik-Light.ttf */,
+				DE804816265946F3A1507E1B /* Rubik-Medium.ttf */,
+				E96D3ABAAC0546CE9052CE6B /* Rubik-Regular.ttf */,
+				A069827317C043D8B5CAE52C /* Rubik-SemiBold.ttf */,
+				03664EF5A42E49EBAF6DA892 /* NotoSansThai-Regular.ttf */,
+			);
+			name = Resources;
+			path = "";
+			sourceTree = "<group>";
+		};
 		D7E4C46ADA2E9064B798F356 /* ExpoModulesProviders */ = {
 			isa = PBXGroup;
 			children = (
@@ -180,13 +180,13 @@
 			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "Leafi" */;
 			buildPhases = (
 				08A4A3CD28434E44B6B9DE2E /* [CP] Check Pods Manifest.lock */,
-				F01861CE01A920C7A0A62136 /* [Expo] Configure project */,
+				C5360ED355EEA0A4C84D279B /* [Expo] Configure project */,
 				13B07F871A680F5B00A75B9A /* Sources */,
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
 				800E24972A6A228C8D4807E9 /* [CP] Copy Pods Resources */,
-				7E04F782EE96357282F3AA7C /* [CP] Embed Pods Frameworks */,
+				4D0F3E632B02C115F5A9202D /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -236,15 +236,15 @@
 				BB2F792D24A3F905000567C9 /* Expo.plist in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				3E461D99554A48A4959DE609 /* SplashScreen.storyboard in Resources */,
-				57A6178CFB094860895685BD /* GoogleService-Info.plist in Resources */,
-				B68F96565CD441818A542F65 /* Rubik-Bold.ttf in Resources */,
-				5B74211293244D28937C4D3E /* Rubik-ExtraBold.ttf in Resources */,
-				FFC4092AB44C410AA9755D7C /* Rubik-Light.ttf in Resources */,
-				7486333141294B069621058F /* Rubik-Medium.ttf in Resources */,
-				8F92FDC16C66435EB0B93B91 /* Rubik-Regular.ttf in Resources */,
-				C37C03C8D8CA46CABFBD13FF /* Rubik-SemiBold.ttf in Resources */,
-				C7D5505E8A5A4CC78839E65D /* NotoSansThai-Regular.ttf in Resources */,
-				6DEB9A4E5604BF0A2B41E575 /* PrivacyInfo.xcprivacy in Resources */,
+				B2A193DC581045FCBCD6413C /* GoogleService-Info.plist in Resources */,
+				ACEBD74BB6AA4F7796209B7E /* Rubik-Bold.ttf in Resources */,
+				91831CD75FF142FDAA488A16 /* Rubik-ExtraBold.ttf in Resources */,
+				2FE36759DD3B4C219A8B25CD /* Rubik-Light.ttf in Resources */,
+				B8602A0F44F84072B832A938 /* Rubik-Medium.ttf in Resources */,
+				46C36865F4124227B5446FDA /* Rubik-Regular.ttf in Resources */,
+				0E364026526740ABB38A4D8E /* Rubik-SemiBold.ttf in Resources */,
+				B0C4C2E7C7A842978BACC3FF /* NotoSansThai-Regular.ttf in Resources */,
+				E32A699078384359BBF06992 /* PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -288,7 +288,7 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		7E04F782EE96357282F3AA7C /* [CP] Embed Pods Frameworks */ = {
+		4D0F3E632B02C115F5A9202D /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -325,11 +325,14 @@
 				"${PODS_CONFIGURATION_BUILD_DIR}/GTMAppAuth/GTMAppAuth_Privacy.bundle",
 				"${PODS_CONFIGURATION_BUILD_DIR}/GTMSessionFetcher/GTMSessionFetcher_Core_Privacy.bundle",
 				"${PODS_CONFIGURATION_BUILD_DIR}/GoogleSignIn/GoogleSignIn.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/PurchasesHybridCommon/PurchasesHybridCommon.bundle",
 				"${PODS_CONFIGURATION_BUILD_DIR}/RCT-Folly/RCT-Folly_privacy.bundle",
 				"${PODS_CONFIGURATION_BUILD_DIR}/RNCAsyncStorage/RNCAsyncStorage_resources.bundle",
 				"${PODS_CONFIGURATION_BUILD_DIR}/ReachabilitySwift/ReachabilitySwift.bundle",
 				"${PODS_CONFIGURATION_BUILD_DIR}/React-Core/React-Core_privacy.bundle",
 				"${PODS_CONFIGURATION_BUILD_DIR}/React-cxxreact/React-cxxreact_privacy.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/RevenueCat/RevenueCat.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/RevenueCatUI/RevenueCat_RevenueCatUI.bundle",
 				"${PODS_CONFIGURATION_BUILD_DIR}/boost/boost_privacy.bundle",
 				"${PODS_CONFIGURATION_BUILD_DIR}/expo-dev-launcher/EXDevLauncher.bundle",
 				"${PODS_CONFIGURATION_BUILD_DIR}/expo-dev-menu/EXDevMenu.bundle",
@@ -349,11 +352,14 @@
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GTMAppAuth_Privacy.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GTMSessionFetcher_Core_Privacy.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GoogleSignIn.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/PurchasesHybridCommon.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/RCT-Folly_privacy.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/RNCAsyncStorage_resources.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/ReachabilitySwift.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/React-Core_privacy.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/React-cxxreact_privacy.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/RevenueCat.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/RevenueCat_RevenueCatUI.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/boost_privacy.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/EXDevLauncher.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/EXDevMenu.bundle",
@@ -364,7 +370,7 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Leafi/Pods-Leafi-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		F01861CE01A920C7A0A62136 /* [Expo] Configure project */ = {
+		C5360ED355EEA0A4C84D279B /* [Expo] Configure project */ = {
 			isa = PBXShellScriptBuildPhase;
 			alwaysOutOfDate = 1;
 			buildActionMask = 2147483647;
@@ -393,7 +399,7 @@
 				13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
 				B18059E884C0ABDD17F3DC3D /* ExpoModulesProvider.swift in Sources */,
-				C42EFC8D35CA4F0483D1E4A2 /* noop-file.swift in Sources */,
+				CB5E44B1A0304A2AB43C8036 /* noop-file.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

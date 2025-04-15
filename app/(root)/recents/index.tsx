@@ -64,7 +64,6 @@ const RecentLogs = () => {
       </TouchableOpacity>
     </View>
   );
-  console.log("did come in here", recentMeals);
   if (loading) {
     return (
       <View className="flex-1 justify-center items-center bg-bone-light my-5">
