@@ -30,7 +30,10 @@
       "icon": "./assets/images/icon-real.png",
       "supportsTablet": true,
       "bundleIdentifier": "com.archbishop.c6companion",
-      "googleServicesFile": "./GoogleService-Info.plist"
+      "googleServicesFile": "./GoogleService-Info.plist",
+      "infoPlist": {
+        "NSUserTrackingUsageDescription": "This is used to support Sign In with Apple and basic app analytics"
+      }
     },
     "android": {
       "adaptiveIcon": {

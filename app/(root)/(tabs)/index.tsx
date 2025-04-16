@@ -30,13 +30,13 @@ export default function HomePage() {
     await findAMatch(user?.uid);
   };
   if (!userProfile) return null;
-  router.push({
-    pathname: "/onboarding/loading",
-    params: {
-      uid: user?.uid,
-      data: encodeURIComponent(JSON.stringify(userProfile)),
-    },
-  });
+  // router.push({
+  //   pathname: "/onboarding/loading",
+  //   params: {
+  //     uid: user?.uid,
+  //     data: encodeURIComponent(JSON.stringify(userProfile)),
+  //   },
+  // });
   return (
     <KeyboardAvoidingView className="flex-1 h-full pt-16">
       <View className="px-6 my-1">

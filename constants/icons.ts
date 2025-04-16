@@ -1,4 +1,5 @@
 import google from "@/assets/icons/google.png";
+import apple from "@/assets/icons/apple.png";
 import home from "@/assets/icons/home.png";
 import search from "@/assets/icons/search.png";
 import person from "@/assets/icons/person.png";
@@ -36,6 +37,7 @@ import flame2 from "@/assets/icons/flame6.png";
 // import logo from "@/assets/icons/logo.png";
 export default {
   google,
+  apple,
   home,
   search,
   person,

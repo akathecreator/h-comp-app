@@ -139,7 +139,7 @@ export const GlobalProvider = ({ children }: GlobalProviderProps) => {
       console.error("❌ Failed to clear and logout:", err);
     }
   };
-
+  // clearAndLogout()
   // Monitor Firebase auth
   // useEffect(() => {
   //   const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {

@@ -21,7 +21,37 @@ import { useVideoPlayer, VideoView } from "expo-video";
 import { useEvent } from "expo";
 import { OnboardingSlider } from "@/components/auth/OnboardingSlider";
 import icons from "@/constants/icons";
+import * as AppleAuthentication from "expo-apple-authentication";
+import { OAuthProvider } from "firebase/auth";
 
+const signInWithApple = async () => {
+  try {
+    const appleCredential = await AppleAuthentication.signInAsync({
+      requestedScopes: [
+        AppleAuthentication.AppleAuthenticationScope.FULL_NAME,
+        AppleAuthentication.AppleAuthenticationScope.EMAIL,
+      ],
+    });
+    console.log("✅ Apple Sign-In success:", appleCredential);
+    AppleAuthentication.isAvailableAsync().then(console.log);
+    alert(JSON.stringify(appleCredential, null, 2));
+    const { identityToken, nonce } = appleCredential;
+
+    if (!identityToken) throw new Error("Missing identity token");
+
+    const provider = new OAuthProvider("apple.com");
+    const credential = provider.credential({
+      idToken: identityToken,
+      rawNonce: nonce,
+    });
+
+    await signInWithCredential(auth, credential);
+    // refetchUserProfile();
+  } catch (error) {
+    console.log("Full Apple login error:", JSON.stringify(error, null, 2));
+    // alert("Apple Sign-In failed: " + error?.message ?? error);
+  }
+};
 const { width, height } = Dimensions.get("window");
 
 const Auth = () => {
@@ -115,6 +145,22 @@ const Auth = () => {
               />
               <Text className="text-lg ml-2 text-white font-medium">
                 Continue with Google
+              </Text>
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity
+            disabled={!request}
+            onPress={() => signInWithApple()}
+            className="bg-black shadow-md  rounded-full w-full py-4 mt-5"
+          >
+            <View className="flex flex-row items-center justify-center">
+              <Image
+                source={icons.apple}
+                className="w-5 h-5"
+                resizeMode="contain"
+              />
+              <Text className="text-lg ml-2 text-white font-medium">
+                Continue with Apple
               </Text>
             </View>
           </TouchableOpacity>

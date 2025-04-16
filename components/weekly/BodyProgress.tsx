@@ -177,43 +177,49 @@ const BodyProgress = () => {
         </Text>
       )}
 
-      <ScrollView showsHorizontalScrollIndicator={false} className="flex-row">
-        {/* Add Photo Button */}
-       
-        {/* Display Progress Photos */}
-        <FlatList
-          data={photos}
-          keyExtractor={(item, index) => index.toString()}
-          horizontal
-          contentContainerStyle={{ paddingVertical: 16 }}
-          renderItem={({ item, index }) => (
-            <TouchableOpacity
-              onPress={() => openImage(index)}
-              onLongPress={() => confirmDelete(index, item.id)}
-            >
-              <View className="relative w-28 h-28 items-center justify-center mx-1">
-                {/* Date Above Image */}
-                <Text className="absolute -top-4 text-gray-500 text-xs">
-                  {dayjs(item.uploadedAt.toDate()).format("MMM D")}
-                </Text>
+<FlatList
+  data={[{ isAddButton: true }, ...photos]} // 👈 inject add button at start
+  keyExtractor={(item, index) => item.id?.toString() || `add-${index}`}
+  horizontal
+  showsHorizontalScrollIndicator={false}
+  contentContainerStyle={{ paddingVertical: 16, paddingLeft: 8 }}
+  renderItem={({ item, index }) => {
+    if (item.isAddButton) {
+      return (
+        <TouchableOpacity
+          onPress={handleAddPhoto}
+          className="w-24 h-24 border-dashed border-2 border-newblue rounded-full items-center justify-center mr-3 mt-2"
+        >
+          <Plus size={32} color="#847d3b" />
+        </TouchableOpacity>
+      );
+    }
 
-                {/* Circular Image */}
-                <Image
-                  source={{ uri: item.url }}
-                  className="w-24 h-24 rounded-full border border-gray-300"
-                  resizeMode="cover"
-                />
+    return (
+      <TouchableOpacity
+        onPress={() => openImage(index - 1)} // Adjust index because of the Add button
+        onLongPress={() => confirmDelete(index - 1, item.id)}
+      >
+        <View className="relative w-28 h-28 items-center justify-center mx-1">
+          <Text className="absolute -top-4 text-gray-500 text-xs">
+            {dayjs(item.uploadedAt.toDate()).format("MMM D")}
+          </Text>
 
-                {/* Date Below Image */}
-                <Text className="absolute -bottom-4 text-gray-500 text-xs">
-                  {dayjs(item.uploadedAt.toDate()).format("hh:mm A")}
-                </Text>
-              </View>
-            </TouchableOpacity>
-          )}
-        />
-      </ScrollView>
-      <ImageBackground    
+          <Image
+            source={{ uri: item.url }}
+            className="w-24 h-24 rounded-full border border-gray-300"
+            resizeMode="cover"
+          />
+
+          <Text className="absolute -bottom-4 text-gray-500 text-xs">
+            {dayjs(item.uploadedAt.toDate()).format("hh:mm A")}
+          </Text>
+        </View>
+      </TouchableOpacity>
+    );
+  }}
+/>
+      <ImageBackground
         source={require("@/assets/images/body.png")}
         className="flex-1 items-center justify-center h-40"
         imageStyle={{ borderRadius: 15 }}

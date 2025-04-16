@@ -11,6 +11,8 @@ import images from "@/constants/images";
 import { useRouter } from "expo-router";
 import NutritionDialog from "@/components/food/NutritionDialog";
 import { useGlobalContext } from "@/lib/global-provider";
+import { useRequirePro } from "@/lib/useRequirePro";
+
 const TabIcon = ({
   focused,
   icon,
@@ -40,6 +42,7 @@ const TabIcon = ({
 const TabsLayout = () => {
   const router = useRouter();
   const { dialogVisible, setDialogVisible } = useGlobalContext();
+  useRequirePro();
   return (
     <>
       <Tabs

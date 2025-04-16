@@ -18,21 +18,31 @@ export default function OnboardingLoadingScreen() {
   const showPaywallThenRoute = async () => {
     try {
       const result = await RevenueCatUI.presentPaywallIfNeeded({
-        requiredEntitlementIdentifier: "pro", // use your actual entitlement ID
+        requiredEntitlementIdentifier: "Pro", // your actual entitlement ID
         displayCloseButton: false,
       });
 
-      if (
-        result === PAYWALL_RESULT.PURCHASED ||
-        result === PAYWALL_RESULT.RESTORED
-      ) {
-        router.replace("/"); // unlock app
-      } else {
-        router.replace("/"); // or block access
+      switch (result) {
+        case PAYWALL_RESULT.PURCHASED:
+        case PAYWALL_RESULT.RESTORED:
+          // ✅ User has access
+          router.replace("/");
+          break;
+
+        case PAYWALL_RESULT.CANCELLED:
+        case PAYWALL_RESULT.NOT_PRESENTED:
+          // ❌ User skipped, block or send to limited screen
+          router.replace("/onboarding/locked"); // or show blocked state
+          break;
+
+        default:
+          // fallback
+          router.replace("/onboarding/locked");
+          break;
       }
     } catch (error) {
       console.warn("Paywall failed to present:", error);
-      router.replace("/"); // fallback
+      router.replace("/onboarding/locked");
     }
   };
 
