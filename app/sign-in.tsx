@@ -33,7 +33,9 @@ const signInWithApple = async () => {
       ],
     });
     console.log("✅ Apple Sign-In success:", appleCredential);
-    AppleAuthentication.isAvailableAsync().then(console.log);
+    AppleAuthentication.isAvailableAsync().then((val) =>
+      console.log("🍏 Apple Sign-In available:", val)
+    );
     alert(JSON.stringify(appleCredential, null, 2));
     const { identityToken, nonce } = appleCredential;
 

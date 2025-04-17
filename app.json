@@ -20,7 +20,7 @@
     "name": "Leafi",
     "slug": "c6-companion",
     "owner": "archbishop",
-    "version": "1.0.4",
+    "version": "1.0.5",
     "orientation": "portrait",
     "icon": "./assets/images/icon-real.png",
     "scheme": "com.archbishop.c6companion",
@@ -29,6 +29,7 @@
     "ios": {
       "icon": "./assets/images/icon-real.png",
       "supportsTablet": true,
+      "usesAppleSignIn": true,
       "bundleIdentifier": "com.archbishop.c6companion",
       "googleServicesFile": "./GoogleService-Info.plist",
       "infoPlist": {
@@ -97,7 +98,8 @@
           "supportsBackgroundPlayback": true,
           "supportsPictureInPicture": true
         }
-      ]
+      ],
+      ["expo-apple-authentication"]
     ],
     "experiments": {
       "typedRoutes": true
